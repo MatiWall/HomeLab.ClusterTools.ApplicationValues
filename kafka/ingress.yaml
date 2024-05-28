@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: kafka-ingressroute
+  namespace: kafka
+spec:
+  entryPoints:
+    - kafka
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: kafka
+      port: 9092
