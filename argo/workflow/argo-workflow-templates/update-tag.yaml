@@ -1,0 +1,83 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: deploy-pipline
+spec:
+  entrypoint: build-and-deploy
+  serviceAccountName: argo-workflow-svc
+  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+    - metadata:
+        name: workdir                     # name of volume claim
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+  arguments:
+    parameters:
+      - name: git-application-values
+        value: https://github.com/MatiWall/homelab.application-values.git
+      - name: application-name
+        value: core-api
+  templates:
+    - name: build-and-deploy
+      steps:
+        - - name: cloner
+            template: cloner
+            arguments:
+              parameters:
+                - name: git-application-values
+                  value: "{{workflow.parameters.git-application-values}}"
+        - - name: find-applicaton
+            template: application-name
+            arguments: 
+              parameters:
+                - name: application-name
+                  value: "{{workflow.parameters.git-application-name}}"
+ 
+    - name: cloner
+      inputs:
+        parameters:
+          - name: git-application-values
+      container:
+        image: alpine/git:latest
+        command: [sh, -c]
+        args:
+          - |
+            git clone {{git-application-values}} 
+        workingDir: /src
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+    - name: find-applicaton
+      inputs:
+        parameters:
+          - name: git-application-values
+          - name: application-name
+      container:
+        image: alpine/git:latest
+        command: [sh, -c]
+        args:
+         - |
+           APPLICATIONS_PATH=$(grep -rl {{appplication-name}}) 
+           for path in $APPLICATIONS_PATHS; 
+           do
+             # Check if the file name is Chart.yaml
+             if [[ ${path##*/}" == "Chart.yaml" ]]; 
+             then
+             # Set the application path to the path of Chart.yaml
+               APPLICATION_PATH="$path"
+               break
+             fi
+           done
+           VALUES_PATH=$(echo "$APPLICATION_PATH" | sed 's/Chart.yaml$/values.yaml/')
+           VERSION = $(sed -n 's/^version = "\(.*\)-\(.*\)"/\1.\2/p' $VALUES_PATH)
+           $VERSIONS > version.txt
+
+
+
+        workingDir: /src/{{git-application-values}} 
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
