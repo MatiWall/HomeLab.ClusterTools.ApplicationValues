@@ -5,9 +5,9 @@ metadata:
 spec:
   entrypoint: build-and-deploy
   serviceAccountName: argo-workflow-svc
-  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+  volumeClaimTemplates:
     - metadata:
-        name: workdir                     # name of volume claim
+        name: workdir
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
@@ -20,6 +20,15 @@ spec:
         value: https://github.com/MatiWall/homelab.application-values.git
       - name: application-name
         value: core-api
+      - name: version
+        value: 1.1.1
+      - name: base-image
+        value: python:3.12-2
+      - name: email
+        value: matiwall@live.dk
+      - name: username
+        value: matiwall
+
   templates:
     - name: build-and-deploy
       steps:
@@ -29,13 +38,21 @@ spec:
               parameters:
                 - name: git-application-values
                   value: "{{workflow.parameters.git-application-values}}"
-        - - name: find-applicaton
-            template: application-name
-            arguments: 
+        - - name: find-application
+            template: find-application
+            arguments:
               parameters:
                 - name: application-name
-                  value: "{{workflow.parameters.git-application-name}}"
- 
+                  value: "{{workflow.parameters.application-name}}"
+                - name: base-image
+                  value: "{{workflow.parameters.base-image}}"
+        - - name: update-yaml
+            template: update-yaml
+            arguments:
+              parameters:
+                - name: base-image
+                  value: "{{workflow.parameters.base-image}}"
+
     - name: cloner
       inputs:
         parameters:
@@ -45,39 +62,85 @@ spec:
         command: [sh, -c]
         args:
           - |
-            git clone {{git-application-values}} 
+            git clone "{{inputs.parameters.git-application-values}}"
         workingDir: /src
         volumeMounts:
           - name: workdir
-            mountPath: src/
-    - name: find-applicaton
+            mountPath: /src
+
+    - name: find-application
       inputs:
         parameters:
-          - name: git-application-values
           - name: application-name
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args:
-         - |
-           APPLICATIONS_PATH=$(grep -rl {{appplication-name}}) 
-           for path in $APPLICATIONS_PATHS; 
-           do
-             # Check if the file name is Chart.yaml
-             if [[ ${path##*/}" == "Chart.yaml" ]]; 
-             then
-             # Set the application path to the path of Chart.yaml
-               APPLICATION_PATH="$path"
-               break
-             fi
-           done
-           VALUES_PATH=$(echo "$APPLICATION_PATH" | sed 's/Chart.yaml$/values.yaml/')
-           VERSION = $(sed -n 's/^version = "\(.*\)-\(.*\)"/\1.\2/p' $VALUES_PATH)
-           $VERSIONS > version.txt
-
-
-
-        workingDir: /src/{{git-application-values}} 
+          - name: base-image
+      script:
+        image: "alpine:latest"
+        command: [sh]
+        source: |
+          APPLICATIONS_PATHS=$(grep -rl "{{inputs.parameters.application-name}}" /src) 
+          for path in $APPLICATIONS_PATHS; 
+          do
+            if [[ ${path##*/} == "Chart.yaml" ]]; 
+            then
+              APPLICATION_PATH="$path"
+              break
+            fi
+          done
+          VALUES_PATH=$(echo "$APPLICATION_PATH" | sed 's/Chart.yaml$/values.yaml/')
+          echo "VALUES_PATH=$VALUES_PATH" > /tmp/values_path.txt
+        workingDir: /src
         volumeMounts:
           - name: workdir
-            mountPath: src/
+            mountPath: /src
+
+    - name: update-yaml
+      inputs:
+        parameters:
+          - name: base-image
+      script:
+        image: "{{inputs.parameters.base-image}}"
+        command: [python]
+        source: |
+          import yaml
+
+          with open("/tmp/values_path.txt") as f:
+              values_path = f.read().strip().split('=')[1]
+
+          with open(values_path, 'r') as f:
+              data = yaml.safe_load(f)
+
+          if data.get('cronjob').
+              application-type = 'cronjob'
+          elif data.get('deployment'):
+              application_type = 'depployment'
+          else:
+              raise ValueError('values.yaml does not include either a cronjob or deployment key')
+          data[application_type]['image']['tag'] = {{input.parameters.version}}
+
+          with open(values_path, 'w') as f:
+              yaml.safe_dump(data, f, default_flow_style=False, sort_keys=False)
+        workingDir: /src
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+          - name: workdir
+            mountPath: /tmp
+    - name: push-updated-values
+      inputs:
+        parameters:
+          - name: application-name
+          - name: username
+          - name: email
+      script:
+        image: "alpine/git:latest"
+        command: [sh]
+        source: |
+            git config --global user.email "{{workflow.parameters.email}}"
+            git config --global user.name "{{workflow.parameters.username}}"
+            git add .
+            git commit -m "Update application version to {{workflow.parameters.version}}"
+            git push origin HEAD
+        workingDir: /src
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
