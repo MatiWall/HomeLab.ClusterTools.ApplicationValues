@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: git-push-template
+spec:
+  entrypoint: git-push-entrypoint
+  arguments:
+    parameters:
+      - name: username
+      - name: email
+
+  templates:
+    - name: git-push-entrypoint
+      steps:
+        - - name: git-push
+            template: git-push
+            arguments:
+              parameters:
+                - name: username
+                  value: "{{workflow.parameters.username}}"
+                - name: email
+                  value: "{{workflow.parameters.email}}"
+
+    - name: git-push
+      inputs:
+        parameters:
+          - name: username
+          - name: email
+      container:
+        image: "alpine/git:latest"
+        command: [sh]
+        source: |
+            git config --global user.email "{{inputs.parameters.email}}"
+            git config --global user.name "{{inputs.parameters.username}}"
+            git add .
+            git commit -m "Update application version to {{workflow.parameters.version}}"
+            git push origin HEAD
+        workingDir: /src
+        volumeMounts:
+          - name: workdir
+            mountPath: /src

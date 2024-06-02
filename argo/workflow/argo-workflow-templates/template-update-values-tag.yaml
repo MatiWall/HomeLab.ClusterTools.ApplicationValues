@@ -1,9 +1,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: application-version-updater
+  name: application-values-tag-updater
 spec:
-  entrypoint: build-and-deploy
+  entrypoint: update-values-tag
   serviceAccountName: argo-workflow-svc
   volumeClaimTemplates:
     - metadata:
@@ -30,7 +30,7 @@ spec:
         value: matiwall
 
   templates:
-    - name: build-and-deploy
+    - name: update-values-tag
       steps:
         - - name: cloner
             template: cloner
@@ -52,6 +52,16 @@ spec:
               parameters:
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
+        - - name: git-push
+            templateRef:
+              name: git-push-template
+              template: git-push
+              arguments:
+                parameters:
+                  - name: username
+                    value: "{{workflow.parameters.username}}"
+                  - name: email
+                    value: "{{workflow.parameters.email}}"
 
     - name: cloner
       inputs:
@@ -125,22 +135,3 @@ spec:
             mountPath: /src
           - name: workdir
             mountPath: /tmp
-    - name: push-updated-values
-      inputs:
-        parameters:
-          - name: application-name
-          - name: username
-          - name: email
-      script:
-        image: "alpine/git:latest"
-        command: [sh]
-        source: |
-            git config --global user.email "{{workflow.parameters.email}}"
-            git config --global user.name "{{workflow.parameters.username}}"
-            git add .
-            git commit -m "Update application version to {{workflow.parameters.version}}"
-            git push origin HEAD
-        workingDir: /src
-        volumeMounts:
-          - name: workdir
-            mountPath: /src

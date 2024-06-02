@@ -51,12 +51,43 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
         - - name: build
             template: build
-        - - name: push
-            template: push
+        - - name: update-version
+            template: update-version
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                  
+        - - name: tag-and-push
+            template: tag-and-push
             arguments:
               parameters:
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
+        - - name: git-push
+            templateRef:
+              name: git-push-template
+              template: git-push
+              arguments:
+                parameters:
+                  - name: username
+                    value: "{{workflow.parameters.username}}"
+                  - name: email
+                    value: "{{workflow.parameters.email}}"
+        - - name: update-values
+            templateRef:
+              name: application-values-tag-updater
+              template: git-push
+              arguments:
+                parameters:
+                  - name: username
+                    value: "{{workflow.parameters.username}}"
+                  - name: email
+                    value: "{{workflow.parameters.email}}"
+                  - name: version
+                    value: "{{steps.extract-name-and-version.output.parameters.version}}"
+                  - name: version
+                    value: "{{steps.extract-name-and-version.output.parameters.application-name}}"
 
    
     - name: cloner
@@ -72,9 +103,7 @@ spec:
         command: [sh, -c]
         args:
           - |
-            git clone {{inputs.parameters.giturl}}{{inputs.parameters.repo}} /tmp/repo
-            mv /tmp/repo/{{inputs.parameters.subpath}}/* /src
-            rm -rf /tmp/repo
+            git clone {{inputs.parameters.giturl}}{{inputs.parameters.repo}}
         workingDir: /src
         volumeMounts:
           - name: workdir
@@ -89,7 +118,7 @@ spec:
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
             ls -l /src
-        workingDir: /src
+        workingDir: /src/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
@@ -105,8 +134,22 @@ spec:
         command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
         ports:
           - containerPort: 2375  # Expose Docker daemon on HTTP port
-    
-    - name: push
+    - name: update-version
+      inputs:
+        parameters:
+          - name: subpath
+      container:
+        image: alpine:latest
+        command: [sh, -c]
+        args:
+          - |
+            version=$(cat .version)
+            IFS='.' read -r -a version_parts <<< "$version"
+            ((version_parts[2]++))
+            new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+            echo "$new_version" > .version
+            echo "Updated version to $new_version"
+    - name: tag-and-push
       inputs:
         parameters:
           - name: registry
@@ -118,11 +161,11 @@ spec:
             ls -l
             until docker ps; do sleep 1; done;
             name=$(cat pyproject.toml | grep name | head -1 | grep -oh "\".*\"")
-            version=$(cat pyproject.toml | grep version | head -1 | grep -oh "\".*\"")
+            version=$(cat .version)
             docker load < /src/image.tar
             docker tag image:0.0.1 {{inputs.parameters.registry}}:$version
             docker push {{inputs.parameters.registry}}/$name:$version
-        workingDir: /src
+        workingDir: /src/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
@@ -141,6 +184,34 @@ spec:
         command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
         ports:
           - containerPort: 2375  # Expose Docker daemon on HTTP port  
+            
+    - name: extract-name-and-version
+      inputs:
+        parameters:
+          - name: registry
+      container:
+        image: alpine.latest
+        command: [sh, -c]
+        args:
+          - |
+            name=$(cat pyproject.toml | grep name | head -1 | grep -oh "\".*\"")
+            version=$(cat .version)
+            echo "Found application name $name and version $version"
+            cat $name >> /tmp/name.txt
+            cat $version >> /tmp/version.txt
+        workingDir: /src/{{inputs.parameters.subpath}}
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+        outputs:
+          parameters:
+          - name: version
+            valueFrom:
+              path: /tmp/version.txt
+          - name: application-name  # name of output parameter
+            valueFrom:
+              path: /tmp/name.txt
+
   volumes:
     - name: docker-daemon-config
       configMap:
