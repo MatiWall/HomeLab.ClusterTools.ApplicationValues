@@ -8,6 +8,9 @@ spec:
     parameters:
       - name: username
       - name: email
+      - name: commit-message
+        value: 'Default commit message'
+      - name: path
 
   templates:
     - name: git-push-entrypoint
@@ -20,12 +23,16 @@ spec:
                   value: "{{workflow.parameters.username}}"
                 - name: email
                   value: "{{workflow.parameters.email}}"
+                - name: commit-message
+                  value: "{{workflow.parameters.commit-message}}"
 
     - name: git-push
       inputs:
         parameters:
           - name: username
           - name: email
+          - name: commit-message
+          - name: path
       container:
         image: "alpine/git:latest"
         command: [sh]
@@ -33,9 +40,9 @@ spec:
             git config --global user.email "{{inputs.parameters.email}}"
             git config --global user.name "{{inputs.parameters.username}}"
             git add .
-            git commit -m "Update application version to {{workflow.parameters.version}}"
+            git commit -m "{{workflow.parameters.commit-message}}"
             git push origin HEAD
-        workingDir: /src
+        workingDir: /src/{{inputs.parameters.path}}
         volumeMounts:
           - name: workdir
             mountPath: /src

@@ -74,6 +74,12 @@ spec:
                   value: "{{workflow.parameters.registry}}"
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
+        - - name: extract-name-and-version
+            template: extract-name-and-version
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
         - - name: git-push
             templateRef:
               name: git-push-template
@@ -84,10 +90,12 @@ spec:
                     value: "{{workflow.parameters.username}}"
                   - name: email
                     value: "{{workflow.parameters.email}}"
+                  - name: path
+                    value: "{{workflow.parameters.repo}}"
         - - name: update-values
             templateRef:
               name: application-values-tag-updater
-              template: git-push
+              template: update-values-tag
               arguments:
                 parameters:
                   - name: username
@@ -96,7 +104,7 @@ spec:
                     value: "{{workflow.parameters.email}}"
                   - name: version
                     value: "{{steps.extract-name-and-version.output.parameters.version}}"
-                  - name: version
+                  - name: application-name
                     value: "{{steps.extract-name-and-version.output.parameters.application-name}}"
 
    
