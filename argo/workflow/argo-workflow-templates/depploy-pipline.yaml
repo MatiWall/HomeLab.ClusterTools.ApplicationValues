@@ -68,6 +68,8 @@ spec:
               parameters:
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
         - - name: git-push
             templateRef:
               name: git-push-template
@@ -160,6 +162,7 @@ spec:
       inputs:
         parameters:
           - name: registry
+          - name: subpath
       container:
         image: docker:latest
         command: [sh, -c]
