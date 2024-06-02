@@ -32,6 +32,10 @@ spec:
         value: python:3.12-2
       - name: git-application-values
         value: https://github.com/MatiWall/homelab.application-values.git
+      - name: git-username
+        value: matiwall
+      - name: email
+        value: matiwall@live.dk
   templates:
     - name: build-and-deploy
       steps:
@@ -74,6 +78,12 @@ spec:
             templateRef:
               name: git-push-template
               template: git-push
+              arguments:
+                parameters:
+                  - name: username
+                    value: "{{workflow.parameters.username}}"
+                  - name: email
+                    value: "{{workflow.parameters.email}}"
         - - name: update-values
             templateRef:
               name: application-values-tag-updater
