@@ -228,14 +228,14 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: src/
-        outputs:
-          parameters:
-          - name: version
-            valueFrom:
-              path: /tmp/version.txt
-          - name: application-name  # name of output parameter
-            valueFrom:
-              path: /tmp/name.txt
+      outputs:
+        parameters:
+        - name: version
+          valueFrom:
+            path: /tmp/version.txt
+        - name: application-name  # name of output parameter
+          valueFrom:
+            path: /tmp/name.txt
 
   volumes:
     - name: docker-daemon-config
