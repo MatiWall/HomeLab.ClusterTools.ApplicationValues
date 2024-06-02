@@ -84,28 +84,28 @@ spec:
             templateRef:
               name: git-push-template
               template: git-push
-              arguments:
-                parameters:
-                  - name: username
-                    value: "{{workflow.parameters.username}}"
-                  - name: email
-                    value: "{{workflow.parameters.email}}"
-                  - name: path
-                    value: "{{workflow.parameters.repo}}"
+            arguments:
+              parameters:
+                - name: username
+                  value: "{{workflow.parameters.username}}"
+                - name: email
+                  value: "{{workflow.parameters.email}}"
+                - name: path
+                  value: "{{workflow.parameters.repo}}"
         - - name: update-values
             templateRef:
               name: application-values-tag-updater
               template: update-values-tag
-              arguments:
-                parameters:
-                  - name: username
-                    value: "{{workflow.parameters.username}}"
-                  - name: email
-                    value: "{{workflow.parameters.email}}"
-                  - name: version
-                    value: "{{steps.extract-name-and-version.output.parameters.version}}"
-                  - name: application-name
-                    value: "{{steps.extract-name-and-version.output.parameters.application-name}}"
+            arguments:
+              parameters:
+                - name: username
+                  value: "{{workflow.parameters.username}}"
+                - name: email
+                  value: "{{workflow.parameters.email}}"
+                - name: version
+                  value: "{{steps.extract-name-and-version.output.parameters.version}}"
+                - name: application-name
+                  value: "{{steps.extract-name-and-version.output.parameters.application-name}}"
 
    
     - name: cloner
