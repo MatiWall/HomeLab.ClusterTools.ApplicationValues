@@ -51,6 +51,10 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
         - - name: build
             template: build
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
         - - name: update-version
             template: update-version
             arguments:
