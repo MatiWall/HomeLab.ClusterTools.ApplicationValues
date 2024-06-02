@@ -113,6 +113,9 @@ spec:
           - name: workdir
             mountPath: src/
     - name: build
+      inputs:
+        parameters:
+          - name: subpath
       container:
         image: docker:latest
         command: [sh, -c]
