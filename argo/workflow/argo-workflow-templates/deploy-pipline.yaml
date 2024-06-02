@@ -92,6 +92,9 @@ spec:
                   value: "{{workflow.parameters.email}}"
                 - name: path
                   value: "{{workflow.parameters.repo}}"
+                - name: commit-message
+                  value: "Updated {{steps.extract-name-and-version.output.parameters.application-name}} to {{steps.extract-name-and-version.output.parameters.version}}"
+                  
         - - name: update-values
             templateRef:
               name: application-values-tag-updater
