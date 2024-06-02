@@ -32,7 +32,7 @@ spec:
         value: python:3.12-2
       - name: git-application-values
         value: https://github.com/MatiWall/homelab.application-values.git
-      - name: git-username
+      - name: username
         value: matiwall
       - name: email
         value: matiwall@live.dk
