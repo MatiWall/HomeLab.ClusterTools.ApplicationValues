@@ -32,7 +32,7 @@ spec:
       - name: repo
         value: catcode-backend
       - name: subpath
-        value: /services/core-api
+        value: services/core-api
       - name: registry
         value: docker-registry.mw.local/
       - name: base-image
@@ -119,7 +119,7 @@ spec:
             until docker ps; do sleep 1; done;
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
-            ls -l /src
+            ls -l
         workingDir: /src/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
