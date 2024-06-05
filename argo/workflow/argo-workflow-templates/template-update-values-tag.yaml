@@ -78,7 +78,7 @@ spec:
                 - name: email
                   value: "{{workflow.parameters.email}}"
                 - name: commit-message
-                  value: "updated {{workflow.parameters.application-name}} to version {{workflow.parameters.version}}"
+                  value: "updated {{inputs.parameters.application-name}} to version {{inputs.parameters.version}}"
                 - name: path
                   value: "homelab.application-values/"
 
