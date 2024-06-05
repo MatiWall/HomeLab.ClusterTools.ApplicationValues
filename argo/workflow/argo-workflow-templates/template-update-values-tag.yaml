@@ -84,6 +84,8 @@ spec:
         command: [sh, -c]
         args:
           - |
+            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
             git clone "{{inputs.parameters.git-application-values}}"
         workingDir: /src
         volumeMounts:
