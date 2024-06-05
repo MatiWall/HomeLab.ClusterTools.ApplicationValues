@@ -62,6 +62,8 @@ spec:
                   value: "{{workflow.parameters.email}}"
                 - name: commit-message
                   value: "updated {{workflow.parameters.application-name}} to version {{workflow.parameters.version}}"
+                - name: path
+                  value: "{{workflow.parameters.application-name}}/"
 
     - name: cloner
       inputs:
