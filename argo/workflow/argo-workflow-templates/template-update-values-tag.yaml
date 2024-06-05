@@ -65,7 +65,7 @@ spec:
                 - name: commit-message
                   value: "updated {{workflow.parameters.application-name}} to version {{workflow.parameters.version}}"
                 - name: path
-                  value: "{{workflow.parameters.application-name}}/"
+                  value: "homelab.application-values/"
 
     - name: cloner
       inputs:
