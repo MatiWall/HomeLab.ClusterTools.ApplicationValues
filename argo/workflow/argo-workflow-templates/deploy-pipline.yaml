@@ -215,7 +215,7 @@ spec:
         parameters:
           - name: subpath
       container:
-        image: alpine.latest
+        image: alpine:latest
         command: [sh, -c]
         args:
           - |
