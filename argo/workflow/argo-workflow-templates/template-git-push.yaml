@@ -4,6 +4,10 @@ metadata:
   name: git-push-template
 spec:
   entrypoint: git-push-entrypoint
+  volumes:
+    - name: ssh-key
+      secret:
+        secretName: matiwall-git-ssh
   arguments:
     parameters:
       - name: username
@@ -38,6 +42,11 @@ spec:
         command: [sh, -c]
         args: 
           - |
+            mkdir -p ~/.ssh
+            cp /mnt/ssh-key/ssh-privatekey ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            
             git config --global user.email "{{inputs.parameters.email}}"
             git config --global user.name "{{inputs.parameters.username}}"
             git remote -v
@@ -48,3 +57,5 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: /src
+          - name: matiwall-git-ssh
+            mountPath: /mnt/ssh-key
