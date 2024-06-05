@@ -13,6 +13,10 @@ spec:
         resources:
           requests:
             storage: 1Gi
+  volumes:
+    - name: ssh-key
+      secret:
+        secretName: matiwall-git-ssh
 
   arguments:
     parameters:
