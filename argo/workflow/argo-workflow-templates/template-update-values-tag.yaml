@@ -95,7 +95,6 @@ spec:
           - name: ssh-key
             mountPath: /root/.ssh/id_rsa
             subPath: ssh-privatekey 
-            readOnly: true
 
     - name: find-application
       inputs:
