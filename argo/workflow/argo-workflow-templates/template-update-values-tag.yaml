@@ -134,7 +134,7 @@ spec:
               application_type = 'deployment'
           else:
               raise ValueError('values.yaml does not include either a cronjob or deployment key')
-          data[application_type]['image']['tag'] = {{input.parameters.version}}
+          data[application_type]['image']['tag'] = {{inputs.parameters.version}}
 
           with open(values_path, 'w') as f:
               yaml.safe_dump(data, f, default_flow_style=False, sort_keys=False)
