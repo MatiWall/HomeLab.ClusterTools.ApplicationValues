@@ -108,7 +108,7 @@ spec:
                 - name: version
                   value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
                 - name: application-name
-                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+                  value: "core-api"
 
    
     - name: cloner
