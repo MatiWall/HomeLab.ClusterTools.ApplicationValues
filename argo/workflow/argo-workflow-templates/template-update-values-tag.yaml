@@ -84,20 +84,15 @@ spec:
         command: [sh, -c]
         args:
           - |
-            mkdir -p ~/.ssh
-            cp /mnt/ssh-key/ssh-privatekey ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-
-            ls ~/.ssh
-
             git clone "{{inputs.parameters.git-application-values}}"
         workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src
           - name: ssh-key
-            mountPath: /mnt/ssh-key
+            mountPath: /root/.ssh/id_rsa
+            subPath: ssh-privatekey 
+            readOnly: true
 
     - name: find-application
       inputs:
