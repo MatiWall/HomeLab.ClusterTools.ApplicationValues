@@ -50,6 +50,8 @@ spec:
                   value: "{{workflow.parameters.base-image}}"
                 - name: version
                   value: "{{workflow.parameters.version}}"
+                - name: values-path
+                  value: "{{steps.find-application.outputs.parameters.values-path}}"
         - - name: git-push
             templateRef:
               name: git-push-template
@@ -98,17 +100,24 @@ spec:
             fi
           done
           VALUES_PATH=$(echo "$APPLICATION_PATH" | sed 's/Chart.yaml$/values.yaml/')
-          echo "VALUES_PATH=$VALUES_PATH" > /tmp/values_path.txt
+          echo "$VALUES_PATH" > /tmp/values_path.txt
+        outputs:
+          parameters:
+            - name: values-path
+              valueFrom:
+                path: /tmp/values_path.txt
         workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src
+          
 
     - name: update-yaml
       inputs:
         parameters:
           - name: base-image
           - name: version
+          - name: values-path
       script:
         image: "{{inputs.parameters.base-image}}"
         command: [python]
