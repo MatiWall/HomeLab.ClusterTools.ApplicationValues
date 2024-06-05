@@ -116,11 +116,11 @@ spec:
         command: [sh, -c]
         args:
           - |
+            ls
             until docker ps; do sleep 1; done;
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
-            ls -l
-        workingDir: /src/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
@@ -151,6 +151,10 @@ spec:
             new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
             echo "$new_version" > .version
             echo "Updated version to $new_version"
+        workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
     - name: tag-and-push
       inputs:
         parameters:
@@ -168,7 +172,7 @@ spec:
             docker load < /src/image.tar
             docker tag image:0.0.1 {{inputs.parameters.registry}}:$version
             docker push {{inputs.parameters.registry}}/$name:$version
-        workingDir: /src/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
@@ -202,7 +206,7 @@ spec:
             echo "Found application name $name and version $version"
             cat $name >> /tmp/name.txt
             cat $version >> /tmp/version.txt
-        workingDir: /src/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
