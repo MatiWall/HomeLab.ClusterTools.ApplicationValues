@@ -122,9 +122,9 @@ spec:
               data = yaml.safe_load(f)
 
           if data.get('cronjob'):
-              application-type = 'cronjob'
+              application_type = 'cronjob'
           elif data.get('deployment'):
-              application_type = 'depployment'
+              application_type = 'deployment'
           else:
               raise ValueError('values.yaml does not include either a cronjob or deployment key')
           data[application_type]['image']['tag'] = {{input.parameters.version}}
