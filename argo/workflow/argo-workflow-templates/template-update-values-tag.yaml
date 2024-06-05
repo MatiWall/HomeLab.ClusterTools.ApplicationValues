@@ -21,9 +21,13 @@ spec:
       - name: base-image
         value: docker-registry.mw.local/python:3.12-3
       - name: email
+        value: matiwall@live.dk
       - name: username
+        value: matiwall
       - name: application-name
+        value: core-api
       - name: version
+        value: 1.1.1a
 
   templates:
     - name: update-values-tag
