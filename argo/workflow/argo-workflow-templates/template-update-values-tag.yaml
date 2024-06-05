@@ -124,10 +124,8 @@ spec:
         source: |
           import yaml
 
-          with open("/tmp/values_path.txt") as f:
-              values_path = f.read().strip().split('=')[1]
 
-          with open(values_path, 'r') as f:
+          with open({{inputs.parameters.values-path}}, 'r') as f:
               data = yaml.safe_load(f)
 
           if data.get('cronjob'):
