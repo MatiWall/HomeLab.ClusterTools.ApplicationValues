@@ -18,16 +18,12 @@ spec:
     parameters:
       - name: git-application-values
         value: https://github.com/MatiWall/homelab.application-values.git
-      - name: application-name
-        value: core-api
-      - name: version
-        value: 1.1.1
       - name: base-image
         value: python:3.12-2
       - name: email
-        value: matiwall@live.dk
       - name: username
-        value: matiwall
+      - name: application-name
+      - name: version
 
   templates:
     - name: update-values-tag
