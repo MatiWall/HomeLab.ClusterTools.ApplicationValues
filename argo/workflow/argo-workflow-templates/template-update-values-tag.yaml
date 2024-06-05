@@ -17,6 +17,7 @@ spec:
     - name: ssh-key
       secret:
         secretName: matiwall-git-ssh
+      defaultMode: 0600 
 
   arguments:
     parameters:
@@ -95,6 +96,7 @@ spec:
           - name: ssh-key
             mountPath: /root/.ssh/id_rsa
             subPath: ssh-privatekey 
+            readOnly: true
 
     - name: find-application
       inputs:
