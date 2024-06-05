@@ -17,7 +17,6 @@ spec:
     - name: ssh-key
       secret:
         secretName: matiwall-git-ssh
-      defaultMode: 0600 
 
   arguments:
     parameters:
@@ -85,6 +84,8 @@ spec:
         command: [sh, -c]
         args:
           - |
+            mkdir -p ~/.ssh
+            cp /mnt/ssh-key/ssh-privatekey ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
@@ -94,9 +95,7 @@ spec:
           - name: workdir
             mountPath: /src
           - name: ssh-key
-            mountPath: /root/.ssh/id_rsa
-            subPath: ssh-privatekey 
-            readOnly: true
+            mountPath: /mnt/ssh-key
 
     - name: find-application
       inputs:
