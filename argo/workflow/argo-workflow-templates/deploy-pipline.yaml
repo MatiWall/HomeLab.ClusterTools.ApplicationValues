@@ -113,6 +113,7 @@ spec:
       inputs:
         parameters:
           - name: subpath
+          - name: repo
       container:
         image: docker:latest
         command: [sh, -c]
