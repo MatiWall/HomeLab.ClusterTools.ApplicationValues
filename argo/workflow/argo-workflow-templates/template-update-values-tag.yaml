@@ -124,8 +124,8 @@ spec:
         source: |
           import yaml
 
-
-          with open({{inputs.parameters.values-path}}, 'r') as f:
+          values_path = "{{inputs.parameters.values-path}}"
+          with open(values_path, 'r') as f:
               data = yaml.safe_load(f)
 
           if data.get('cronjob'):
