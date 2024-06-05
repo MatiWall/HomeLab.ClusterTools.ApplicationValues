@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: git-push-template
+  name: git-template
 spec:
   entrypoint: git-push-entrypoint
   volumes:
@@ -54,6 +54,29 @@ spec:
             git commit -m "{{inputs.parameters.commit-message}}"
             git push origin HEAD
         workingDir: /src/{{inputs.parameters.path}}
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+          - name: ssh-key
+            mountPath: /mnt/ssh-key
+
+
+    - name: git-clone
+      inputs:
+        parameters:
+          - name: url
+      container:
+        image: alpine/git:latest
+        command: [sh, -c]
+        args:
+          - |
+            mkdir -p ~/.ssh
+            cp /mnt/ssh-key/ssh-privatekey ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+            git clone "{{inputs.parameters.url}}"
+        workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src

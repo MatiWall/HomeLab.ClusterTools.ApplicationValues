@@ -36,11 +36,13 @@ spec:
   templates:
     - name: update-values-tag
       steps:
-        - - name: cloner
-            template: cloner
+        - - name: git-push
+            templateRef:
+              name: git-template
+              template: git-clone
             arguments:
               parameters:
-                - name: git-application-values
+                - name: url
                   value: "{{workflow.parameters.git-application-values}}"
         - - name: find-application
             template: find-application
@@ -62,7 +64,7 @@ spec:
                   value: "{{steps.find-application.outputs.parameters.values-path}}"
         - - name: git-push
             templateRef:
-              name: git-push-template
+              name: git-template
               template: git-push
             arguments:
               parameters:
