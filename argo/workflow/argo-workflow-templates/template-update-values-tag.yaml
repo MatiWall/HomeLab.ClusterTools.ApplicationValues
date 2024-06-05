@@ -21,7 +21,7 @@ spec:
   arguments:
     parameters:
       - name: git-application-values
-        value: git@github.com:MatiWall/homelab.application-values.git
+        value: ssh://git@github.com:MatiWall/homelab.application-values.git
       - name: base-image
         value: docker-registry.mw.local/python:3.12-3
       - name: email
