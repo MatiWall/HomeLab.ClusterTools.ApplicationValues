@@ -17,6 +17,9 @@ spec:
     - name: ssh-key
       secret:
         secretName: matiwall-git-ssh
+    - name: docker-daemon-config
+      configMap:
+        name: docker-daemon-config
 
   arguments:
     parameters:
@@ -215,8 +218,3 @@ spec:
           - name: application-name  # name of output parameter
             valueFrom:
               path: /tmp/name.txt
-
-  volumes:
-    - name: docker-daemon-config
-      configMap:
-        name: docker-daemon-config
