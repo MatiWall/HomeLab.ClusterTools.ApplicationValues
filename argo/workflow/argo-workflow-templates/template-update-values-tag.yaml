@@ -49,7 +49,7 @@ spec:
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
                 - name: version
-                  value: "{{workflow.parameters.versions}}"
+                  value: "{{workflow.parameters.version}}"
         - - name: git-push
             templateRef:
               name: git-push-template
