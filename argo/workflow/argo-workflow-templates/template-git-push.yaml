@@ -41,7 +41,7 @@ spec:
             git config --global user.email "{{inputs.parameters.email}}"
             git config --global user.name "{{inputs.parameters.username}}"
             git add .
-            git commit -m "{{workflow.parameters.commit-message}}"
+            git commit -m "{{inputs.parameters.commit-message}}"
             git push origin HEAD
         workingDir: /src/{{inputs.parameters.path}}
         volumeMounts:
