@@ -60,6 +60,8 @@ spec:
               parameters:
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
         - - name: update-version
             template: update-version
             arguments:
@@ -120,7 +122,7 @@ spec:
             until docker ps; do sleep 1; done;
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
-        workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
