@@ -48,6 +48,8 @@ spec:
               parameters:
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
+                - name: version
+                  value: "{{workflow.parameters.versions}}"
         - - name: git-push
             templateRef:
               name: git-push-template
@@ -78,7 +80,6 @@ spec:
       inputs:
         parameters:
           - name: application-name
-          - name: base-image
       script:
         image: "alpine:latest"
         command: [sh]
@@ -103,6 +104,7 @@ spec:
       inputs:
         parameters:
           - name: base-image
+          - name: version
       script:
         image: "{{inputs.parameters.base-image}}"
         command: [python]
