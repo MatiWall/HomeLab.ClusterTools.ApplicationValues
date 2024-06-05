@@ -101,15 +101,15 @@ spec:
           done
           VALUES_PATH=$(echo "$APPLICATION_PATH" | sed 's/Chart.yaml$/values.yaml/')
           echo "$VALUES_PATH" > /tmp/values_path.txt
-        outputs:
-          parameters:
-            - name: values-path
-              valueFrom:
-                path: /tmp/values_path.txt
         workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src
+      outputs:
+        parameters:
+          - name: values-path
+            valueFrom:
+              path: /tmp/values_path.txt
           
 
     - name: update-yaml
