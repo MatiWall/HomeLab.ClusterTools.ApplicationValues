@@ -80,7 +80,7 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
         - - name: git-push
             templateRef:
-              name: git-push-template
+              name: git-template
               template: git-push
             arguments:
               parameters:
