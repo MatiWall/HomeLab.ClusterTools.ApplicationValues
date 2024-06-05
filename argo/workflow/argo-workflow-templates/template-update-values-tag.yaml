@@ -54,12 +54,12 @@ spec:
             templateRef:
               name: git-push-template
               template: git-push
-              arguments:
-                parameters:
-                  - name: username
-                    value: "{{workflow.parameters.username}}"
-                  - name: email
-                    value: "{{workflow.parameters.email}}"
+            arguments:
+              parameters:
+                - name: username
+                  value: "{{workflow.parameters.username}}"
+                - name: email
+                  value: "{{workflow.parameters.email}}"
 
     - name: cloner
       inputs:
