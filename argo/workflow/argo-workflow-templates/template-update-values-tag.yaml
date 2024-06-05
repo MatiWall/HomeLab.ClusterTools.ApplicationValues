@@ -19,7 +19,7 @@ spec:
       - name: git-application-values
         value: https://github.com/MatiWall/homelab.application-values.git
       - name: base-image
-        value: python:3.12-2
+        value: docker-registry.mw.local/python:3.12-2
       - name: email
       - name: username
       - name: application-name
