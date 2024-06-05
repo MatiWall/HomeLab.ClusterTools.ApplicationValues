@@ -35,6 +35,10 @@ spec:
 
   templates:
     - name: update-values-tag
+      inputs:
+        parameters:
+          - name: application-name
+        
       steps:
         - - name: git-clone
             templateRef:
@@ -49,7 +53,7 @@ spec:
             arguments:
               parameters:
                 - name: application-name
-                  value: "{{workflow.parameters.application-name}}"
+                  value: "{{inputs.parameters.application-name}}"
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
         - - name: update-yaml
