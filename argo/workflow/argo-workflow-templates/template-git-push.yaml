@@ -36,7 +36,8 @@ spec:
       container:
         image: "alpine/git:latest"
         command: [sh, -c]
-        args: |
+        args: 
+          - |
             git config --global user.email "{{inputs.parameters.email}}"
             git config --global user.name "{{inputs.parameters.username}}"
             git add .
