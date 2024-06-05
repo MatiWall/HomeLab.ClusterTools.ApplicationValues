@@ -121,7 +121,7 @@ spec:
           with open(values_path, 'r') as f:
               data = yaml.safe_load(f)
 
-          if data.get('cronjob').
+          if data.get('cronjob'):
               application-type = 'cronjob'
           elif data.get('deployment'):
               application_type = 'depployment'
