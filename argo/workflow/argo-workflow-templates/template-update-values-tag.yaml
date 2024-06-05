@@ -38,6 +38,7 @@ spec:
       inputs:
         parameters:
           - name: application-name
+          - name: version
         
       steps:
         - - name: git-clone
@@ -63,7 +64,7 @@ spec:
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
                 - name: version
-                  value: "{{workflow.parameters.version}}"
+                  value: "{{inputs.parameters.version}}"
                 - name: values-path
                   value: "{{steps.find-application.outputs.parameters.values-path}}"
         - - name: git-push

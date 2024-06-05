@@ -102,10 +102,6 @@ spec:
               template: update-values-tag
             arguments:
               parameters:
-                - name: username
-                  value: "{{workflow.parameters.username}}"
-                - name: email
-                  value: "{{workflow.parameters.email}}"
                 - name: version
                   value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
                 - name: application-name
