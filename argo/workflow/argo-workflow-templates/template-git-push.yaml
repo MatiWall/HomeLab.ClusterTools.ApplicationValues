@@ -40,6 +40,7 @@ spec:
           - |
             git config --global user.email "{{inputs.parameters.email}}"
             git config --global user.name "{{inputs.parameters.username}}"
+            git remote -v
             git add .
             git commit -m "{{inputs.parameters.commit-message}}"
             git push origin HEAD
