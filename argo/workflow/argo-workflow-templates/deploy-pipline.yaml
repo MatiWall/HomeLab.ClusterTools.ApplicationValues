@@ -13,11 +13,15 @@ spec:
         resources:
           requests:
             storage: 1Gi
+  volumes:
+    - name: ssh-key
+      secret:
+        secretName: matiwall-git-ssh
 
   arguments:
     parameters:
       - name: giturl
-        value: https://github.com/MatiWall/  # Provide the correct GitHub URL here
+        value: git@github.com:MatiWall/  # Provide the correct GitHub URL here
       - name: revision
         value: HEAD
       - name: branch
@@ -31,7 +35,7 @@ spec:
       - name: base-image
         value: python:3.12-2
       - name: git-application-values
-        value: https://github.com/MatiWall/homelab.application-values.git
+        value: git@github.com:MatiWall/homelab.application-values.git
       - name: username
         value: matiwall
       - name: email
@@ -39,20 +43,14 @@ spec:
   templates:
     - name: build-and-deploy
       steps:
-        - - name: cloner
-            template: cloner
+        - - name: git-clone
+            templateRef:
+              name: git-template
+              template: git-clone
             arguments:
               parameters:
-                - name: giturl
-                  value: "{{workflow.parameters.giturl}}"
-                - name: revision
-                  value: "{{workflow.parameters.revision}}"
-                - name: branch
-                  value: "{{workflow.parameters.branch}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
+                - name: url
+                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
         - - name: build
             template: build
             arguments:
@@ -109,26 +107,7 @@ spec:
                   value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
                 - name: application-name
                   value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
-
    
-    - name: cloner
-      inputs:
-        parameters:
-          - name: giturl
-          - name: revision
-          - name: branch
-          - name: repo
-          - name: subpath
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args:
-          - |
-            git clone {{inputs.parameters.giturl}}{{inputs.parameters.repo}}
-        workingDir: /src
-        volumeMounts:
-          - name: workdir
-            mountPath: src/
     - name: build
       inputs:
         parameters:
