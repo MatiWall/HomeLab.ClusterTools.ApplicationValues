@@ -5,10 +5,6 @@ metadata:
 spec:
   entrypoint: update-values-tag
   serviceAccountName: argo-workflow-svc
-  volumes:
-    - name: ssh-key
-      secret:
-        secretName: matiwall-git-ssh
 
   arguments:
     parameters:
@@ -73,28 +69,6 @@ spec:
                   value: "updated {{inputs.parameters.application-name}} to version {{inputs.parameters.version}}"
                 - name: path
                   value: "homelab.application-values/"
-
-    - name: cloner
-      inputs:
-        parameters:
-          - name: git-application-values
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args:
-          - |
-            mkdir -p ~/.ssh
-            cp /mnt/ssh-key/ssh-privatekey ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-
-            git clone "{{inputs.parameters.git-application-values}}"
-        workingDir: /src
-        volumeMounts:
-          - name: workdir
-            mountPath: /src
-          - name: ssh-key
-            mountPath: /mnt/ssh-key
 
     - name: find-application
       inputs:

@@ -4,10 +4,6 @@ metadata:
   name: git-template
 spec:
   entrypoint: git-push-entrypoint
-  volumes:
-    - name: ssh-key
-      secret:
-        secretName: matiwall-git-ssh
   arguments:
     parameters:
       - name: username
@@ -37,6 +33,10 @@ spec:
           - name: email
           - name: commit-message
           - name: path
+      volumes:
+        - name: ssh-key
+          secret:
+            secretName: matiwall-git-ssh
       container:
         image: "alpine/git:latest"
         command: [sh, -c]
@@ -65,6 +65,10 @@ spec:
       inputs:
         parameters:
           - name: url
+      volumes:
+        - name: ssh-key
+          secret:
+            secretName: matiwall-git-ssh
       container:
         image: alpine/git:latest
         command: [sh, -c]
@@ -82,3 +86,5 @@ spec:
             mountPath: /src
           - name: ssh-key
             mountPath: /mnt/ssh-key
+
+

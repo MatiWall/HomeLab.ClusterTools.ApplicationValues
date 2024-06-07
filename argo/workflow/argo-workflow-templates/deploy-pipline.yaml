@@ -13,13 +13,6 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  volumes:
-    - name: ssh-key
-      secret:
-        secretName: matiwall-git-ssh
-    - name: docker-daemon-config
-      configMap:
-        name: docker-daemon-config
 
   arguments:
     parameters:
@@ -151,11 +144,11 @@ spec:
         command: [sh, -c]
         args:
           - |
-            version=$(cat .version)
+            version=$(cat version.txt)
             IFS='.' read -r -a version_parts <<< "$version"
             ((version_parts[2]++))
             new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
-            echo "$new_version" > .version
+            echo "$new_version" > version.txt
             echo "Updated version to $new_version"
         workingDir: /src/{{inputs.parameters.subpath}}/{{inputs.parameters.subpath}}
         volumeMounts:
