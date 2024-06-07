@@ -65,7 +65,7 @@ spec:
               parameters:
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
-                - name: reppo
+                - name: repo
                   value: "{{workflow.parameters.repo}}"
                   
         - - name: tag-and-push
@@ -76,7 +76,7 @@ spec:
                   value: "{{workflow.parameters.registry}}"
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
-                - name: reppo
+                - name: repo
                   value: "{{workflow.parameters.repo}}"
         - - name: extract-name-and-version
             template: extract-name-and-version
@@ -84,7 +84,7 @@ spec:
               parameters:
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
-                - name: reppo
+                - name: repo
                   value: "{{workflow.parameters.repo}}"
         - - name: git-push
             templateRef:
