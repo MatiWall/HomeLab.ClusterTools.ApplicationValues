@@ -155,11 +155,18 @@ spec:
         command: [sh, -c]
         args:
           - |
+            # Read current version from version.txt
             version=$(cat version.txt)
-            IFS='.' read -r -a version_parts <<< "$version"
-            ((version_parts[2]++))
-            new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
-            echo version.txt
+
+            # Increment the patch version using sed
+            new_version=$(echo "$version" | sed 's/\([0-9]*\.[0-9]*\)\.\([0-9]*\)/echo \1.$(($2 + 1))/e')
+
+            # Update version.txt with the new version 
+            echo "$new_version" > version.txt
+
+            # Output confirmation message
+            echo "Updated version to $new_version"
+
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
