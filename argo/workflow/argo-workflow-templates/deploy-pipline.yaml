@@ -159,8 +159,7 @@ spec:
             IFS='.' read -r -a version_parts <<< "$version"
             ((version_parts[2]++))
             new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
-            echo "$new_version" > version.txt
-            echo "Updated version to $new_version"
+            echo version.txt
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
