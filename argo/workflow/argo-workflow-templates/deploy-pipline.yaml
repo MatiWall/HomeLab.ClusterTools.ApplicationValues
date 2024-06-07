@@ -143,6 +143,7 @@ spec:
       inputs:
         parameters:
           - name: subpath
+          - name: repo
       container:
         image: alpine:latest
         command: [sh, -c]
@@ -163,6 +164,7 @@ spec:
         parameters:
           - name: registry
           - name: subpath
+          - name: repo
       container:
         image: docker:latest
         command: [sh, -c]
@@ -199,6 +201,7 @@ spec:
       inputs:
         parameters:
           - name: subpath
+          - name: repo
       container:
         image: alpine:latest
         command: [sh, -c]
