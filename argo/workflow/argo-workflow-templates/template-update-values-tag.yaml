@@ -11,7 +11,9 @@ spec:
       - name: git-application-values
         value: git@github.com:MatiWall/homelab.application-values.git
       - name: base-image
-        value: docker-registry.mw.local/python:3.12-3
+        value: python:3.12-3
+      - name: registry
+        value: docker-registry.mw.local/
       - name: email
         value: matiwall@live.dk
       - name: username
@@ -51,6 +53,8 @@ spec:
               parameters:
                 - name: base-image
                   value: "{{workflow.parameters.base-image}}"
+                - name: registry
+                  value: "{{workflow.parameters.registry}}"
                 - name: version
                   value: "{{inputs.parameters.version}}"
                 - name: values-path
@@ -104,10 +108,11 @@ spec:
       inputs:
         parameters:
           - name: base-image
+          - name: registry
           - name: version
           - name: values-path
       script:
-        image: "{{inputs.parameters.base-image}}"
+        image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [python]
         source: |
           import yaml
