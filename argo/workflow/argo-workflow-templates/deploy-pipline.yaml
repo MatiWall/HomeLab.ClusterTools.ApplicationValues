@@ -187,7 +187,7 @@ spec:
             name=$(cat pyproject.toml | grep name | head -1 | grep -oh "\".*\"")
             version=$(cat version.txt)
             docker load < /src/image.tar
-            docker tag image:0.0.1 {{inputs.parameters.registry}}:$version
+            docker tag image:0.0.1 {{inputs.parameters.registry}}/$name:$version
             docker push {{inputs.parameters.registry}}/$name:$version
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
