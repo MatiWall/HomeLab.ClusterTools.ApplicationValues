@@ -80,7 +80,7 @@ spec:
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
           - name: tag-and-push
-            dependencies: [git-clone]
+            dependencies: [extract-name-and-version, build]
             template: tag-and-push
             arguments:
               parameters:
