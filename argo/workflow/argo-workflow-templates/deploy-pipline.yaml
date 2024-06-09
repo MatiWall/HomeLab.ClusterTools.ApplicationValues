@@ -208,13 +208,12 @@ spec:
             echo "system: $system"
             echo "Application $application"
             echo "Deployable Unit: $deployableUnit"
-            echo "Version: $version"
-            echo "Tag: $tag"    
+            echo "Version: $version" 
 
             name="${system}.${application}.${deployableUnit}"
             echo "Found application name $name and version $version"
-            cat $name >> /tmp/name.txt
-            cat $version >> /tmp/version.txt
+            cat "$name" >> /tmp/name.txt
+            cat "$version" >> /tmp/version.txt
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
