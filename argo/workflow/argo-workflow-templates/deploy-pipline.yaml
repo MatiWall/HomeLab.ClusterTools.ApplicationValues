@@ -91,9 +91,9 @@ spec:
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
                 - name: application-name
-                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+                  value: "{{tasks.extract-name-and-version.outputs.parameters.application-name}}"
                 - name: version
-                  value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
+                  value: "{{tasks.extract-name-and-version.outputs.parameters.version}}"
           - name: git-push
             dependencies: [tag-and-push]
             templateRef:
@@ -108,7 +108,7 @@ spec:
                 - name: path
                   value: "{{workflow.parameters.repo}}"
                 - name: commit-message
-                  value: "Updated {{steps.extract-name-and-version.outputs.parameters.application-name}} to {{steps.extract-name-and-version.outputs.parameters.version}}"
+                  value: "Updated {{tasks.extract-name-and-version.outputs.parameters.application-name}} to {{tasks.extract-name-and-version.outputs.parameters.version}}"
                   
           - name: update-values
             dependencies: [tag-and-push]
@@ -118,9 +118,9 @@ spec:
             arguments:
               parameters:
                 - name: version
-                  value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
+                  value: "{{tasks.extract-name-and-version.outputs.parameters.version}}"
                 - name: application-name
-                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+                  value: "{{tasks.extract-name-and-version.outputs.parameters.application-name}}"
    
     - name: build
       inputs:
