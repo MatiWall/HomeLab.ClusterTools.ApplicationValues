@@ -184,7 +184,7 @@ spec:
           - |
             ls -l
             until docker ps; do sleep 1; done;
-            name=$(grep -m 1 '^name' pyproject.toml | grep -oP '(?<=name = ").*(?=")')
+            name=$(cat name.txt)
             version=$(cat version.txt)
           
             updated_name=$(echo "$name" | sed 's/\./\//g')
