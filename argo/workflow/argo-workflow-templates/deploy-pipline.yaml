@@ -33,7 +33,7 @@ spec:
       - name: registry
         value: docker-registry.mw.local/
       - name: base-image
-        value: python:3.12-2
+        value: python:3.12-3
       - name: git-application-values
         value: git@github.com:MatiWall/homelab.application-values.git
       - name: username
@@ -70,6 +70,10 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
+                - name: registry
+                  value: "{{workflow.parameters.registry}}"
+                - name: base-image
+                  value: "{{workflow.parameters.base-image}}"
           - name: extract-name-and-version
             dependencies: [update-version]
             template: extract-name-and-version
@@ -160,6 +164,8 @@ spec:
         parameters:
           - name: subpath
           - name: repo
+          - name: registry
+          - name: base-image
       script:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [python]
