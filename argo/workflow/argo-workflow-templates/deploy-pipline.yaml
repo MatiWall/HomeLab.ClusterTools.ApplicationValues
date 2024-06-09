@@ -205,8 +205,9 @@ spec:
             version=$(extract_field "version" catcode.yaml)
 
             # Debug prints
-            echo "Registry: $registry" 
-            echo "Updated name: $updated_name"
+            echo "system: $system"
+            echo "Application $application"
+            echo "Deployable Unit: $deployableUnit"
             echo "Version: $version"
             echo "Tag: $tag"    
 
@@ -241,14 +242,13 @@ spec:
           - |
             ls -l
             until docker ps; do sleep 1; done;
-          
-            registry={{inputs.parameters.registry}}
-            tag="{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
 
             docker load < /src/image.tar
 
-            docker tag image:0.0.1 "$tag"
-            docker push "$tag"
+            image="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
+
+            docker tag image:0.0.1 "$image"
+            docker push "$image"
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
