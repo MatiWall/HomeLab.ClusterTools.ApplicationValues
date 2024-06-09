@@ -42,7 +42,8 @@ spec:
         value: matiwall@live.dk
   templates:
     - name: build-and-deploy
-      steps:
+      dag:
+        tasks:
         - - name: git-clone
             templateRef:
               name: git-template
@@ -52,6 +53,7 @@ spec:
                 - name: url
                   value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
         - - name: build
+            dependencies: [git-clone]
             template: build
             arguments:
               parameters:
@@ -60,6 +62,7 @@ spec:
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
         - - name: update-version
+            dependencies: [git-clone]
             template: update-version
             arguments:
               parameters:
@@ -67,8 +70,17 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
-                  
+        - - name: extract-name-and-version
+            dependencies: [update-version]
+            template: extract-name-and-version
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
         - - name: tag-and-push
+            dependencies: [git-clone]
             template: tag-and-push
             arguments:
               parameters:
@@ -78,15 +90,12 @@ spec:
                   value: "{{workflow.parameters.subpath}}"
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
-        - - name: extract-name-and-version
-            template: extract-name-and-version
-            arguments:
-              parameters:
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
+                - name: application-name
+                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+                - name: version
+                  value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
         - - name: git-push
+            dependencies: [tag-and-push]
             templateRef:
               name: git-template
               template: git-push
@@ -102,6 +111,7 @@ spec:
                   value: "Updated {{steps.extract-name-and-version.outputs.parameters.application-name}} to {{steps.extract-name-and-version.outputs.parameters.version}}"
                   
         - - name: update-values
+            dependencies: [tag-and-push]
             templateRef:
               name: application-values-tag-updater
               template: update-values-tag
@@ -155,28 +165,75 @@ spec:
         command: [sh, -c]
         args:
           - |
-            # Read current version from version.txt
-            version=$(cat version.txt)
+            # Function to update patch version by one in semantic version format x.y.z
+            update_patch_version() {
+              local yaml_file="$1"
 
-            # Increment the patch version using sed
-            new_version=$(echo "$version" | sed 's/\([0-9]*\.[0-9]*\)\.\([0-9]*\)/echo \1.$(($2 + 1))/e')
+              # Use sed to find and increment the patch version
+              sed -i -E 's/^(\s*version:\s*[0-9]+\.[0-9]+\.)([0-9]+)/echo "\1$((\2 + 1))"/e' "$yaml_file"
+            }
 
-            # Update version.txt with the new version 
-            echo "$new_version" > version.txt
+            # Example usage: Update patch version in catcode.yaml
+            update_patch_version catcode.yaml
 
-            # Output confirmation message
-            echo "Updated version to $new_version"
+            cat catcode.yaml
 
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
+    - name: extract-name-and-version
+      inputs:
+        parameters:
+          - name: subpath
+          - name: repo
+      container:
+        image: alpine:latest
+        command: [sh, -c]
+        args:
+          - |
+            extract_field() {
+              local field_name="$1"
+              local yaml_file="$2"
+              # Use sed to find the line containing the field and extract the value
+              sed -n "s/^\s*$field_name:\s*\(.*\)/\1/p" "$yaml_file" | tr -d '"'
+            }
+
+            system=$(extract_field "system" catcode.yaml)
+            application=$(extract_field "application" catcode.yaml)
+            deployableUnit=$(extract_field "deployableUnit" catcode.yaml)
+            version=$(extract_field "version" catcode.yaml)
+
+            # Debug prints
+            echo "Registry: $registry" 
+            echo "Updated name: $updated_name"
+            echo "Version: $version"
+            echo "Tag: $tag"    
+
+            name="${system}.${application}.${deployableUnit}"
+            echo "Found application name $name and version $version"
+            cat $name >> /tmp/name.txt
+            cat $version >> /tmp/version.txt
+        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+      outputs:
+        parameters:
+          - name: version
+            valueFrom:
+              path: /tmp/version.txt
+          - name: application-name  # name of output parameter
+            valueFrom:
+              path: /tmp/name.txt
     - name: tag-and-push
       inputs:
         parameters:
           - name: registry
           - name: subpath
           - name: repo
+          - name: application-name
+          - name: version
       container:
         image: docker:latest
         command: [sh, -c]
@@ -184,18 +241,9 @@ spec:
           - |
             ls -l
             until docker ps; do sleep 1; done;
-            name=$(cat name.txt)
-            version=$(cat version.txt)
           
-            updated_name=$(echo "$name" | sed 's/\./\//g')
             registry={{inputs.parameters.registry}}
-            tag="${registry}${updated_name}:${version}"
-
-            # Debug prints
-            echo "Registry: $registry" 
-            echo "Updated name: $updated_name"
-            echo "Version: $version"
-            echo "Tag: $tag"    
+            tag="{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
 
             docker load < /src/image.tar
 
@@ -220,31 +268,4 @@ spec:
         command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
         ports:
           - containerPort: 2375  # Expose Docker daemon on HTTP port  
-            
-    - name: extract-name-and-version
-      inputs:
-        parameters:
-          - name: subpath
-          - name: repo
-      container:
-        image: alpine:latest
-        command: [sh, -c]
-        args:
-          - |
-            name=$(cat pyproject.toml | grep name | head -1 | grep -oh "\".*\"")
-            version=$(cat version.txt)
-            echo "Found application name $name and version $version"
-            cat $name >> /tmp/name.txt
-            cat $version >> /tmp/version.txt
-        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
-        volumeMounts:
-          - name: workdir
-            mountPath: src/
-      outputs:
-        parameters:
-          - name: version
-            valueFrom:
-              path: /tmp/version.txt
-          - name: application-name  # name of output parameter
-            valueFrom:
-              path: /tmp/name.txt
+          
