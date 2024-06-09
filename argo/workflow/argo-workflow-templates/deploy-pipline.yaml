@@ -44,83 +44,83 @@ spec:
     - name: build-and-deploy
       dag:
         tasks:
-          - - name: git-clone
-              templateRef:
-                name: git-template
-                template: git-clone
-              arguments:
-                parameters:
-                  - name: url
-                    value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
-          - - name: build
-              dependencies: [git-clone]
-              template: build
-              arguments:
-                parameters:
-                  - name: subpath
-                    value: "{{workflow.parameters.subpath}}"
-                  - name: repo
-                    value: "{{workflow.parameters.repo}}"
-          - - name: update-version
-              dependencies: [git-clone]
-              template: update-version
-              arguments:
-                parameters:
-                  - name: subpath
-                    value: "{{workflow.parameters.subpath}}"
-                  - name: repo
-                    value: "{{workflow.parameters.repo}}"
-          - - name: extract-name-and-version
-              dependencies: [update-version]
-              template: extract-name-and-version
-              arguments:
-                parameters:
-                  - name: subpath
-                    value: "{{workflow.parameters.subpath}}"
-                  - name: repo
-                    value: "{{workflow.parameters.repo}}"
-          - - name: tag-and-push
-              dependencies: [git-clone]
-              template: tag-and-push
-              arguments:
-                parameters:
-                  - name: registry
-                    value: "{{workflow.parameters.registry}}"
-                  - name: subpath
-                    value: "{{workflow.parameters.subpath}}"
-                  - name: repo
-                    value: "{{workflow.parameters.repo}}"
-                  - name: application-name
-                    value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
-                  - name: version
-                    value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
-          - - name: git-push
-              dependencies: [tag-and-push]
-              templateRef:
-                name: git-template
-                template: git-push
-              arguments:
-                parameters:
-                  - name: username
-                    value: "{{workflow.parameters.username}}"
-                  - name: email
-                    value: "{{workflow.parameters.email}}"
-                  - name: path
-                    value: "{{workflow.parameters.repo}}"
-                  - name: commit-message
-                    value: "Updated {{steps.extract-name-and-version.outputs.parameters.application-name}} to {{steps.extract-name-and-version.outputs.parameters.version}}"
+          - name: git-clone
+            templateRef:
+              name: git-template
+              template: git-clone
+            arguments:
+              parameters:
+                - name: url
+                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+          - name: build
+            dependencies: [git-clone]
+            template: build
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+          - name: update-version
+            dependencies: [git-clone]
+            template: update-version
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+          - name: extract-name-and-version
+            dependencies: [update-version]
+            template: extract-name-and-version
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+          - name: tag-and-push
+            dependencies: [git-clone]
+            template: tag-and-push
+            arguments:
+              parameters:
+                - name: registry
+                  value: "{{workflow.parameters.registry}}"
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+                - name: application-name
+                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+                - name: version
+                  value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
+          - name: git-push
+            dependencies: [tag-and-push]
+            templateRef:
+              name: git-template
+              template: git-push
+            arguments:
+              parameters:
+                - name: username
+                  value: "{{workflow.parameters.username}}"
+                - name: email
+                  value: "{{workflow.parameters.email}}"
+                - name: path
+                  value: "{{workflow.parameters.repo}}"
+                - name: commit-message
+                  value: "Updated {{steps.extract-name-and-version.outputs.parameters.application-name}} to {{steps.extract-name-and-version.outputs.parameters.version}}"
                   
-          - - name: update-values
-              dependencies: [tag-and-push]
-              templateRef:
-                name: application-values-tag-updater
-                template: update-values-tag
-              arguments:
-                parameters:
-                  - name: version
-                    value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
-                  - name: application-name
-                    value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
+          - name: update-values
+            dependencies: [tag-and-push]
+            templateRef:
+              name: application-values-tag-updater
+              template: update-values-tag
+            arguments:
+              parameters:
+                - name: version
+                  value: "{{steps.extract-name-and-version.outputs.parameters.version}}"
+                - name: application-name
+                  value: "{{steps.extract-name-and-version.outputs.parameters.application-name}}"
    
     - name: build
       inputs:
