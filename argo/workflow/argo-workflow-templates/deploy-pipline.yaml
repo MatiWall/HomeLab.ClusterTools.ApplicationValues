@@ -184,13 +184,20 @@ spec:
           - |
             ls -l
             until docker ps; do sleep 1; done;
-            name=$(cat pyproject.toml | grep name | head -1 | grep -oh "\".*\"")
+            name=$(grep -m 1 '^name' pyproject.toml | grep -oP '(?<=name = ").*(?=")')
             version=$(cat version.txt)
-            docker load < /src/image.tar
-
           
             updated_name=$(echo "$name" | sed 's/\./\//g')
-            tag="{{inputs.parameters.registry}}${updated_name}:${version}"
+            registry={{inputs.parameters.registry}}
+            tag="${registry}${updated_name}:${version}"
+
+            # Debug prints
+            echo "Registry: $registry" 
+            echo "Updated name: $updated_name"
+            echo "Version: $version"
+            echo "Tag: $tag"    
+
+            docker load < /src/image.tar
 
             docker tag image:0.0.1 "$tag"
             docker push "$tag"
