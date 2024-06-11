@@ -118,6 +118,7 @@ spec:
           import yaml
 
           values_path = "{{inputs.parameters.values-path}}"
+          print(values_path)
           with open(values_path, 'r') as f:
               data = yaml.safe_load(f)
 

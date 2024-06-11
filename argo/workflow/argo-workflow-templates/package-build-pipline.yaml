@@ -32,18 +32,14 @@ spec:
   templates:
     - name: build-and-deploy
       steps:
-        - - name: clone-repo
-            template: cloner
+        - - name: git-clone
+            templateRef:
+              name: git-template
+              template: git-clone
             arguments:
               parameters:
-                - name: giturl
-                  value: "{{workflow.parameters.giturl}}"
-                - name: revision
-                  value: "{{workflow.parameters.revision}}"
-                - name: branch
-                  value: "{{workflow.parameters.branch}}"
-                - name: path
-                  value: "{{workflow.parameters.path}}"
+                - name: url
+                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.path}}"
         - - name: install-dependencies
             template: install-dependencies
             arguments:
@@ -86,23 +82,6 @@ spec:
                   value: "{{workflow.parameters.base-image}}"
 
                
-    - name: cloner
-      inputs:
-        parameters:
-          - name: giturl
-          - name: revision
-          - name: branch
-          - name: path
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args:
-          - |
-            git clone {{inputs.parameters.giturl}}{{inputs.parameters.path}} --branch {{inputs.parameters.branch}}
-        workingDir: /src
-        volumeMounts:
-          - name: workdir
-            mountPath: src/
     - name: install-dependencies
       inputs:
         parameters:
