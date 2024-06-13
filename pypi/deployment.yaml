@@ -16,6 +16,8 @@ spec:
       containers:
       - name: pypiserver
         image: pypiserver/pypiserver:v2.1.1
+        command: ["pypi-server"]
+        args: ["-a", ".", "-P", "."]
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
