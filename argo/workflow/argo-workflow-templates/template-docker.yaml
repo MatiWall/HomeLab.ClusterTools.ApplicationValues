@@ -13,7 +13,7 @@ spec:
           requests:
             storage: 1Gi
 
-templates:
+  templates:
     - name: build
       inputs:
         parameters:
