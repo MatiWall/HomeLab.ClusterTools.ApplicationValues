@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pypiserver
-        image: docker-registry.mw.local/pypiserver:0.1.0
+        image: docker-registry.mw.local/pypiserver:0.1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
