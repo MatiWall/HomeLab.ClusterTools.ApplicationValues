@@ -23,7 +23,7 @@ spec:
       - name: subpath
         value: 
       - name: registry
-        value: docker-registry.mw.local #docker-registry-service.docker-registry.svc.cluster.local:5000
+        value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
       - name: application-name
         value: extensions-opentelemetry
       - name: version
