@@ -55,6 +55,7 @@ spec:
             templateRef:
               name: docker-templates
               template: tag-and-push
+            dependencies: [build]
             arguments:
               parameters:
                 - name: registry
