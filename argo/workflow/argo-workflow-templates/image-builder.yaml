@@ -64,7 +64,9 @@ spec:
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
                 - name: application-name
+                  value: "{{workflow.parameters.application-name}}"
                 - name: version
+                  value: "{{workflow.parameters.versions}}"
             
                
     - name: build
