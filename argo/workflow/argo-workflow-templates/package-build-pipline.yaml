@@ -17,7 +17,7 @@ spec:
   arguments:
     parameters:
       - name: giturl
-        value: https://github.com/MatiWall/  # Provide the correct GitHub URL here
+        value: git@github.com:MatiWall/ # Provide the correct GitHub URL here
       - name: revision
         value: HEAD
       - name: branch
