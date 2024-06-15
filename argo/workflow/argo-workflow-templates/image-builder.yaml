@@ -16,35 +16,55 @@ spec:
 
   arguments:
     parameters:
-      - name: python-version
-        value: "3.12"
-      - name: image-version
-        value: "2"
+      - name: giturl
+        value: git@github.com:MatiWall/ 
+      - name: repo
+        value: catcode-backend
+      - name: subpath
+        value: 
       - name: registry
         value: docker-registry.mw.local #docker-registry-service.docker-registry.svc.cluster.local:5000
+      - name: application-name
+        value: extensions-opentelemetry
+      - name: version
+        value: 0.1.1
   templates:
     - name: build-and-deploy
-      steps:
-        - - name: build
-            template: build
+      dag:
+        tasks:
+          - name: git-clone
+            templateRef:
+              name: git-template
+              template: git-clone
             arguments:
               parameters:
-                - name: python-version
-                  value: "{{workflow.parameters.python-version}}"
-                - name: image-version
-                  value: "{{workflow.parameters.image-version}}"
-                - name: registry
-                  value: "{{workflow.parameters.registry}}"
-        - - name: push
-            template: push
+                - name: url
+                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+          - name: build
+            templateRef:
+              name: docker-templates
+              template: build
+            dependencies: [git-clone]
             arguments:
               parameters:
-                - name: python-version
-                  value: "{{workflow.parameters.python-version}}"
-                - name: image-version
-                  value: "{{workflow.parameters.image-version}}"
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+          - name: push
+            templateRef:
+              name: docker-templates
+              template: tag-and-push
+            arguments:
+              parameters:
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+                - name: application-name
+                - name: version
             
                
     - name: build

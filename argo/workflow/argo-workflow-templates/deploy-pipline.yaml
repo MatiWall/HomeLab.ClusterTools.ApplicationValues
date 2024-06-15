@@ -13,10 +13,6 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  volumes:
-    - name: docker-daemon-config
-      configMap:
-        name: docker-daemon-config
 
   arguments:
     parameters:
@@ -131,6 +127,10 @@ spec:
         parameters:
           - name: subpath
           - name: repo
+      volumes:
+        - name: docker-daemon-config
+          configMap:
+            name: docker-daemon-config
       container:
         image: docker:latest
         command: [sh, -c]
@@ -242,6 +242,10 @@ spec:
           - name: repo
           - name: application-name
           - name: version
+      volumes:
+        - name: docker-daemon-config
+          configMap:
+            name: docker-daemon-config
       container:
         image: docker:latest
         command: [sh, -c]

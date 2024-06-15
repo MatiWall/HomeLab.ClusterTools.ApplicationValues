@@ -1,0 +1,100 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: docker-templates
+spec:
+  serviceAccountName: argo-workflow-svc
+  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+    - metadata:
+        name: workdir                     # name of volume claim
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+templates:
+    - name: build
+      inputs:
+        parameters:
+          - name: subpath
+          - name: repo
+      volumes:
+        - name: docker-daemon-config
+          configMap:
+            name: docker-daemon-config
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args:
+          - |
+            ls
+            until docker ps; do sleep 1; done;
+            docker build -t image:0.0.1 .
+            docker save -o /src/image.tar image:0.0.1
+        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+          - name: docker-daemon-config
+            mountPath: /etc/docker/daemon.json
+            subPath: daemon.json
+        env:
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375
+      sidecars:
+      - name: docker-in-docker
+        image: docker:dind
+        securityContext:
+          privileged: true
+        mirrorVolumeMounts: true
+        command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
+        ports:
+          - containerPort: 2375  # Expose Docker daemon on HTTP port
+
+    - name: tag-and-push
+      inputs:
+        parameters:
+          - name: registry
+          - name: subpath
+          - name: repo
+          - name: application-name
+          - name: version
+      volumes:
+        - name: docker-daemon-config
+          configMap:
+            name: docker-daemon-config
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args:
+          - |
+            ls -l
+            until docker ps; do sleep 1; done;
+
+            docker load < /src/image.tar
+
+            image="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
+
+            docker tag image:0.0.1 "$image"
+            docker push "$image"
+        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+          - name: docker-daemon-config
+            mountPath: /etc/docker/daemon.json
+            subPath: daemon.json
+        env:
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375
+      sidecars:
+      - name: docker-in-docker
+        image: docker:dind
+        securityContext:
+          privileged: true
+        mirrorVolumeMounts: true
+        command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
+        ports:
+          - containerPort: 2375  # Expose Docker daemon on HTTP port  
+          
