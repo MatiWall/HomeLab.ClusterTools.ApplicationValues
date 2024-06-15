@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: python-base-image
+  name: generic-image-builder
 spec:
   entrypoint: build-and-deploy
   serviceAccountName: argo-workflow-svc
