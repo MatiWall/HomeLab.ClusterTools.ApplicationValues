@@ -10,6 +10,9 @@ data:
     server:
       http_listen_port: 3100
     
+    limits_config: 
+      allow_structured_metedata: true
+    
     common:
       path_prefix: /var/lib/loki
       storage:

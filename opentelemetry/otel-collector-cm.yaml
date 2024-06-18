@@ -40,6 +40,8 @@ data:
     exporters:
       loki:
         endpoint: "http://loki-service.monitoring.svc.cluster.local:80/loki/api/v1/push"
+      otlphttp:
+        endpoint: "http://loki.mw.local/otlp"
 
       otlp:
         endpoint: "tempo-service.monitoring.svc.cluster.local:4317"
@@ -67,4 +69,4 @@ data:
           processors:
             - k8sattributes
             - batch
-          exporters: [loki]
+          exporters: [otlphttp]
