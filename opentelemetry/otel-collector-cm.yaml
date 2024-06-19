@@ -39,6 +39,9 @@ data:
             - from: connection
     exporters:
       loki:
+        endpoint: "http://loki.mw.local/loki/api/v1/push"
+
+      otlphttp: 
         endpoint: "http://loki.mw.local/otlp"
 
       otlp:
@@ -67,4 +70,4 @@ data:
           processors:
             - k8sattributes
             - batch
-          exporters: [loki]
+          exporters: [otlphttp]
