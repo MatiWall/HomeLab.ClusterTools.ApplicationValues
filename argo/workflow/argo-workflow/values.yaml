@@ -11,3 +11,9 @@ deployment:
         traefik.ingress.kubernetes.io/frontend-entry-points: "http"
       hosts:
         - argo-workflow.mw.local  # Specify your desired hostname
+
+
+  workflowDefaults:
+    spec:
+      ttlStrategy:
+        secondsAfterCompletion: 3600
