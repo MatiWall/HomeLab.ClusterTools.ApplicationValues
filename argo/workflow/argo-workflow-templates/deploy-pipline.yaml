@@ -4,6 +4,10 @@ metadata:
   name: deploy-pipline
 spec:
   entrypoint: build-and-deploy
+  ttlStrategy:
+    secondsAfterCompletion: 3600 # Time to live after workflow is completed, replaces ttlSecondsAfterFinished
+    secondsAfterSuccess: 3600     # Time to live after workflow is successful
+    secondsAfterFailure: 3600
   serviceAccountName: argo-workflow-svc
   volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
     - metadata:
