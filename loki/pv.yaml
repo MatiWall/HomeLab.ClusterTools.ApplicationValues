@@ -28,4 +28,4 @@ spec:
     requests:
       storage: 10Gi  # Adjust the storage size as needed
   storageClassName: nfs-storage
-
+  volumeName: loki-pv
