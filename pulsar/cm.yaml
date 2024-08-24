@@ -46,22 +46,22 @@ data:
     # Enable this to use ZooKeeper as the metadata store
     PULSAR_STANDALONE_USE_ZOOKEEPER=true
 
-  functions_worker.yml: |
+  functions_worker.yaml: |
     # Basic configuration for Pulsar Functions worker
-    functionsWorkerEnabled=true
-    workerId=pulsar-functions-worker-1
-    workerHostname=localhost
-    workerPort=6750
-    workerPortTls=6751
-    stateStorageServiceUrl=bookkeeper://localhost:4181
-    pulsarServiceUrl=pulsar://localhost:6650
-    pulsarWebServiceUrl=http://localhost:8080
-    numFunctionPackageReplicas=1
-    functionAssignmentMode=org.apache.pulsar.functions.worker.scheduler.RoundRobinScheduler
-    downloadDirectory=/pulsar/functions
-    connectTimeoutSec=30
-    readTimeoutSec=30
-    updateLabelsIntervalMinutes=10
-    functionRuntimeFactoryClassName=org.apache.pulsar.functions.runtime.process.ProcessRuntimeFactory
-    numHttpServerThreads=8
-    numFunctionThreads=8
+    functionsWorkerEnabled: true
+    workerId: pulsar-functions-worker-1
+    workerHostname: localhost
+    workerPort: 6750
+    workerPortTls: 6751
+    stateStorageServiceUrl: bookkeeper://localhost:4181
+    pulsarServiceUrl: pulsar://localhost:6650
+    pulsarWebServiceUrl: http://localhost:8080
+    numFunctionPackageReplicas: 1
+    functionAssignmentMode: org.apache.pulsar.functions.worker.scheduler.RoundRobinScheduler
+    downloadDirectory: /pulsar/functions
+    connectTimeoutSec: 30
+    readTimeoutSec: 30
+    updateLabelsIntervalMinutes: 10
+    functionRuntimeFactoryClassName: org.apache.pulsar.functions.runtime.process.ProcessRuntimeFactory
+    numHttpServerThreads: 8
+    numFunctionThreads: 8
