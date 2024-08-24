@@ -24,9 +24,6 @@ spec:
               name: pulsar
             - containerPort: 8080
               name: http
-          env:
-            - name: PULSAR_STANDALONE_USE_ZOOKEEPER
-              value: "1" # Optional, set to "1" to use ZooKeeper as the metadata store
           volumeMounts:
             - name: pulsar-data
               mountPath: /pulsar/data
@@ -37,5 +34,5 @@ spec:
           persistentVolumeClaim:
             claimName: pulsar-data-pvc
         - name: pulsar-conf
-          persistentVolumeClaim:
-            claimName: pulsar-conf-pvc
+          configMap:
+            name: pulsar-config

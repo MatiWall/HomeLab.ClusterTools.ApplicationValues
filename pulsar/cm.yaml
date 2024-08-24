@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulsar-config
+  namespace: pulsar
+data:
+  standalone.conf: |
+    #### Broker Settings ####
+
+    # Port to use for serving non-TLS connections on the broker
+    brokerServicePort=6650
+
+    # Port to use for serving HTTP requests
+    webServicePort=8080
+
+    # Hostname or IP address to advertise to clients when they connect to the broker
+    advertisedAddress=localhost
+
+    # Directory where the Pulsar stores data (e.g., bookkeeper ledgers and managed ledger data)
+    dataDir=/pulsar/data
+
+    #### ZooKeeper Settings ####
+
+    # ZooKeeper server connection string
+    zookeeperServers=localhost:2181
+
+    # Configuration store connection string (usually same as ZooKeeper in standalone mode)
+    configurationStoreServers=localhost:2181
+
+    #### BookKeeper Settings ####
+
+    # Directory to store BookKeeper data
+    bookkeeperDirectories=/pulsar/data/bookkeeper
+
+    #### Other Settings ####
+
+    # Disable authentication
+    authenticationEnabled=false
+
+    # Disable authorization
+    authorizationEnabled=false
+
+    # Number of threads in Pulsar broker's thread pool
+    numWorkerThreads=10
+
+    # Enable this to use ZooKeeper as the metadata store
+    PULSAR_STANDALONE_USE_ZOOKEEPER=true
