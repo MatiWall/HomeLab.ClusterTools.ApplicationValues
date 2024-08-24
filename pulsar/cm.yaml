@@ -46,7 +46,7 @@ data:
     # Enable this to use ZooKeeper as the metadata store
     PULSAR_STANDALONE_USE_ZOOKEEPER=true
 
-  functions_worker.yaml: |
+  functions_worker.yml: |
     # Basic configuration for Pulsar Functions worker
     functionsWorkerEnabled: true
     workerId: pulsar-functions-worker-1
