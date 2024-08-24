@@ -7,6 +7,8 @@ data:
   standalone.conf: |
     #### Broker Settings ####
 
+    clusterName=standalone
+
     # Port to use for serving non-TLS connections on the broker
     brokerServicePort=6650
 
