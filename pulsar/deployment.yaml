@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulsar-standalone
+  namespace: default
+  labels:
+    app: pulsar-standalone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulsar-standalone
+  template:
+    metadata:
+      labels:
+        app: pulsar-standalone
+    spec:
+      containers:
+        - name: pulsar
+          image: apachepulsar/pulsar:3.3.1
+          args: ["bin/pulsar", "standalone"]
+          ports:
+            - containerPort: 6650
+              name: pulsar
+            - containerPort: 8080
+              name: http
+          env:
+            - name: PULSAR_STANDALONE_USE_ZOOKEEPER
+              value: "1" # Optional, set to "1" to use ZooKeeper as the metadata store
+          volumeMounts:
+            - name: pulsar-data
+              mountPath: /pulsar/data
+            - name: pulsar-conf
+              mountPath: /pulsar/conf
+      volumes:
+        - name: pulsar-data
+          persistentVolumeClaim:
+            claimName: pulsar-data-pvc
+        - name: pulsar-conf
+          persistentVolumeClaim:
+            claimName: pulsar-conf-pvc
