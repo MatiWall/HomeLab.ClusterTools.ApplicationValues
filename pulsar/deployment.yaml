@@ -24,12 +24,12 @@ spec:
               name: pulsar
             - containerPort: 8080
               name: http
-          volumeMounts:
-            - name: pulsar-data
-              mountPath: /pulsar/data
-            - name: pulsar-conf
-              mountPath: /pulsar/conf
-          env:
+#          volumeMounts:
+#            - name: pulsar-data
+#              mountPath: /pulsar/data
+#            - name: pulsar-conf
+#              mountPath: /pulsar/conf
+#          env:
            - name: PULSAR_STANDALONE_USE_ZOOKEEPER
              value: "0"
       volumes:
