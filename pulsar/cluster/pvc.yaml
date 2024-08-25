@@ -2,40 +2,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pulsar-data-pvc
-spec:
-  capacity:
-    storage: 0.5Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-storage
-  nfs:
-    path: /mnt/ext1/pulsar/data
-    server: 192.168.0.11
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pulsar-conf-pvc
-  namespace: pulsar
-spec:
-  capacity:
-    storage: 0.5Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-storage
-  nfs:
-    path: /mnt/ext1/pulsar/conf
-    server: 192.168.0.11
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pulsar-data-pvc
   namespace: pulsar
 spec:
   accessModes:
@@ -43,7 +9,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
