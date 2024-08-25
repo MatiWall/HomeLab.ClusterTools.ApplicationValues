@@ -25,4 +25,4 @@ spec:
       kind: Rule
       services:
         - name: pulsar
-          port: 8080
+          port: 80
