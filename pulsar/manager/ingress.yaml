@@ -1,0 +1,15 @@
+# pulsar-manager-ingressroute.yaml
+apiVersion: traefik.mrlesmithjr.dev/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pulsar-manager
+  namespace: pulsar
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`pulsar-manager.mw.local`)
+    kind: Rule
+    services:
+    - name: pulsar-manager
+      port: 8080

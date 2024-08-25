@@ -1,0 +1,11 @@
+# pulsar-manager-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulsar-manager-config
+  namespace: pulsar
+data:
+  application.yml: |
+    pulsar:
+      serviceUrl: "pulsar://pulsar-broker:6650"
+      webServiceUrl: "http://pulsar.mw.local:8080"
