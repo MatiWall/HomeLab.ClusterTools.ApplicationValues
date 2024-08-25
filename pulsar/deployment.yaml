@@ -31,7 +31,7 @@ spec:
               mountPath: /pulsar/conf
           env:
            - name: PULSAR_STANDALONE_USE_ZOOKEEPER
-             value: "1"
+             value: "0"
       volumes:
         - name: pulsar-data
           persistentVolumeClaim:
