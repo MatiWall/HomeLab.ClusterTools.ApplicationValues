@@ -1,0 +1,28 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: pulsar-tcp-ingressroute
+  namespace: pulsar
+spec:
+  entryPoints:
+    - tcp
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: pulsar
+          port: 6650
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pulsar-http-ingressroute
+  namespace: pulsar
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pulsar.mw.local`)
+      kind: Rule
+      services:
+        - name: pulsar
+          port: 8080

@@ -18,3 +18,7 @@ spec:
         port: 5672
         expose: true
         exposedPort: 5672
+      pulsar:
+        port: 6650
+        expose: true
+        exposedPort: 6650
