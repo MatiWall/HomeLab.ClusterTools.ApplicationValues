@@ -5,9 +5,9 @@ metadata:
   namespace: pulsar
 spec:
   entryPoints:
-    - tcp
+    - pulsar
   routes:
-    - match: HostSNI(`*`)
+    - match: HostSNI(`pulsar.mw.local`)
       services:
         - name: pulsar
           port: 6650
