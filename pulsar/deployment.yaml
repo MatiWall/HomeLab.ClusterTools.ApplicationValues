@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: pulsar
-          image: apachepulsar/pulsar:3.3.0
+          image: apachepulsar/pulsar:3.2.4
           args: ["bin/pulsar", "standalone"]
           ports:
             - containerPort: 6650
