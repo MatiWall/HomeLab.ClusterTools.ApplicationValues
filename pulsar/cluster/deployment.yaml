@@ -39,7 +39,6 @@ spec:
         - name: pulsar-setup
           image: apachepulsar/pulsar:3.2.4
           command: ["/bin/sh", "/pulsar-setup/setup.sh"]
-          restartPolicy: Never
           resources:
             requests:
               memory: "0.1Gi"
