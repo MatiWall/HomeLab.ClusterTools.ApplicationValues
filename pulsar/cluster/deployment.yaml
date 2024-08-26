@@ -52,6 +52,10 @@ spec:
           env:
            - name: PULSAR_SERVICE_URL
              value: "http://localhost:8080"
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'Sidecar stopping'"]
       volumes:
         - name: pulsar-data
           persistentVolumeClaim:
