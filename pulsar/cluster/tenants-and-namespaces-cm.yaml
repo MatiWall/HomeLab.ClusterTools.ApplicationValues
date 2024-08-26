@@ -11,7 +11,7 @@ data:
       sleep 5
     done
 
-    pulsar-admin tenants create homelap
-    pulsar-admin namespaces create homelap/catcode
+    /pulsar/bin/pulsar-admin tenants create homelap
+    /pulsar/bin/pulsar-admin namespaces create homelap/catcode
 
     echo "Tenants and namespaces created."
