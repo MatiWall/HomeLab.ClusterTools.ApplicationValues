@@ -31,12 +31,27 @@ spec:
 #              mountPath: /pulsar/conf
           resources:
             requests:
+              memory: "0.5Gi"
+              cpu: "0.1"
+            limits:
+              memory: "3Gi"
+              cpu: "1"
+        - name: pulsar-setup
+          image: apachepulsar/pulsar:3.2.4
+          command: ["/bin/sh", "/pulsar-setup/setup.sh"]
+          resources:
+            requests:
               memory: "0.1Gi"
               cpu: "0.1"
             limits:
-              memory: "1.5Gi"
-              cpu: "1"
-
+              memory: "1Gi"
+              cpu: "0.5"
+          volumeMounts:
+            - name: pulsar-setup-script
+              mountPath: /pulsar-setup
+          env:
+           - name: PULSAR_SERVICE_URL
+             value: "http://localhost:8080"
       volumes:
         - name: pulsar-data
           persistentVolumeClaim:
