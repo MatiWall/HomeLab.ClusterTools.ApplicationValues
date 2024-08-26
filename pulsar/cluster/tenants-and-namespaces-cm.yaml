@@ -4,7 +4,7 @@ metadata:
   name: pulsar-setup-cm
   namespace: pulsar
 data:
-  csetup.sh: |
+  setup.sh: |
     #!/bin/sh
     until curl -s ${PULSAR_SERVICE_URL}/admin/v2/clusters | grep "cluster"; do
       echo "Waiting for Pulsar to start..."
