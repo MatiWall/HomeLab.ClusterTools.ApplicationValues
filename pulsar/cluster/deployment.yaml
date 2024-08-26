@@ -24,11 +24,11 @@ spec:
               name: pulsar
             - containerPort: 8080
               name: http
-          volumeMounts:
-            - name: pulsar-data
-              mountPath: /pulsar/data
-            - name: pulsar-conf
-              mountPath: /pulsar/conf
+#          volumeMounts:
+#            - name: pulsar-data
+#              mountPath: /pulsar/data
+#            - name: pulsar-conf
+#              mountPath: /pulsar/conf
           env:
            - name: PULSAR_STANDALONE_USE_ZOOKEEPER
              value: "0"
@@ -39,6 +39,22 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "1"
+        - name: pulsar-setup
+          image: apachepulsar/pulsar:3.2.4
+          command: ["/bin/sh", "/pulsar-setup/setup.sh"]
+          resources:
+            requests:
+              memory: "0.1Gi"
+              cpu: "0.1"
+            limits:
+              memory: "0.5Gi"
+              cpu: "0.5"
+          volumeMounts:
+            - name: pulsar-setup-script
+              mountPath: /pulsar-setup
+          env:
+           - name: PULSAR_SERVICE_URL
+             value: "http://localhost:8080"
       volumes:
         - name: pulsar-data
           persistentVolumeClaim:
@@ -46,3 +62,7 @@ spec:
         - name: pulsar-conf
           configMap:
             name: pulsar-config
+        - name: pulsar-setup-script
+          configMap:
+            name: pulsar-setup-script
+            defaultMode: 0755

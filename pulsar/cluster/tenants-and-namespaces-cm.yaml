@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulsar-tenants-namespaces
+data:
+  csetup.sh: |
+    #!/bin/sh
+    until curl -s ${PULSAR_SERVICE_URL}/admin/v2/clusters | grep "cluster"; do
+      echo "Waiting for Pulsar to start..."
+      sleep 5
+    done
+
+    pulsar-admin tenants create homelap
+    pulsar-admin namespaces create homelap/catcode
+
+    echo "Tenants and namespaces created."
