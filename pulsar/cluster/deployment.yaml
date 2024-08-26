@@ -47,7 +47,7 @@ spec:
               memory: "0.1Gi"
               cpu: "0.1"
             limits:
-              memory: "0.5Gi"
+              memory: "1Gi"
               cpu: "0.5"
           volumeMounts:
             - name: pulsar-setup-script
