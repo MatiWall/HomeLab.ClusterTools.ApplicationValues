@@ -64,5 +64,5 @@ spec:
             name: pulsar-config
         - name: pulsar-setup-script
           configMap:
-            name: pulsar-setup-script
+            name: pulsar-setup-cm
             defaultMode: 0755
