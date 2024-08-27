@@ -12,7 +12,7 @@ data:
     done
 
     /pulsar/bin/pulsar-admin tenants create homelap
-    /pulsar/bin/pulsar-admin namespaces create homelap/catcode
+    /pulsar/bin/pulsar-admin namespaces create homelab/catcode
 
     echo "Tenants and namespaces created."
 
