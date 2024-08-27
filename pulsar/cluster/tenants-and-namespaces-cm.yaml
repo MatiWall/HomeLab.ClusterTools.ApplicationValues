@@ -15,3 +15,7 @@ data:
     /pulsar/bin/pulsar-admin namespaces create homelap/catcode
 
     echo "Tenants and namespaces created."
+
+    # Keep the container alive after the setup is complete
+    echo "Setup complete. Keeping the container alive..."
+    tail -f /dev/null
