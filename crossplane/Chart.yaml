@@ -1,0 +1,8 @@
+apiVersion: v2
+name: crossplane-install
+description: A Helm chart for installing Crossplane on Kubernetes
+version: 1.0.0
+dependencies:
+- name: crossplane
+  version: "1.13.0"
+  repository: "https://charts.crossplane.io/stable"
