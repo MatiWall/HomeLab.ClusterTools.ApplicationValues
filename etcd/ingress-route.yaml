@@ -7,9 +7,9 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`docker-registry-ui.mw.local`)
+    - match: Host(`etcd.mw.local`)
       kind: Rule
       services:
-        - name: registry-ui
+        - name: etcd
           port: 80
 
