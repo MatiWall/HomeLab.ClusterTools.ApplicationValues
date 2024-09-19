@@ -3,6 +3,9 @@ kind: IngressRoute
 metadata:
   name: etcd-ingress
   namespace: catcode
+  annotations: {
+    traefik.ingress.kubernetes.io/service.serversscheme: h2c
+  }
 spec:
   entryPoints:
     - web

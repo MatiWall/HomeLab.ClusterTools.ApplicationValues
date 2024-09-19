@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: etcd
   namespace: catcode
+  annotations: {
+    traefik.ingress.kubernetes.io/service.serversscheme: h2c
+  }
 spec:
   ports:
     - port: 80
