@@ -4,7 +4,7 @@ metadata:
   name: verdaccio-registry
   namespace: verdaccio
 spec:
-  serviceName: "verdaccio"
+  serviceName: "verdaccio-service"
   replicas: 1
   selector:
     matchLabels:
