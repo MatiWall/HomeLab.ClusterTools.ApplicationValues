@@ -1,0 +1,15 @@
+# ingressroute.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: verdaccio-ingressroute
+  namespace: verdaccio
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`verdaccio.mw.local`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: verdaccio-service
+          port: 80

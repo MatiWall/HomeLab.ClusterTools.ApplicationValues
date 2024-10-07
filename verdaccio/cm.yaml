@@ -1,0 +1,25 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: verdaccio-config
+  namespace: verdaccio
+data:
+  config.yaml: |
+    storage: /verdaccio/storage
+    uplinks:
+      npmjs:
+        url: https://registry.npmjs.org/
+    packages:
+      '@*/*':
+        access: $all
+        publish: $authenticated
+      '**':
+        access: $all
+        publish: $authenticated
+    auth:
+      htpasswd:
+        file: /verdaccio/conf/htpasswd
+        max_users: 100
+    logs:
+      - { type: stdout, format: pretty, level: http }
