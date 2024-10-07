@@ -1,10 +1,9 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: verdaccio-registry
   namespace: verdaccio
 spec:
-  serviceName: "verdaccio-service"
   replicas: 1
   selector:
     matchLabels:
@@ -15,20 +14,20 @@ spec:
         app: verdaccio
     spec:
       containers:
-      - name: verdaccio
-        image: verdaccio/verdaccio:latest
-        ports:
-          - containerPort: 4873
-        volumeMounts:
-          - name: storage
-            mountPath: /verdaccio/storage
-          - name: config
-            mountPath: /verdaccio/conf/config.yaml
-            subPath: config.yaml
-    volumes:
-      - name: storage
-        persistentVolumeClaim:
-          claimName: verdaccio-pvc
-      - name: config
-        configMap:
-          name: verdaccio-config
+        - name: verdaccio
+          image: verdaccio/verdaccio:latest
+          ports:
+            - containerPort: 4873
+          volumeMounts:
+            - name: storage
+              mountPath: /verdaccio/storage
+            - name: config
+              mountPath: /verdaccio/conf/config.yaml
+              subPath: config.yaml
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: verdaccio-pvc
+        - name: config
+          configMap:
+            name: verdaccio-config
