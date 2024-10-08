@@ -1,4 +1,3 @@
-# configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,10 +11,15 @@ data:
         url: https://registry.npmjs.org/
     packages:
       '@*/*':
-        access: $all
-        publish: $authenticated
+        access: $all      # Allow all users to access scoped packages
+        publish: $all     # Allow all users to publish scoped packages
       '**':
-        access: $all
-        publish: $authenticated
+        access: $all      # Allow all users to access all packages
+        publish: $all     # Allow all users to publish all packages
     logs:
       - { type: stdout, format: pretty, level: http }
+
+    # Disable web UI login/signup button (optional)
+    security:
+      web:
+        sign: false
