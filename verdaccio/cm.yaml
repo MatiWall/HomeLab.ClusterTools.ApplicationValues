@@ -12,12 +12,8 @@ data:
 
     # Allow anonymous access and publishing for all packages
     packages:
-      '@*/*':
-        access: $all      # Allow anonymous access to scoped packages
-        publish: $anonymous     # Allow anonymous publishing to scoped packages
-        unpublish: $anonymous   # Allow anonymous unpublishing
       '**':
-        access: $all      # Allow anonymous access to all packages
+        access: $anonymous      # Allow anonymous access to all packages
         publish: $anonymous     # Allow anonymous publishing to all packages
         unpublish: $anonymous   # Allow anonymous unpublishing
 
