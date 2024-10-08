@@ -17,9 +17,5 @@ data:
       '**':
         access: $all
         publish: $authenticated
-    auth:
-      htpasswd:
-        file: /verdaccio/conf/htpasswd
-        max_users: 100
     logs:
       - { type: stdout, format: pretty, level: http }
