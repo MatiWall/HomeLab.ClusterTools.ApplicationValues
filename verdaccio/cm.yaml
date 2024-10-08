@@ -14,10 +14,12 @@ data:
     packages:
       '@*/*':
         access: $all      # Allow anonymous access to scoped packages
-        publish: $all     # Allow anonymous publishing to scoped packages
+        publish: $anonymous     # Allow anonymous publishing to scoped packages
+        unpublish: $anonymous   # Allow anonymous unpublishing
       '**':
         access: $all      # Allow anonymous access to all packages
-        publish: $all     # Allow anonymous publishing to all packages
+        publish: $anonymous     # Allow anonymous publishing to all packages
+        unpublish: $anonymous   # Allow anonymous unpublishing
 
     logs:
       - { type: stdout, format: pretty, level: http }
@@ -25,7 +27,7 @@ data:
     # Disable authentication entirely
     auth: {}
 
-    # Optional: Disable web UI login/signup button
+    # Disable web UI login/signup button
     security:
       web:
         sign: false

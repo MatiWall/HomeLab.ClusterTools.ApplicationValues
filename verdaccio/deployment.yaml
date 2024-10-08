@@ -21,7 +21,9 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /verdaccio/storage
-
+            - name: config
+              mountPath: /verdaccio/conf/config.yaml
+              subPath: config.yaml
       volumes:
         - name: storage
           persistentVolumeClaim:
