@@ -15,9 +15,11 @@ data:
       '@*/*':
         access: $all          # Allow anonymous access to scoped packages
         publish: $all         # Allow anonymous publishing to scoped packages
+        proxy: npmjs
       '**':
         access: $all          # Allow anonymous access to all packages
         publish: $all         # Allow anonymous publishing to all packages
+        proxy: npmjs
 
     logs:
       - { type: stdout, format: pretty, level: http }
