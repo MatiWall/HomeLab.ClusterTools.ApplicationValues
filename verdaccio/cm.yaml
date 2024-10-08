@@ -6,28 +6,24 @@ metadata:
 data:
   config.yaml: |
     storage: /verdaccio/storage
+    auth:
+
+    # a list of other known repositories we can talk to
     uplinks:
       npmjs:
         url: https://registry.npmjs.org/
 
-    # Allow anonymous access and publishing for all packages
     packages:
       '@*/*':
-        access: $all          # Allow anonymous access to scoped packages
-        publish: $all         # Allow anonymous publishing to scoped packages
+        # scoped packages
+        access: $all
+        publish: $all
         proxy: npmjs
+
       '**':
-        access: $all          # Allow anonymous access to all packages
-        publish: $all         # Allow anonymous publishing to all packages
+        access: $all
+        publish: $all
         proxy: npmjs
 
     logs:
       - { type: stdout, format: pretty, level: http }
-
-    # Disable authentication entirely
-    auth: {}
-
-    # Optional: Disable web UI login/signup button
-    security:
-      web:
-        sign: false
