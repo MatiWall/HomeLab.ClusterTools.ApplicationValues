@@ -20,7 +20,7 @@ data:
         secureJsonData:
           password: 'postgres'
         jsonData:
-          database: 'Test'
+          database: 'Workout'
           sslmode: 'disable'
       - name: Tempo
         type: tempo
