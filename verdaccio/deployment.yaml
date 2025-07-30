@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: verdaccio
-          image: verdaccio/verdaccio:latest
+          image: verdaccio/verdaccio:5
           ports:
             - containerPort: 4873
           volumeMounts:
