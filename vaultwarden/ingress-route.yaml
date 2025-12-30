@@ -12,6 +12,6 @@ spec:
     priority: 10
     services:
     - name: vaultwarden-service
-      port: 443
+      port: 80
   tls: 
     secretName: vaultwarden-tls
