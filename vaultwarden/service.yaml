@@ -6,8 +6,8 @@ metadata:
     app: vaultwarden
 spec:
   ports:
-    - port: 443
-      targetPort: 80
+    - port: 80
+      targetPort: 443
   selector:
     app: vaultwarden
   type: ClusterIP
