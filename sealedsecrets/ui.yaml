@@ -12,6 +12,8 @@ spec:
   targetNamespace: kube-system
   set:
     replicas: 1
+    ingress:
+      enabled: false
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
