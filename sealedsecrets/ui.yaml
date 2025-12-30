@@ -8,8 +8,7 @@ metadata:
 spec:
   chart: sealed-secrets-web
   repo: https://charts.bakito.net
-  version: "2.3.4"
-  targetNamespace: sealed-secrets
+  version: "3.2.0"
+  targetNamespace: kube-system
   set:
-    hostname: sealedsecrets.mw.local
     replicas: 1
