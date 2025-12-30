@@ -21,12 +21,11 @@ spec:
           volumeMounts:
             - name: vaultwarden-storage-volume
               mountPath: /data/
-          containerPort: 80
           resources:
             requests:
               memory: "50Mi"
               cpu: "100m"
-            limit:
+            limits:
               memory: "128Mi"
               cpu: "250m"
       volumes:
