@@ -9,7 +9,7 @@ metadata:
   name: rancher
   namespace: cattle-system
 spec:
-  chart: rancher-stable/rancher
+  chart: rancher
   targetNamespace: cattle-system
   repo: https://releases.rancher.com/server-charts/stable
   version: "" # optional, can pin a version
