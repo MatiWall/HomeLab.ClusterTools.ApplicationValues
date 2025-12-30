@@ -6,7 +6,6 @@ metadata:
 spec:
   entryPoints:
   - websecure
-  - web
   routes:
   - kind: Rule
     match: Host(`vaultwarden.mw.local`)
@@ -14,4 +13,4 @@ spec:
     services:
     - name: vaultwarden-service
       port: 80
-
+  tls: {}
