@@ -12,3 +12,20 @@ spec:
   targetNamespace: kube-system
   set:
     replicas: 1
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sealed-secrets-web-ingress
+  namespace: kube-system
+spec:
+  entryPoints:
+  - web
+  routes:
+  - kind: Rule
+    match: Host(`sealedsecrets.mw.local`)
+    priority: 10
+    services:
+    - name: sealedsecrets-ui-sealed-secrets-web
+      port: 80
+
