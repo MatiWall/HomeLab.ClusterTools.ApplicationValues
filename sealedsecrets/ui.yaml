@@ -1,1 +1,15 @@
 # https://github.com/bakito/sealed-secrets-web
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: sealedsecrets-ui
+  namespace: kube-system
+spec:
+  chart: sealed-secrets-web
+  repo: https://charts.bakito.net
+  version: "2.3.4"
+  targetNamespace: sealed-secrets
+  set:
+    hostname: sealedsecrets.mw.local
+    replicas: 1
