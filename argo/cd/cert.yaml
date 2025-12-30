@@ -6,7 +6,8 @@ metadata:
 spec:
   secretName: argocd-tls-secret
   issuerRef:
-    name: ssl-issuer
+  issuerRef:
+    name: selfsigned-issuer
     kind: ClusterIssuer
   dnsNames:
     - argocd.mw.local
