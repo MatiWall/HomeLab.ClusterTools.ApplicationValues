@@ -21,6 +21,9 @@ spec:
       containers:
         - name: sealedsecrets-ui
           image: ghcr.io/bakito/sealed-secrets-web:main # https://github.com/bakito/sealed-secrets-web/pkgs/container/sealed-secrets-web
+          args:
+            - --sealed-secrets-service-namespace=sealedsecrets
+            - --sealed-secrets-service-name=sealed-secrets-controller
           ports:
             - containerPort: 80
               name: http
