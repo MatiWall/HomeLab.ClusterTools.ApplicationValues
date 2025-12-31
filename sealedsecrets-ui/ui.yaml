@@ -30,7 +30,7 @@ spec:
               memory: "100Mi"
           env:
             - name: SEALED_SECRETS_CONTROLLER_NAMESPACE
-              value: kube-system
+              value: sealedsecrets
             - name: SEALED_SECRETS_CONTROLLER_NAME
               value: sealed-secrets-controller
 ---
@@ -71,7 +71,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: sealed-secrets-web-ingress
-  namespace: kube-system
+  namespace: sealedsecrets
 spec:
   entryPoints:
   - web

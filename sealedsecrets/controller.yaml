@@ -165,7 +165,7 @@ metadata:
   labels:
     name: sealed-secrets-service-proxier
   name: sealed-secrets-service-proxier
-  namespace: kube-system
+  namespace: sealedsecrets
 rules:
 - apiGroups:
   - ""
@@ -194,7 +194,7 @@ metadata:
   labels:
     name: sealed-secrets-controller
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -202,7 +202,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -258,7 +258,7 @@ metadata:
   labels:
     name: sealed-secrets-controller
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 ---
 apiVersion: v1
 kind: Service
@@ -267,7 +267,7 @@ metadata:
   labels:
     name: sealed-secrets-controller
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 spec:
   ports:
   - port: 8080
@@ -283,7 +283,7 @@ metadata:
   labels:
     name: sealed-secrets-service-proxier
   name: sealed-secrets-service-proxier
-  namespace: kube-system
+  namespace: sealedsecrets
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -300,7 +300,7 @@ metadata:
   labels:
     name: sealed-secrets-controller-metrics
   name: sealed-secrets-controller-metrics
-  namespace: kube-system
+  namespace: sealedsecrets
 spec:
   ports:
   - port: 8081
@@ -316,7 +316,7 @@ metadata:
   labels:
     name: sealed-secrets-key-admin
   name: sealed-secrets-key-admin
-  namespace: kube-system
+  namespace: sealedsecrets
 rules:
 - apiGroups:
   - ""
@@ -340,7 +340,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -349,7 +349,7 @@ metadata:
   labels:
     name: sealed-secrets-controller
   name: sealed-secrets-controller
-  namespace: kube-system
+  namespace: sealedsecrets
 spec:
   minReadySeconds: 30
   replicas: 1
