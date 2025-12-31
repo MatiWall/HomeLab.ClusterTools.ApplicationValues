@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflare-tunnel-config
+  namespace: cloudflare
+data:
+  config.yaml: |
+    # ConfigMap
+    credentials-file: /etc/cloudflared/credentials.json
+
+    ingress:
+      - service: http://pejzen-frontend.pejzen.svc.cluster.local:80
+      - service: http_status:404

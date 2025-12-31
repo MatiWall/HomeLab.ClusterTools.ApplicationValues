@@ -21,14 +21,26 @@ spec:
           image: cloudflare/cloudflared:latest
           imagePullPolicy: IfNotPresent
           args: 
-            - "tunnel"
-            - "--url"
-            - "pejzen-frontend.pejzen.svc.cluster.local:80"
-          env:
-            - name: TUNNEL_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: cloudflare-tunnel-token
-                  key: token
+            - tunnel
+            - run
+            - --config
+            - /etc/cloudflared/config.json
+          volumeMounts:
+            - name: tunnel-creds
+              mountPath: /etc/cloudflared/credentials.json
+              subPath: credentials.json
+              readOnly: true
+            - name: tunnel-config
+              mountPath: /etc/cloudflared/config.json
+              subPath: config.yaml
+              readOnly: True
+      volumes:
+        - name: tunnel-creds
+          secret:
+            secretName: cloudflare-tunnel-credentials
+        - name: tunnel-config
+          ConfigMap:
+           name: cloudflare-tunnel-config
 
+       
   
