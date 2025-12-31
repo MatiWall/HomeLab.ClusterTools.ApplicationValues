@@ -36,7 +36,7 @@ spec:
       volumes:
         - name: ssh-key
           secret:
-            secretName: matiwall-git-ssh
+            secretName: argo-ssh-key
       container:
         image: "alpine/git:latest"
         command: [sh, -c]
@@ -68,7 +68,7 @@ spec:
       volumes:
         - name: ssh-key
           secret:
-            secretName: matiwall-git-ssh
+            secretName: argo-ssh-key
       container:
         image: alpine/git:latest
         command: [sh, -c]
