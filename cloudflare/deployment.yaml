@@ -23,14 +23,14 @@ spec:
           args: 
             - tunnel
             - --config
-            - /etc/cloudflared/config.json
+            - /etc/cloudflared/config.yaml
           volumeMounts:
             - name: tunnel-creds
               mountPath: /etc/cloudflared/credentials.json
               subPath: credentials.json
               readOnly: true
             - name: tunnel-config
-              mountPath: /etc/cloudflared/config.json
+              mountPath: /etc/cloudflared/config.yaml
               subPath: config.yaml
               readOnly: True
       volumes:
