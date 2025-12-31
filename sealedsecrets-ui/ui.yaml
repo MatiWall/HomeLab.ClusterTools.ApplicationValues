@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sealedsecrets-ui
+  namespace: sealedsecrets
   labels:
     app: sealedsecrets-ui
 spec:
@@ -24,7 +25,7 @@ spec:
             - containerPort: 80
               name: http
               protocol: TCP
-          respurces:
+          resources:
             limits:
               cpu: "200m"
               memory: "100Mi"
@@ -39,8 +40,6 @@ kind: ServiceAccount
 metadata:
   name: sealedsecrets-ui
   namespace: sealedsecrets
-  labels:
-    name: sealedsecrets-ui-user
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -51,14 +50,27 @@ rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["services", "services/proxy"]
   verbs: ["get", "watch", "list"]
-  resourceNames: sealedsecrets-ui
+  resourceNames: sealedsecrets-ui-svc
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sealedsecrets-ui-rolebinding
+  namespace: SealedSecretSpec
+subjects:
+  - kind: ServiceAccount
+    name: sealedsecrets-ui
+    namespace: sealedsecrets
+roleRef:
+  kind: Role
+  name:  sealedsecrets-reader
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: sealedsecrets-ui-svc
-  labels: 
-    app: sealedsecrets-ui-svc
+  namespace: sealedsecrets
 spec:
   selector:
     app: sealedsecrets-ui
@@ -80,6 +92,6 @@ spec:
     match: Host(`sealedsecrets.mw.local`)
     priority: 10
     services:
-    - name: sealedsecrets-ui-sealed-secrets-web
+    - name: sealedsecrets-ui-svc
       port: 80
 
