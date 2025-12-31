@@ -23,8 +23,6 @@ spec:
           args: 
             - tunnel
             - run
-            - --config
-            - /etc/cloudflared/config.json
           volumeMounts:
             - name: tunnel-creds
               mountPath: /etc/cloudflared/credentials.json
