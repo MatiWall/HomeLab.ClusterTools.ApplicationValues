@@ -1,0 +1,43 @@
+# https://github.com/bakito/sealed-secrets-web
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sealedsecrets-ui
+  namespace: sealedsecrets
+  labels:
+    app: sealedsecrets-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sealedsecrets-ui
+  template:
+    metadata:
+      labels:
+        app: sealedsecrets-ui
+    spec:
+      serviceAccountName: sealedsecrets-ui
+      containers:
+        - name: sealedsecrets-ui
+          image: ghcr.io/bakito/sealed-secrets-web:main # https://github.com/bakito/sealed-secrets-web/pkgs/container/sealed-secrets-web
+          args:
+            - --sealed-secrets-service-namespace=sealedsecrets
+            - --sealed-secrets-service-name=sealed-secrets-controller
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "100Mi"
+          env:
+            - name: SEALED_SECRETS_CONTROLLER_NAMESPACE
+              value: sealedsecrets
+            - name: SEALED_SECRETS_CONTROLLER_NAME
+              value: sealed-secrets-controller
+
+
+
+
