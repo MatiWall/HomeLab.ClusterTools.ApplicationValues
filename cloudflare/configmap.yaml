@@ -6,6 +6,7 @@ metadata:
 data:
   config.yaml: |
     # ConfigMap
+    tunnel: homelab
     credentials-file: /etc/cloudflared/credentials.json
 
     ingress:
