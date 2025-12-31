@@ -38,7 +38,7 @@ spec:
           secret:
             secretName: cloudflare-tunnel-credentials
         - name: tunnel-config
-          ConfigMap:
+          configMap:
            name: cloudflare-tunnel-config
 
        
