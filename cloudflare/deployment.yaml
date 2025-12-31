@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: cloudflare-tunnel
-          image: cloudflare/cloudflared:2025.11.1-arm64'
+          image: cloudflare/cloudflared:2025.11.1-arm64
           imagePullPolicy: IfNotPresent
           args: 
             - "tunnel"
