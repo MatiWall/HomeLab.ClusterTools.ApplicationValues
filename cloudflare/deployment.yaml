@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: cloudflare-tunnel
   namespace: cloudflare
+  labels:
+    app: cloudflare
 spec:
   replicas: 1
   selector: 
