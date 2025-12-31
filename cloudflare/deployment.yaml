@@ -23,6 +23,7 @@ spec:
           args: 
             - tunnel
             - run
+            - homelab
           volumeMounts:
             - name: tunnel-creds
               mountPath: /etc/cloudflared/credentials.json
