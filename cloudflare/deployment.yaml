@@ -22,8 +22,9 @@ spec:
           imagePullPolicy: IfNotPresent
           args: 
             - tunnel
-            - --config
-            - /etc/cloudflared/config.yaml
+            - run
+            #- --config
+            #- /etc/cloudflared/config.yaml
           volumeMounts:
             - name: tunnel-creds
               mountPath: /etc/cloudflared/credentials.json
