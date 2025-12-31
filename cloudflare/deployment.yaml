@@ -23,7 +23,7 @@ spec:
           args: 
             - "tunnel"
             - "--url"
-            - "http://pejzen.mw.local"
+            - "pejzen-frontend.pejzen.svc.cluster.local:80"
           env:
             - name: TUNNEL_TOKEN
               valueFrom:
