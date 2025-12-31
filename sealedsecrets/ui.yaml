@@ -1,17 +1,71 @@
 # https://github.com/bakito/sealed-secrets-web
 
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: sealedsecrets-ui
-  namespace: kube-system
+  labels:
+    app: sealedsecrets-ui
 spec:
-  chart: sealed-secrets-web
-  repo: https://charts.bakito.net
-  version: "3.2.0"
-  targetNamespace: kube-system
-  set:
-    replicas: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sealedsecrets-ui
+  template:
+    metadata:
+      labels:
+        app: sealedsecrets-ui
+    spec:
+      serviceAccountName: sealedsecrets-ui
+      containers:
+        - name: sealedsecrets-ui
+          image: ghcr.io/bakito/sealed-secrets-web:main # https://github.com/bakito/sealed-secrets-web/pkgs/container/sealed-secrets-web
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          respurces:
+            limits:
+              cpu: "200m"
+              memory: "100Mi"
+          env:
+            - name: SEALED_SECRETS_CONTROLLER_NAMESPACE
+              value: kube-system
+            - name: SEALED_SECRETS_CONTROLLER_NAME
+              value: sealed-secrets-controller
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sealedsecrets-ui
+  namespace: sealedsecrets
+  labels:
+    name: sealedsecrets-ui-user
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: sealedsecrets
+  name: sealedsecrets-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["services", "services/proxy"]
+  verbs: ["get", "watch", "list"]
+  resourceNames: sealedsecrets-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sealedsecrets-ui-svc
+  labels: 
+    app: sealedsecrets-ui-svc
+spec:
+  selector:
+    app: sealedsecrets-ui
+  ports:
+    - port: 80
+      targetPort: 80
+    
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
