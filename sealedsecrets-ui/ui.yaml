@@ -55,7 +55,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: sealedsecrets-ui-rolebinding
-  namespace: SealedSecretSpec
+  namespace: sealedsecrets
 subjects:
   - kind: ServiceAccount
     name: sealedsecrets-ui
