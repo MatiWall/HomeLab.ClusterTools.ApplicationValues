@@ -22,8 +22,8 @@ spec:
           imagePullPolicy: IfNotPresent
           args: 
             - tunnel
-            - run
-            - homelab
+            - --config
+            - /etc/cloudflared/config.json
           volumeMounts:
             - name: tunnel-creds
               mountPath: /etc/cloudflared/credentials.json
