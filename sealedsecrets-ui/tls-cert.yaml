@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sealedsecrets-ui-cert
+  namespace: sealedsecrets
+spec:
+  secretName: sealedsecrets-ui-tls-secret
+  issuerRef:
+    name: local-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - sealedsecrets.mw.local
+  duration: 8760h
+  renewBefore: 720h

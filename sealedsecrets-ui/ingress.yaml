@@ -13,3 +13,5 @@ spec:
     services:
     - name: sealedsecrets-ui-svc
       port: 80
+  tls:
+    secretName: sealedsecrets-ui-tls-secret
