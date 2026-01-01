@@ -6,8 +6,9 @@ metadata:
 spec:
   secretName: argocd-tls-secret
   issuerRef:
-  issuerRef:
-    name: selfsigned-issuer
+    name: local-ca
     kind: ClusterIssuer
   dnsNames:
     - argocd.mw.local
+  duration: 8760h
+  renewBefore: 720h
