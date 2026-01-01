@@ -5,11 +5,13 @@ metadata:
   namespace: docker-registry
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - match: Host(`docker-registry-ui.mw.local`)
       kind: Rule
       services:
         - name: registry-ui
           port: 80
+  tls:
+    secretName: docker-registry-ui-tls-secret
 
