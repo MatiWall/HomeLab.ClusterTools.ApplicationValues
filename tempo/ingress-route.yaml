@@ -6,7 +6,6 @@ metadata:
 spec:
   entryPoints:
   - websecure
-  - web
   routes:
   - kind: Rule
     match: Host(`tempo.mw.local`)
@@ -14,4 +13,6 @@ spec:
     services:
     - name: tempo-service
       port: 80
+  tls:
+    secretName: tempo-tls-secret
 
