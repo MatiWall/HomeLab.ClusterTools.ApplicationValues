@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rancher
+  namespace: cattle-system
+  labels:
+    app: rancher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rancher
+  template:
+    metadata:
+      labels:
+        app: labels
+    spec:
+      containers:
+        - name: rancher 
+          image: rancher/rancher:v2.13-head
+          ports: 
+            containerPort: 80
+
+  
