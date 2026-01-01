@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: traefik-cert
+  namespace: kube-system
+spec:
+  secretName: traefik-tls-secret
+  issuerRef:
+    name: local-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - traefik.mw.local
+  duration: 8760h
+  renewBefore: 720h
