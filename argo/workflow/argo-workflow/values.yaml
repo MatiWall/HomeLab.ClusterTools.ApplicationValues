@@ -8,7 +8,7 @@ deployment:
     ingress:
       enabled: true  # Enable the ingress resource
       annotations:   # Add any necessary annotations here
-        traefik.ingress.kubernetes.io/frontend-entry-points: "http"
+        traefik.ingress.kubernetes.io/frontend-entry-points: "https"
       hosts:
         - argo-workflow.mw.local  # Specify your desired hostname
       tls:
