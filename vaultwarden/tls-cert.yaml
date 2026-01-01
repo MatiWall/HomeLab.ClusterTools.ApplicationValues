@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: vaultwarden-cert
-  namespace: kube-system
+  namespace: vaultwarden
 spec:
   secretName: vaultwarden-tls-secret
   issuerRef:
