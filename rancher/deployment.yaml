@@ -21,3 +21,6 @@ spec:
           image: rancher/rancher:v2.13.1
           ports: 
             - containerPort: 80
+          env:
+            - name: CATTLE_BOOTSTRAP_PASSWORD
+              value: "admin"
