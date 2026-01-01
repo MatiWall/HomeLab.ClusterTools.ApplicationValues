@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: argo-workflow-cert
-  namespace: argocd
+  namespace: argo
 spec:
   secretName: argocd-workflow-tls-secret
   issuerRef:
