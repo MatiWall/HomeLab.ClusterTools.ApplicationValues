@@ -6,7 +6,6 @@ metadata:
   labels:
     app: rancher
 spec:
-  serviceAccountName: rancher-sa
   replicas: 1
   selector:
     matchLabels:
@@ -16,6 +15,7 @@ spec:
       labels:
         app: rancher
     spec:
+      serviceAccountName: rancher-sa
       containers:
         - name: rancher 
           image: rancher/rancher:v2.13.1
