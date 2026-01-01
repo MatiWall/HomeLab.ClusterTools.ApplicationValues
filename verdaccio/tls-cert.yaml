@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: verdaccio-cert
+  namespace: verdaccio
+spec:
+  secretName: verdaccio-tls-secret
+  issuerRef:
+    name: local-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - verdaccio.mw.local
+  duration: 8760h
+  renewBefore: 720h

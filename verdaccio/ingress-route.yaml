@@ -13,3 +13,5 @@ spec:
       services:
         - name: verdaccio-service
           port: 80
+  tls:
+    secretName: verdaccio-tls-secret
