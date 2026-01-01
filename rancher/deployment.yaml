@@ -19,6 +19,6 @@ spec:
         - name: rancher 
           image: rancher/rancher:v2.13-head
           ports: 
-            containerPort: 80
+            - containerPort: 80
 
   
