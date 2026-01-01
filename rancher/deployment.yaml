@@ -21,5 +21,3 @@ spec:
           image: rancher/rancher:v2.13.1
           ports: 
             - containerPort: 80
-
-  
