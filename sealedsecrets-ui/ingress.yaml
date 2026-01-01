@@ -5,7 +5,7 @@ metadata:
   namespace: sealedsecrets
 spec:
   entryPoints:
-  - web
+  - websecure
   routes:
   - kind: Rule
     match: Host(`sealedsecrets.mw.local`)
