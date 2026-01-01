@@ -13,4 +13,4 @@ spec:
     size: 4096
   issuerRef:
     name: local-selfsigned
-    kind: Issuer
+    kind: ClusterIssuer
