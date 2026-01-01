@@ -1,0 +1,71 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: mw.local
+spec:
+  sources:
+  # Include a bundle of publicly trusted certificates which can be
+  # used to validate most TLS certificates on the internet, such as
+  # those issued by Let's Encrypt, Google, Amazon and others.
+  # NB: Unless you pin the package providing these CAs, the default can change!
+#  - useDefaultCAs: true
+
+  # A Secret in the "trust" namespace; see "Trust Namespace" below for further details
+#  - secret:
+#      name: "my-db-tls"
+#      key: "ca.crt"
+
+  # Another Secret source, but this time using a label selector instead of a named Secret
+#  - secret:
+#      selector:
+#        matchLabels:
+#          fruit: apple
+#      key: "ca.crt"
+
+  - inLine: |
+      -----BEGIN CERTIFICATE-----
+      MIIFBDCCAuygAwIBAgIUUt57EXKwHzji5pLdHEtXetZcf9cwDQYJKoZIhvcNAQEN
+      BQAwGjEYMBYGA1UEAxMPSG9tZWxhYiBSb290IENBMB4XDTI2MDEwMTEzNTk0MloX
+      DTM1MTIzMDEzNTk0MlowGjEYMBYGA1UEAxMPSG9tZWxhYiBSb290IENBMIICIjAN
+      BgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA5Ealdxv02zzbhUh/aDUO5RO8HpmE
+      jVqm0V5EPNXFQxR0GOKtmv1r7PnJOKJdPw77lzUlHuE3D4Df90FY4/IkT52j7Z6f
+      r6VkmrCz+/N9cryvHsAiKYuAJYN/Xeo+ZsWy5CzTSZaM9GZpFTY0dnCCjN0jf+pG
+      Qnzyoo6m6bVsOQO06ErsUp2VRbcF6O8BBOlI+fwnepFbKmndzu8/LCF/MfKCl045
+      PM6QxRRXiRfoNzL7mGyC/U3cCNkkgeN7byRGU0+S6rm1AN6JF8TAujaZfoEXpH3b
+      ZW2g8ZQ6wVch4IQaIJszxr4Cv3INJazndu+hpfXNpxu2WCJy6tTe4xfMjNt40jFz
+      Cp2viKaW94ZwcGv8hrzL0wdfFzyTvq68TbezVWVXGlopPYtnLmqGIp8KX+zdkkI2
+      pwiBggbbdhszKUGiclgDKcz4VxLfFblRVYIkrtS9Myeu+g3c3rDhzoY/oykcnZzu
+      fQpcjvesmwHbVwIDORVYdctKsvvxBkqMLFXH6ChUIDfWc8JdjnFmGal7vnACEaCO
+      LgEwWLHR5KDNHGT4Lsu1GPid053SJj3b+PuHHV4KtG8qqGliTy/S9A3uQIwp5q3x
+      T7gLzDc/0BvF/NUs+un/Y1Xh5W1wRKSgNLQDTqq6fUS46NgvLBZr44YML1AKGcty
+      MD8NANSLZXZjnHUCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQF
+      MAMBAf8wHQYDVR0OBBYEFC7b2kBjiWBvER+Wif6qTt9jN3YIMA0GCSqGSIb3DQEB
+      DQUAA4ICAQAGXeK0XfXjO02zbBXfgGqeFIoQUgc0vVXaSGRXdooNKopmV2tACDPU
+      ZF+35wY9zf6ZadvCjklCPW/+UCSufu/VKSIUmOm9QGXHP5RJrLP8nw3DWOIAITtI
+      0RSx2y7WBezdN3+nkqvFH0RMW7MoPhkLq1XvkMwTdjz8cuirqH8fW1El9Ps6sz+T
+      3GIkexE94+7gEy9tKcTdmpcOCXgfsAG260eClk3/40m3CFeEpqI0QvxuYvs78bfb
+      M2pbHWVRPZJdpkWUodd1JH09tFwOJSxpyxWWRbZqardWHPVEeQHV3lFlxbo8lnir
+      OlM6Yv8SRxIqD0AM3VRoU6iILkrkQYY3h8brsClfKQZmadGxY7I1E1t+g7vvCYTO
+      VcUtzX3njK1OfGWFMEwbhgm/Y2T2HRmIbM4zY8DTsIPdQk9mgiJeTmZOYi1E/Rrx
+      10IoiYj3Ft9NIgXjGSDUUAZeKqWeuXk7srUig+PertQkL/bQOgz1kJJ7qNAfdW8y
+      gIWbhZZWtIexPC/jrcCsZoou5g7JkfdD6TSAcqw5FFAYky60wQtMbgQYKSLKkAtI
+      jorrkAtkUgfIOBXiZGIgcn2Ajntij+8tgx1s/8m/r3aZGHJHA5OYIDv/DEwMFdjv
+      3Lb3bNZCVuVYm1vi8Vr94iTSY+W0yuOtHi2W+XidsIU+LLs3yCrpWw==
+      -----END CERTIFICATE-----
+  
+  target:
+    # Sync the bundle to a ConfigMap called `my-org.com` in every namespace which
+    # has the label "linkerd.io/inject=enabled"
+    # All ConfigMaps will include a PEM-formatted bundle, here named "root-certs.pem"
+    # and in this case we also request binary formatted bundles in JKS and PKCS#12 formats,
+    # here named "bundle.jks" and "bundle.p12".
+    configMap:
+      key: "root-certs.pem"
+      metadata:
+        annotations:
+          argocd.argoproj.io/sync-wave: "1"
+        labels:
+          app.kubernetes.io/component: "trust-bundle"
+    namespaceSelector:
+      matchLabels:
+        linkerd.io/inject: "enabled"
