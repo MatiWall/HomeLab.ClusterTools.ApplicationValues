@@ -14,4 +14,8 @@ spec:
     services:
     - name: grafana-service
       port: 80
+  tls:
+    secretName: grafana-tls-secret
+    
+    
 
