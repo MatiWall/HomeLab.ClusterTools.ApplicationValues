@@ -11,7 +11,7 @@ spec:
     match: Host(`rancher.mw.local`)
     priority: 10
     services:
-    - name: rancher-service
+    - name: rancher-svc
       port: 80
   tls:
     secretName: rancher-tls-secret
