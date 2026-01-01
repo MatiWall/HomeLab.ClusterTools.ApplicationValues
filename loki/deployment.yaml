@@ -30,7 +30,7 @@ spec:
             - name: loki-pv
               mountPath: /var/lib/loki
       initContainers:
-        - name: Fix path permissions
+        - name: path-permissions
           image: busybox:1.28
           command: ["sh", "-c", "chown -R 10001:10001 /var/lib/loki"]
           volumeMounts:
