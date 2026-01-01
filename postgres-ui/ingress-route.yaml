@@ -6,7 +6,6 @@ metadata:
 spec:
   entryPoints:
   - websecure
-  - web
   routes:
   - kind: Rule
     match: Host(`postgres-ui.mw.local`)
@@ -14,4 +13,6 @@ spec:
     services:
     - name: postgres-ui-service
       port: 80
+  tls:
+    secretName: postgres-ui-tls-secret
 

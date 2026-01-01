@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-ui-cert
+  namespace: postgres
+spec:
+  secretName: postgres-ui-tls-secret
+  issuerRef:
+    name: local-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - postgres-ui.mw.local
+  duration: 8760h
+  renewBefore: 720h

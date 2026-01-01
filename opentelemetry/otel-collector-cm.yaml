@@ -40,7 +40,7 @@ data:
             - from: connection
     exporters:
       loki:
-        endpoint: "http://loki.mw.local/loki/api/v1/push"
+        endpoint: "https://loki.mw.local/loki/api/v1/push"
 
       otlphttp: 
         endpoint: "http://loki.mw.local/otlp"
