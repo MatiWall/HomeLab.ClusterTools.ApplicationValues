@@ -5,7 +5,7 @@ metadata:
   namespace: cert-manager
 spec:
   isCA: true
-  commonName: Local Development CA
+  commonName: Homelab Root CA
   secretName: local-root-ca-secret
   duration: 87600h   # 10 years
   privateKey:
