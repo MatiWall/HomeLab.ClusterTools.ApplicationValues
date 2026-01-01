@@ -19,7 +19,7 @@ spec:
       #serviceAccountName: loki-service-account
       containers:
         - name: loki
-          image: grafana/loki:3.0.0
+          image: grafana/loki:3.5.9
           args:
             - -config.file=/tmp/loki/config.yaml
           ports:
