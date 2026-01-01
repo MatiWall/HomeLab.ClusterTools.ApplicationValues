@@ -9,6 +9,6 @@ spec:
     name: local-ca
     kind: ClusterIssuer
   dnsNames:
-    - argocd-workflow.mw.local
+    - argo-workflow.mw.local
   duration: 8760h
   renewBefore: 720h
