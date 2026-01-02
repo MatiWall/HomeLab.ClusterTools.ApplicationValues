@@ -1,7 +1,7 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: mw.local
+  name: homelab-root-ca-bundle
 spec:
   sources:
   # Include a bundle of publicly trusted certificates which can be
