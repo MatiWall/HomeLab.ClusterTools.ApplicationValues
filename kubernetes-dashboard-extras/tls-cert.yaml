@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kubernetes-dashboard-web-tls-cert
+  namespace: kubernetes-dashboard
+spec:
+  secretName: kubernetes-dashboard-web-tls-secret
+  issuerRef:
+    name: local-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - kubernetes-dashboard.mw.local
+  duration: 8760h
+  renewBefore: 720h
