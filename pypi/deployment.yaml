@@ -14,20 +14,29 @@ spec:
         app: pypiserver
     spec:
       containers:
-      - name: pypiserver
-        image: docker-registry.mw.local/pypiserver:0.1.1
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: PYPISERVER_PASSWORDS
-          value: "admin:adminpass,user:userpass"
-        volumeMounts:
-        - name: pypiserver-storage
-          mountPath: /data/packages
+        - name: pypiserver
+          image: docker-registry.mw.local/pypiserver:0.1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: PYPISERVER_PASSWORDS
+              value: "admin:adminpass,user:userpass"
+            - name: SSL_CERT_FILE
+              value: /etc/ssl/certs/root-certs.pem
+          volumeMounts:
+            - name: pypiserver-storage
+              mountPath: /data/packages
+            - name: trust-bundle
+              mountPath: /etc/ssl/certs/root-certs.pem
+              readOnly: true
+              subPath: root-certs.pem
       volumes:
         - name: pypiserver-storage
           persistentVolumeClaim:
             claimName: pypi-storage-pvc
+        - name: trust-bundle
+          configMap:
+            name: homelab-root-ca-bundle
 
