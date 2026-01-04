@@ -5,13 +5,45 @@
 #  namespace: kubernetes-dashboard
 #spec:
 #  entryPoints:
-#  - websecure
-#  routes:
+  #- websecure
+ # routes:
 #  - kind: Rule
 #    match: Host(`kubernetes-dashboard.mw.local`)
 #    priority: 10
-#    services:
+ #   services:
 #    - name: kubernetes-dashboard-kong-proxy
 #      port: 443
 #  tls:
 #    secretName: kubernetes-dashboard-web-tls-secret
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: dashboard-transport
+  namespace: kubernetes-dashboard
+spec:
+  serverName: kubernetes-dashboard-kong-proxy
+  insecureSkipVerify: true
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kubernetes-dashboard.mw.local`)
+      kind: Rule
+      services:
+        - name: kubernetes-dashboard-kong-proxy
+          port: 443
+          scheme: https
+          serversTransport: dashboard-transport
+          namespace: kubernetes-dashboard
+  tls:
+    secretName: kubernetes-dashboard-web-tls-secret
