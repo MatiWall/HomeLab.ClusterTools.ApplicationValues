@@ -1,17 +1,17 @@
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: kubernetes-dashboard-web-ingress
-  namespace: kubernetes-dashboard
-spec:
-  entryPoints:
-  - websecure
-  routes:
-  - kind: Rule
-    match: Host(`kubernetes-dashboard.mw.local`)
-    priority: 10
-    services:
-    - name: kubernetes-dashboard-kong-proxy
-      port: 443
-  tls:
-    secretName: kubernetes-dashboard-web-tls-secret
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: kubernetes-dashboard-web-ingress
+#  namespace: kubernetes-dashboard
+#spec:
+#  entryPoints:
+#  - websecure
+#  routes:
+#  - kind: Rule
+#    match: Host(`kubernetes-dashboard.mw.local`)
+#    priority: 10
+#    services:
+#    - name: kubernetes-dashboard-kong-proxy
+#      port: 443
+#  tls:
+#    secretName: kubernetes-dashboard-web-tls-secret
