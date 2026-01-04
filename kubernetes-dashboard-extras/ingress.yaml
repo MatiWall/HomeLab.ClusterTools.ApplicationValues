@@ -11,7 +11,7 @@ spec:
     match: Host(`kubernetes-dashboard.mw.local`)
     priority: 10
     services:
-    - name: kubernetes-dashboard-web
-      port: 8000
+    - name: kubernetes-dashboard-kong-proxy
+      port: 443
   tls:
     secretName: kubernetes-dashboard-web-tls-secret
