@@ -9,7 +9,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-#  storageClassName: nfs-storage
+  storageClassName: nfs-storage
   nfs:
     path: /mnt/ext1/vaultwarden
     server: 192.168.0.11
@@ -27,6 +27,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-#  storageClassName: nfs-storage
+  storageClassName: nfs-storage
 
 
