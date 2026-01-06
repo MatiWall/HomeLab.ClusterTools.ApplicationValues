@@ -37,7 +37,7 @@ spec:
             - name: loki-pv
               mountPath: /var/lib/loki
           securityContext:
-            runUserAs: 1001
+            runAsUser: 1001
 
       volumes:
         - name: loki-config
