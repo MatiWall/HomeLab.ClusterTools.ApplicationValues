@@ -27,6 +27,6 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: nfs-storage
+#  storageClassName: nfs-storage
 
 
