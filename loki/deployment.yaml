@@ -7,6 +7,7 @@ metadata:
   labels:
     app: loki
 spec:
+  revisionHistoryLimit: 1
   replicas: 1
   selector:
     matchLabels:
@@ -37,7 +38,7 @@ spec:
             - name: loki-pv
               mountPath: /var/lib/loki
           securityContext:
-            runAsUser: 1001
+            fsGroup: 10001
 
       volumes:
         - name: loki-config
