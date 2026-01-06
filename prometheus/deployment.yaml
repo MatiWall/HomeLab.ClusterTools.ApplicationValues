@@ -7,8 +7,6 @@ metadata:
     app: prometheus-server
 spec:
   revisionHistoryLimit: 0
-  securityContext:
-    fsGroup: 65534
   replicas: 1
   selector:
     matchLabels:
@@ -18,6 +16,8 @@ spec:
       labels:
         app: prometheus-server
     spec:
+      securityContext:
+        fsGroup: 65534
       containers:
         - name: prometheus
           image: prom/prometheus
