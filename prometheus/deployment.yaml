@@ -6,6 +6,7 @@ metadata:
   labels:
     app: prometheus-server
 spec:
+  revisionHistoryLimit: 0
   securityContext:
     fsGroup: 65534
   replicas: 1
