@@ -44,7 +44,7 @@ spec:
             mountPath: /etc/docker/daemon.json
             subPath: daemon.json
           - name: pypi-certificate
-            mountPath: /etc/ssl/certs/pypi.crt
+            mountPath: certs/pypi.crt
             subPath: tls.crt
             readOnly: true
         env:
