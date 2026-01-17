@@ -34,6 +34,7 @@ spec:
           - |
             ls
             until docker ps; do sleep 1; done;
+            mkdir -p ./certs
             cp /etc/ssl/certs/pypi.crt ./certs/pypi.crt
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
