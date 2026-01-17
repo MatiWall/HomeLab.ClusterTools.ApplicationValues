@@ -88,6 +88,10 @@ spec:
           - name: registry
           - name: base-image
       imagePullPolicy: Always
+      volumes:
+        - name: pypi-certificate
+          secret:
+            secretName: argo-workflow-ca-secret
       container:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
@@ -98,6 +102,9 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: /src
+          - name: pypi-certificate
+            mountPath: /etc/ssl/certs/pypi.crt
+            subPath: tls.crt
     - name: run-pytest
       inputs:
         parameters:
@@ -145,13 +152,21 @@ spec:
         parameters:
           - name: registry
           - name: base-image
+      volumes:
+        - name: pypi-certificate
+          secret:
+            secretName: argo-workflow-ca-secret
       container:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
         args:
+          - poetry config certificates.local.cert /etc/ssl/certs/pypi.crt
           - poetry publish -r private
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
           - name: workdir
             mountPath: src/
+          - name: pypi-certificate
+            mountPath: /etc/ssl/certs/pypi.crt
+            subPath: tls.crt
           
