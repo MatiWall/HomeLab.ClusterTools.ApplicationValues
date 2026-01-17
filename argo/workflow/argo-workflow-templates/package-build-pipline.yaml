@@ -95,9 +95,10 @@ spec:
       container:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
-        args:
-          - poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
-          - poetry install --with dev
+        args: 
+          - | 
+            poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
+            poetry install --with dev
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
           - name: workdir
@@ -160,8 +161,9 @@ spec:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
         args:
-          - poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
-          - poetry publish -r private
+          - | 
+            poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
+            poetry publish -r private
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
           - name: workdir
