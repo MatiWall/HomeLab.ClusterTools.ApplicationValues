@@ -34,6 +34,7 @@ spec:
           - |
             ls
             until docker ps; do sleep 1; done;
+            cp /etc/ssl/certs/pypi.crt ./certs/pypi.crt
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
@@ -44,7 +45,7 @@ spec:
             mountPath: /etc/docker/daemon.json
             subPath: daemon.json
           - name: pypi-certificate
-            mountPath: certs/pypi.crt
+            mountPath: /etc/ssl/certs/pypi.crt
             subPath: tls.crt
             readOnly: true
         env:
