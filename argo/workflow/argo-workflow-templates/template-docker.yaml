@@ -24,6 +24,9 @@ spec:
         - name: docker-daemon-config
           configMap:
             name: docker-daemon-config
+        - name: pypi-certificate
+          secret:
+            secretName: argo-workflow-ca-secret
       container:
         image: docker:latest
         command: [sh, -c]
@@ -40,6 +43,10 @@ spec:
           - name: docker-daemon-config
             mountPath: /etc/docker/daemon.json
             subPath: daemon.json
+          - name: pypi-certificate
+            mountPath: /etc/ssl/certs/pypi.crt
+            subPath: tls.crt
+            readOnly: true
         env:
           - name: DOCKER_HOST
             value: tcp://localhost:2375
