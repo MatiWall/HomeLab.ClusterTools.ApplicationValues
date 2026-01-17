@@ -160,7 +160,7 @@ spec:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
         args:
-          - poetry config certificates.local.cert /etc/ssl/certs/pypi.crt
+          - poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
           - poetry publish -r private
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
