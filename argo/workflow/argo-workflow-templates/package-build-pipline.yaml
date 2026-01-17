@@ -5,6 +5,9 @@ metadata:
 spec:
   entrypoint: build-and-deploy
   serviceAccountName: argo-workflow-svc
+  podGC:
+    strategy: OnWorkflowSuccess
+    deleteDelayDuration: 1m
   volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
     - metadata:
         name: workdir                     # name of volume claim
