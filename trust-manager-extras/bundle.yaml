@@ -25,7 +25,6 @@ spec:
     - secret:
         name: local-root-ca-secret
         key: tls.crt
-        namespace: cert-manager
   
   target:
     # Sync the bundle to a ConfigMap called `my-org.com` in every namespace which
