@@ -97,8 +97,12 @@ spec:
         command: [sh, -c]
         args: 
           - | 
-            sleep infinity
-            poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
+            cat /etc/ssl/certs/ca-certificates.crt \
+            /etc/ssl/certs/homelab-root-ca.pem \
+            > /etc/ssl/certs/ca-bundle.pem
+            export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.pem
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-bundle.pem
+
             poetry install --with dev
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
@@ -164,7 +168,9 @@ spec:
         command: [sh, -c]
         args:
           - | 
-            poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
+            cat /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/homelab-root-ca.pem  > /etc/ssl/certs/ca-bundle.pem
+            export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.pem
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-bundle.pem
             poetry publish -r private
         workingDir: /src/{{workflow.parameters.path}}
         volumeMounts:
