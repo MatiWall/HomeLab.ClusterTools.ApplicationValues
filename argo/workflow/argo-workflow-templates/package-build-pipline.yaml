@@ -97,6 +97,7 @@ spec:
         command: [sh, -c]
         args: 
           - | 
+            sleep infinity
             poetry config certificates.private.cert /etc/ssl/certs/pypi.crt
             poetry install --with dev
         workingDir: /src/{{workflow.parameters.path}}
