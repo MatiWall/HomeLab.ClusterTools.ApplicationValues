@@ -22,36 +22,10 @@ spec:
 #          fruit: apple
 #      key: "ca.crt"
 
-  - inLine: |
-      -----BEGIN CERTIFICATE-----
-      MIIFBDCCAuygAwIBAgIUFqy1q/NKMDI9YGVopLcb1ngFrbQwDQYJKoZIhvcNAQEN
-      BQAwGjEYMBYGA1UEAxMPSG9tZWxhYiBSb290IENBMB4XDTI2MDEwMjE2MjYyMVoX
-      DTM1MTIzMTE2MjYyMVowGjEYMBYGA1UEAxMPSG9tZWxhYiBSb290IENBMIICIjAN
-      BgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAu4DflmvwpzYUs8SffM9aqhdA2zyH
-      JzMJryP7i/P6nv160AlsG15kUQr65iXpcnPFgry2L4JtvZnbiW/R9nOMILwwCuE7
-      Np9H/1W+xuTtNntr5fjyIzBrW3UMUHaSQMykzQDYKROzRfRUpGlwMjT5keMNEWsV
-      jB2HnWceJ9GQ3tY50s+MlTfcOgnl5p0enq3bRzzqCVL2CzcBUHGk+K/fx4jEJXMx
-      s+aJAErg+wBreLT4y4+ei2fYaNbd5YyiIVpV4ioV69L8cFWHGrRZIoElaOU/2LCW
-      /lxGM6PnFRJTqILBsieGOgR14EzlK0Xyd3jvUKDIy8270ITzHtk9gFLKjMBBAKFe
-      3EMxRkhBqJa63ONzXYlB9JoT0G9xNF0FX9ip/OVthUyGZb6qXdWWnvhplF59g3s9
-      Xno/JJIwMqiyxWtgKusc3Nxex6qahGB4i0Hiua0XLh2fnox3SdsHyatXxO6XZnwg
-      ux3rsRJhoUWpI4uoIMR2uw1LOSS9W/LDhkXFACBRbZOCV2GXxtsQiOJjOinbo1gD
-      VGWB1LczeeF//VGkqVZWV9tuIlC5dnUeBY7tj0cUTwMK2HDZvNemQU8qQe6dX5XQ
-      nJcbhnBeMgYsc2iFF0HStNYXWRe4CsJHci2AJhw/bylcQ9L9zM5hD3nbMaMkqTsQ
-      eI/vVt6tW1AbKF0CAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQF
-      MAMBAf8wHQYDVR0OBBYEFBInuM2kb2deNwQEVyFClyDVQHtuMA0GCSqGSIb3DQEB
-      DQUAA4ICAQBeXGNistNc5z6waMndImbl0SWYC9dAiY1SOKhvPzCNSI68QpGCoJxo
-      3AVMT9UHiLoFIjTNr757CM7CQCLtoKWyvDp9Fyxd8JbDQ24YSPTPpuhsEprQsjep
-      czbwWv7MCk6V//e7EQfDgXsfCoNl2qClQP7rwWjZmFfauHx+PSXxLfjAHTOCDAkD
-      43Zi7WclNlmQHuGMFEoIaV1s0DRROGz6Ad0k+YvoB90wZCxlR70oISrEW2L/Kg0M
-      A4KW5J3J+eNajya5SsJqt20jC4pbB1id3ddhOWIaR0A9SCGExBycqaoReQo02ujd
-      Cn2oFKmqb5Sy8cjfRD2HG+M9P50ORAhrAfv364EjouTGRXykDfrWrBCRsp1pvCJN
-      OaafqC8KwTn2o4iRaqkDUaUtbxKjakJqHgFB7xmZDNxgCJQzTWDVAAqmSldXcmKu
-      23NSXfX8mwA5/AV9rhesH2Rjb+HYoFZRem66JjxqK1P8QU9EokyOndbF7+R17SIu
-      RMY0qeBjGquU9ymfCnay+if+N1GogBSqII/h5mFdSkQw9H6fSqmOPiCHeBOiHrrw
-      BH2fujT9SmhNop0YUb8RM+/Wp1DcwzkXGw06sg91M5T5LNdaamBfqzGBVKwjkASm
-      IIGEiSCLZ7heMuOtX7e0W0XPinbatsg9UEsNQ98LgHlj/Kv9wjIuLA==
-      -----END CERTIFICATE-----
+    - secret:
+        name: local-root-ca-secret
+        key: tls.crt
+        namespace: cert-manager
   
   target:
     # Sync the bundle to a ConfigMap called `my-org.com` in every namespace which

@@ -89,9 +89,9 @@ spec:
           - name: base-image
       imagePullPolicy: Always
       volumes:
-        - name: pypi-certificate
-          secret:
-            secretName: argo-workflow-ca-secret
+        - name: ca-bundle
+          configMap:
+            name: homelab-root-ca-bundle
       container:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
@@ -104,9 +104,10 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: /src
-          - name: pypi-certificate
-            mountPath: /etc/ssl/certs/pypi.crt
-            subPath: tls.crt
+          - name: ca-bundle
+            mountPath: /etc/ssl/certs/homelab-root-ca.pem
+            subPath: root-certs.pem
+            readOnly: true
     - name: run-pytest
       inputs:
         parameters:
@@ -155,9 +156,9 @@ spec:
           - name: registry
           - name: base-image
       volumes:
-        - name: pypi-certificate
-          secret:
-            secretName: argo-workflow-ca-secret
+        - name: ca-bundle
+          configMap:
+            name: homelab-root-ca-bundle
       container:
         image: "{{inputs.parameters.registry}}{{inputs.parameters.base-image}}"
         command: [sh, -c]
@@ -169,7 +170,8 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: src/
-          - name: pypi-certificate
-            mountPath: /etc/ssl/certs/pypi.crt
-            subPath: tls.crt
+          - name: ca-bundle
+            mountPath: /etc/ssl/certs/homelab-root-ca.pem
+            subPath: root-certs.pem
+            readOnly: true
           
