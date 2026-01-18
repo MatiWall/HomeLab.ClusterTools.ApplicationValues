@@ -12,3 +12,5 @@ spec:
           default: true
         exposedPort: 5432
         protocol: TCP
+    additionalArguments:
+      - --entryPoints.websecure.forwardingTimeouts.idleTimeout=3600s
