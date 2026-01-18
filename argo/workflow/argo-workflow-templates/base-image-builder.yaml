@@ -1,0 +1,169 @@
+apiVersion: argoproj.io/v1alpha1 # not used
+kind: WorkflowTemplate
+metadata:
+  name: base-image-builder
+spec:
+  podGC:
+    strategy: OnWorkflowSuccess
+    deleteDelayDuration: 1m
+  entrypoint: build-and-push
+  serviceAccountName: argo-workflow-svc
+  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+    - metadata:
+        name: workdir                     # name of volume claim
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+  arguments:
+    parameters:
+      - name: giturl
+        value: git@github.com:MatiWall/ 
+      - name: repo
+        value: catcode-backend
+      - name: subpath
+        value: 
+      - name: registry
+        value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
+      - name: application-name
+        value: extensions-opentelemetry
+      - name: version
+        value: 0.1.1
+  templates:
+    - name: build-and-deploy
+      dag:
+        tasks:
+          - name: git-clone
+            templateRef:
+              name: git-template
+              template: git-clone
+            arguments:
+              parameters:
+                - name: url
+                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+          - name: build
+            templateRef:
+              name: docker-templates
+              template: build
+            dependencies: [git-clone]
+            arguments:
+              parameters:
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+          - name: push
+            templateRef:
+              name: docker-templates
+              template: tag-and-push
+            dependencies: [build]
+            arguments:
+              parameters:
+                - name: registry
+                  value: "{{workflow.parameters.registry}}"
+                - name: subpath
+                  value: "{{workflow.parameters.subpath}}"
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+                - name: application-name
+                  value: "{{workflow.parameters.application-name}}"
+                - name: version
+                  value: "{{workflow.parameters.version}}"
+            
+               
+    - name: build
+      inputs:
+        parameters:
+          - name: python-version
+          - name: image-version
+          - name: registry
+      volumes:
+        - name: ca-bundle
+          configMap:
+            name: homelab-root-ca-bundle
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args:
+          - |
+            until docker ps; do sleep 1; done;
+            cat <<EOF > Dockerfile
+            FROM python:{{inputs.parameters.python-version}}-slim
+            WORKDIR /app
+
+            COPY /etc/ssl/certs/homelab-root-ca.pem /etc/ssl/certs/homelab-root-ca.pem
+            RUN cat /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/homelab-root-ca.pem > /etc/ssl/certs/ca-bundle.pem
+            ENV SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.pem
+            ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-bundle.pem
+            
+            ENV POETRY_HOME=/app \ 
+                POETRY_VIRTUALENVS_IN_PROJECT=true \
+                POETRY_NO_INTERACTION=true
+            RUN pip install poetry
+            RUN pip install pyyaml
+            EOF
+            docker build -t python:{{inputs.parameters.python-version}}-{{inputs.parameters.image-version}} .
+            docker save -o /workspace/python_image.tar python:{{inputs.parameters.python-version}}-{{inputs.parameters.image-version}}
+            ls -l /workspace
+        workingDir: /workspace
+        volumeMounts:
+          - name: workdir
+            mountPath: /workspace
+          - name: ca-bundle
+            mountPath: /etc/ssl/certs/homelab-root-ca.pem
+            subPath: root-certs.pem
+            readOnly: true         
+        env:
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375
+      sidecars:
+      - name: docker-in-docker
+        image: docker:dind
+        securityContext:
+          privileged: true
+        mirrorVolumeMounts: true
+        command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
+        ports:
+          - containerPort: 2375  # Expose Docker daemon on HTTP port
+
+    - name: push
+      inputs:
+        parameters:
+          - name: python-version
+          - name: image-version
+          - name: registry
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args:
+          - |
+            ls -l
+            until docker ps; do sleep 1; done;
+            docker load < /workspace/python_image.tar
+            docker tag python:{{inputs.parameters.python-version}}-{{inputs.parameters.image-version}} {{inputs.parameters.registry}}/python:{{inputs.parameters.python-version}}-{{inputs.parameters.image-version}}
+            docker push {{inputs.parameters.registry}}/python:{{inputs.parameters.python-version}}-{{inputs.parameters.image-version}}
+        workingDir: /workspace
+        volumeMounts:
+          - name: workdir
+            mountPath: /workspace
+          - name: docker-daemon-config
+            mountPath: /etc/docker/daemon.json
+            subPath: daemon.json
+        env:
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375
+      sidecars:
+      - name: docker-in-docker
+        image: docker:dind
+        securityContext:
+          privileged: true
+        mirrorVolumeMounts: true
+        command: ["dockerd", "--host=unix:///var/run/docker.sock", "--host=tcp://0.0.0.0:2375"]
+        ports:
+          - containerPort: 2375  # Expose Docker daemon on HTTP port  
+  volumes:
+    - name: docker-daemon-config
+      configMap:
+        name: docker-daemon-config

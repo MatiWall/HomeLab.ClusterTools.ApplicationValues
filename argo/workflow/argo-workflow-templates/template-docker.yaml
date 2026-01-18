@@ -24,9 +24,9 @@ spec:
         - name: docker-daemon-config
           configMap:
             name: docker-daemon-config
-        - name: pypi-certificate
-          secret:
-            secretName: argo-workflow-ca-secret
+        - name: ca-bundle
+          configMap:
+            name: homelab-root-ca-bundle
       container:
         image: docker:latest
         command: [sh, -c]
@@ -45,10 +45,10 @@ spec:
           - name: docker-daemon-config
             mountPath: /etc/docker/daemon.json
             subPath: daemon.json
-          - name: pypi-certificate
-            mountPath: /etc/ssl/certs/pypi.crt
-            subPath: tls.crt
-            readOnly: true
+          - name: ca-bundle
+            mountPath: /etc/ssl/certs/homelab-root-ca.pem
+            subPath: root-certs.pem
+            readOnly: true      
         env:
           - name: DOCKER_HOST
             value: tcp://localhost:2375
