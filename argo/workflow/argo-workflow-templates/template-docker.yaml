@@ -35,7 +35,7 @@ spec:
             ls
             until docker ps; do sleep 1; done;
             mkdir -p ./certs
-            cp /etc/ssl/certs//etc/ssl/certs/homelab-root-ca.pem ./certs//etc/ssl/certs/homelab-root-ca.pem
+            cp /etc/ssl/certs/etc/ssl/certs/homelab-root-ca.pem ./certs/homelab-root-ca.pem
             sleep infinity
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
