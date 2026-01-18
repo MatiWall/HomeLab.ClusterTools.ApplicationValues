@@ -36,7 +36,6 @@ spec:
             until docker ps; do sleep 1; done;
             mkdir -p ./certs
             cp /etc/ssl/certs/homelab-root-ca-bundle.pem ./certs/homelab-root-ca-bundle.pem
-            sleep infinity
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
         workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
