@@ -10,3 +10,5 @@ spec:
         port: 5432
         expose: true
         exposedPort: 5432
+    additionalArguments:
+      - --entryPoints.postgres.address=:5432
