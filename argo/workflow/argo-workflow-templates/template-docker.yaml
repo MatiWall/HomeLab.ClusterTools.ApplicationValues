@@ -35,7 +35,7 @@ spec:
             ls
             until docker ps; do sleep 1; done;
             mkdir -p ./certs
-            cp /etc/ssl/certs/homelab-root-ca.pem ./certs/homelab-root-ca.pem
+            cp /etc/ssl/certs/homelab-root-ca-bundle.pem ./certs/homelab-root-ca-bundle.pem
             sleep infinity
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
@@ -47,8 +47,8 @@ spec:
             mountPath: /etc/docker/daemon.json
             subPath: daemon.json
           - name: ca-bundle
-            mountPath: /etc/ssl/certs/homelab-root-ca.pem
-            subPath: homelab-root-ca.pem
+            mountPath: /etc/ssl/certs/homelab-root-ca-bundle.pem
+            subPath: root-certs.pem
             readOnly: true      
         env:
           - name: DOCKER_HOST
