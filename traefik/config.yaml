@@ -10,15 +10,3 @@ spec:
         port: 5432
         expose: true
         exposedPort: 5432
-      kafka: 
-        port: 9092
-        expose: true
-        exposedPort: 9092
-      amqp:
-        port: 5672
-        expose: true
-        exposedPort: 5672
-      pulsar:
-        port: 6650
-        expose: true
-        exposedPort: 6650
