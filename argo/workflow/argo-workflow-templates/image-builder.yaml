@@ -3,8 +3,10 @@ kind: WorkflowTemplate
 metadata:
   name: generic-image-builder
 spec:
+  podGC:
+    strategy: OnWorkflowSuccess
+    deleteDelayDuration: 1m
   entrypoint: build-and-deploy
-
   serviceAccountName: argo-workflow-svc
   volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
     - metadata:
@@ -77,6 +79,10 @@ spec:
           - name: python-version
           - name: image-version
           - name: registry
+      volumes:
+        - name: ca-bundle
+          configMap:
+            name: homelab-root-ca-bundle
       container:
         image: docker:latest
         command: [sh, -c]
@@ -86,6 +92,11 @@ spec:
             cat <<EOF > Dockerfile
             FROM python:{{inputs.parameters.python-version}}-slim
             WORKDIR /app
+
+            COPY /etc/ssl/certs/homelab-root-ca.pem /etc/ssl/certs/homelab-root-ca.pem
+            RUN cat /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/homelab-root-ca.pem > /etc/ssl/certs/ca-bundle.pem
+            export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.pem
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-bundle.pem
             
             ENV POETRY_HOME=/app \ 
                 POETRY_VIRTUALENVS_IN_PROJECT=true \
@@ -100,6 +111,10 @@ spec:
         volumeMounts:
           - name: workdir
             mountPath: /workspace
+          - name: ca-bundle
+            mountPath: /etc/ssl/certs/homelab-root-ca.pem
+            subPath: root-certs.pem
+            readOnly: true         
         env:
           - name: DOCKER_HOST
             value: tcp://localhost:2375

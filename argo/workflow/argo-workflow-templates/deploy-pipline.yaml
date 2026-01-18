@@ -3,8 +3,10 @@ kind: WorkflowTemplate
 metadata:
   name: deploy-pipline
 spec:
+  podGC:
+    strategy: OnWorkflowSuccess
+    deleteDelayDuration: 1m
   entrypoint: build-and-deploy
-
   serviceAccountName: argo-workflow-svc
   volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
     - metadata:
