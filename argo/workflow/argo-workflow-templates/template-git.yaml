@@ -53,8 +53,6 @@ spec:
             git add .
             git commit -m "{{inputs.parameters.commit-message}}"
             git push origin HEAD
-
-            git rev-parse --short=7 HEAD > /tmp/git-hash.txt
         workingDir: /src/{{inputs.parameters.path}}
         volumeMounts:
           - name: workdir
