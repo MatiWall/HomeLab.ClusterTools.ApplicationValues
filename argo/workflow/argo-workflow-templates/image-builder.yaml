@@ -44,7 +44,7 @@ spec:
           - name: generate-tag
             dependencies: [git-clone]
             template: generate-tag
-            
+
           - name: build
             templateRef:
               name: docker-templates
@@ -79,6 +79,7 @@ spec:
           - name: version
             valueFrom: 
               path: /tmp/version.txt
+        workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src
