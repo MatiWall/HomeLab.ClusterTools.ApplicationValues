@@ -88,6 +88,7 @@ spec:
         command: [sh, -c]
         args: 
           - |
+            cd /src/{{workflow.parameters.repo}}
             git rev-parse --short=7 HEAD > /tmp/git.txt
             date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
             echo "$(cat /tmp/date.txt)-$(cat /tmp/git.txt)" > /tmp/version.txt
