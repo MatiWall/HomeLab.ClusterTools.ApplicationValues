@@ -22,15 +22,13 @@ spec:
       - name: giturl
         value: git@github.com:MatiWall/ 
       - name: repo
-        value: catcode-backend
+        value: FitTracker
       - name: subpath
         value: 
       - name: registry
         value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
       - name: application-name
-        value: extensions-opentelemetry
-      - name: version
-        value: 0.1.1
+        value: fittracker-backend
   templates:
     - name: build-and-deploy
       dag:
@@ -58,7 +56,7 @@ spec:
             templateRef:
               name: docker-templates
               template: tag-and-push
-            dependencies: [build]
+            dependencies: [build, generate-tag]
             arguments:
               parameters:
                 - name: registry
@@ -70,6 +68,21 @@ spec:
                 - name: application-name
                   value: "{{workflow.parameters.application-name}}"
                 - name: version
-                  value: "{{workflow.parameters.version}}"
-            
+                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
+    - name: generate-tag
+      outputs:
+        parameters:
+          - name: version
+            valueFrom: /tmp/version.txt
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+      container:
+        image: alpine/git:latest
+        command: [sh, -c]
+        args: |
+          git reg-parse --short=7 HEAD > /tmp/git-hash.txt
+          date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
+          echo "$(cat /tmp/date.txt)-$(cat /tmp/git.txt)" > /tmp/version.txt
+              
               
