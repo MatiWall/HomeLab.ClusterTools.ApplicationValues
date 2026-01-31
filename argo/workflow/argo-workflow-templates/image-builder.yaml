@@ -75,6 +75,9 @@ spec:
                   value: "{{workflow.parameters.repo}}"
                 - name: application-name
                   value: "{{workflow.parameters.application-name}}"
+                - name: version
+                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
+                
     - name: generate-tag
       inputs:
         parameters:
