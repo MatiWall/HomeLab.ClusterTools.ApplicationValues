@@ -44,6 +44,10 @@ spec:
           - name: generate-tag
             dependencies: [git-clone]
             template: generate-tag
+            arguments:
+              parameters:
+                - name: git-hash
+                  value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
 
           - name: build
             templateRef:
@@ -72,10 +76,6 @@ spec:
                 - name: application-name
                   value: "{{workflow.parameters.application-name}}"
     - name: generate-tag
-      arguments:
-        parameters:
-          - name: git-hash
-            value: "{{tasks.generate-tag.outputs.parameters.version}}"
       inputs:
         parameters:
           - name: git-hash
