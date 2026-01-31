@@ -65,6 +65,11 @@ spec:
       inputs:
         parameters:
           - name: url
+      outputs:
+        parameters:
+          - name: git-hash
+            valueFrom: 
+              path: /tmp/git.txt
       volumes:
         - name: ssh-key
           secret:
@@ -80,6 +85,9 @@ spec:
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
             git clone "{{inputs.parameters.url}}"
+
+            git rev-parse --short=7 HEAD > /tmp/git.txt
+            
         workingDir: /src
         volumeMounts:
           - name: workdir

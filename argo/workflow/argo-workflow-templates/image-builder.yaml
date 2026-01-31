@@ -29,6 +29,8 @@ spec:
         value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
       - name: application-name
         value: fittracker-backend
+      - name: git-hash
+        value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
   templates:
     - name: build-and-deploy
       dag:
@@ -88,10 +90,7 @@ spec:
         command: [sh, -c]
         args: 
           - |
-            ls -a
-            cd /src/{{workflow.parameters.repo}}
-            git rev-parse --short=7 HEAD > /tmp/git.txt
             date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
-            echo "$(cat /tmp/date.txt)-$(cat /tmp/git.txt)" > /tmp/version.txt
+            echo "$(cat /tmp/date.txt)-{{workflow.parameters.git-hash}}" > /tmp/version.txt
               
               
