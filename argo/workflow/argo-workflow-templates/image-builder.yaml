@@ -24,13 +24,11 @@ spec:
       - name: repo
         value: FitTracker
       - name: subpath
-        value: 
+        value: ''
       - name: registry
         value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
       - name: application-name
         value: fittracker-backend
-      - name: git-hash
-        value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
   templates:
     - name: build-and-deploy
       dag:

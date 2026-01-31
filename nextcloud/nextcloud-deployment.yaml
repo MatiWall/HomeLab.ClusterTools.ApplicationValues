@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+        - name: nextcloud
+          image: nextcloud:apache
+          env:
+            - name: MYSQL_PASSWORD
+              value: mypassword
+            - name: MYSQL_DATABASE
+              value: nextcloud
+            - name: MYSQL_USER
+              value: nextcloud
+            - name: MYSQL_HOST
+              value: ...
