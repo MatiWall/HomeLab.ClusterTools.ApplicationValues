@@ -73,9 +73,14 @@ spec:
                   value: "{{workflow.parameters.repo}}"
                 - name: application-name
                   value: "{{workflow.parameters.application-name}}"
-                - name: version
-                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
     - name: generate-tag
+      arguments:
+        parameters:
+          - name: git-hash
+            value: "{{tasks.generate-tag.outputs.parameters.version}}"
+      inputs:
+        parameters:
+          - name: git-hash
       outputs:
         parameters:
           - name: version
@@ -91,6 +96,6 @@ spec:
         args: 
           - |
             date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
-            echo "$(cat /tmp/date.txt)-{{workflow.parameters.git-hash}}" > /tmp/version.txt
+            echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
               
               
