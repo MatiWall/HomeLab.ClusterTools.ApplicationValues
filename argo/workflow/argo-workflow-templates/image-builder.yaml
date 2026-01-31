@@ -71,8 +71,6 @@ spec:
                   value: "{{workflow.parameters.registry}}"
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
                 - name: application-name
                   value: "{{workflow.parameters.application-name}}"
                 - name: version

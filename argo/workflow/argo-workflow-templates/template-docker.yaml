@@ -19,7 +19,6 @@ spec:
       inputs:
         parameters:
           - name: subpath
-          - name: repo
       volumes:
         - name: docker-daemon-config
           configMap:
@@ -38,7 +37,7 @@ spec:
             cp /etc/ssl/certs/homelab-root-ca-bundle.pem ./certs/homelab-root-ca-bundle.pem
             docker build -t image:0.0.1 .
             docker save -o /src/image.tar image:0.0.1
-        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
@@ -88,7 +87,7 @@ spec:
 
             docker tag image:0.0.1 "$image"
             docker push "$image"
-        workingDir: /src/{{inputs.parameters.repo}}/{{inputs.parameters.subpath}}
+        workingDir: /src/{{inputs.parameters.subpath}}
         volumeMounts:
           - name: workdir
             mountPath: src/
