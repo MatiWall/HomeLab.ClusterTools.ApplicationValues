@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: rancher-cert
+  name: rancher-tls-cert
   namespace: cattle-system
 spec:
   secretName: rancher-tls-secret
