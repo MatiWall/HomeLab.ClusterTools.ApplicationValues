@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rancher-manager
+description: Umbrella chart to install Rancher Cluster Manager
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: rancher
+    version: 2.9.3   # example – pin this
+    repository: https://releases.rancher.com/server-charts/latest

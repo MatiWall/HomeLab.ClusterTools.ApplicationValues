@@ -1,0 +1,12 @@
+rancher:
+  
+
+  replicas: 1
+
+  bootstrapPassword: admin123
+
+  hostname: rancher.mw.local
+  ingress:
+    enabled: true
+
+
