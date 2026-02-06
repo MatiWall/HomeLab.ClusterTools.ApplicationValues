@@ -8,9 +8,9 @@ rancher:
   hostname: rancher.mw.local
   ingress:
     enabled: true
-  tls:
-    # options: rancher, letsEncrypt, secret
-    source: secret
-    secretName: rancher-tls-secret
+    tls:
+      # options: rancher, letsEncrypt, secret
+      source: secret
+      secretName: rancher-tls-secret
 
 
