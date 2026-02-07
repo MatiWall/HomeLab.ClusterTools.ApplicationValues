@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: webhook
+  name: build-pipeline-webhook
 spec:
   service:
     ports:
@@ -12,7 +12,7 @@ spec:
         app: event-source-webhook
   webhook:
     # event-source can run multiple HTTP servers. Simply define a unique port to start a new HTTP server
-    example:
+    build-pipeline:
       # port to run HTTP server on
       port: "12000"
       # endpoint to listen to
