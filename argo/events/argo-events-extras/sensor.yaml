@@ -3,6 +3,8 @@ kind: Sensor
 metadata:
   name: build-pipeline
 spec:
+  template:
+    serviceAccountName: argo-events-build-pipeline-sa
   dependencies:
     - name: webhook-dep
       eventSourceName: build-pipeline-webhook
@@ -26,3 +28,29 @@ spec:
                       image: docker/whalesay:latest
                       command: [cowsay]
                       args: ["hello world"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argo-events-build-pipeline-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argo-events-build-pipeline-role
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["pods"]
+    verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-events-build-pipeline-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: argo-events-build-pipeline-sa
+roleRef:
+  kind: Role
+  name: argo-events-build-pipeline-role
+  apiGroup: rbac.authorization.k8s.io
