@@ -8,4 +8,4 @@ spec:
     - namePattern: "webhook-forwarder"
       images:
         - alias: docker-registry.mw.local/mwstack-webhookforwarder
-          image: docker-registry.mw.local/mwstack-webhookforwarder
+          imageName: docker-registry.mw.local/mwstack-webhookforwarder
