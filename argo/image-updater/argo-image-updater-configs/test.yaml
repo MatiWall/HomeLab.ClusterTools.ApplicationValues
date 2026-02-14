@@ -1,0 +1,9 @@
+apiGroup: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: argo-image-updater
+spec:
+  applicationRefs:
+    - namePattern: "webhook-forwarder"
+      alias: docker-registry.mw.local/mwstack-webhookforwarder
+      image: docker-registry.mw.local/mwstack-webhookforwarder
