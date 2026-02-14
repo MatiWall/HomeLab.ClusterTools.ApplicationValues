@@ -1,5 +1,5 @@
 
 
-deployment:
-  nameOverride: argo-image-updater
-  fullnameOverride: argo-image-updater
+
+nameOverride: argo-image-updater
+fullnameOverride: argo-image-updater
