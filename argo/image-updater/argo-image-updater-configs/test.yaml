@@ -9,5 +9,5 @@ spec:
       images:
         - alias: "webhook-forwarder"
           imageName: docker-registry.mw.local/mwstack-webhookforwarder
-          updateStrategy: latest
-  writeBackMethod: git
+  writeBackConfig:
+    method: git
