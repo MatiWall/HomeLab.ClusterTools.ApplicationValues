@@ -3,7 +3,9 @@ kind: ImageUpdater
 metadata:
   name: argo-image-updater
 spec:
+  namespace: argocd
   applicationRefs:
     - namePattern: "webhook-forwarder"
-      alias: docker-registry.mw.local/mwstack-webhookforwarder
-      image: docker-registry.mw.local/mwstack-webhookforwarder
+      images:
+        - alias: docker-registry.mw.local/mwstack-webhookforwarder
+          image: docker-registry.mw.local/mwstack-webhookforwarder
