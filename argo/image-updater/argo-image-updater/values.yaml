@@ -14,11 +14,12 @@ deployment:
       image: alpine:3.8
       command: [sh, -c]
       args: 
-        - "cd /homelab-root-ca-bundle.pem /etc/ssl/certs/"
-        - "update-ca-certificates"
+        - | 
+          cp /certs/root-certs.pem /usr/local/share/ca-certificates/homelab-root-ca.pem && update-ca-certificates
       volumeMounts:
-        - mountPath: /homelab-root-ca-bundle.pem
+        - mountPath: /certs
           name: trusted-ca-certificates
+          readOnly: true
 
   volumes:
     - name: trusted-ca-certificates
@@ -26,3 +27,4 @@ deployment:
         name: homelab-root-ca-bundle
         items:
           - key: root-certs.pem
+            path: root-certs.pem
