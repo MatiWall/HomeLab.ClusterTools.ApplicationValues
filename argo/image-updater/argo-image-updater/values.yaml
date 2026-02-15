@@ -3,3 +3,9 @@
 
 nameOverride: argo-image-updater
 fullnameOverride: argo-image-updater
+registries:
+  - name: Docker Registry MW Local
+    prefix: docker-registry.mw.local
+    api_url: https://docker-registry.mw.local
+    default: true
+    insecure: true
