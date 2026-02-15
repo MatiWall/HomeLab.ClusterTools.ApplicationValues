@@ -21,7 +21,7 @@ deployment:
           apk add --upgrade ca-certificates && \
           update-ca-certificates && cp -r /etc/ssl/certs/* /artifact/
       volumeMounts:
-        - mountPath: /usr/local/share/ca-certificates/homelab-root-ca.pem
+        - mountPath: /usr/local/share/ca-certificates/homelab-root-ca.crt # aparently need to change extension
           subPath: homelab-root-ca.pem
           name: trusted-ca-certificates
           readOnly: true
