@@ -1,28 +1,28 @@
 
 
+deployment:
+  nameOverride: argo-image-updater
+  fullnameOverride: argo-image-updater
+  #registries:
+  #  - name: Docker Registry MW Local
+  #    prefix: docker-registry.mw.local
+  #    api_url: https://docker-registry.mw.local
+  #    default: true
+  #    insecure: true
+  initContainers: 
+    - name: add-trusted-ca-certificates
+      image: alpine:3.8
+      command: [sh, -c]
+      args: |
+        cd /homelab-root-ca-bundle.pem /etc/ssl/certs/ && \
+        update-ca-certificates
+      volumeMounts:
+        - mountPath: /homelab-root-ca-bundle.pem
+          name: trusted-ca-certificates
 
-nameOverride: argo-image-updater
-fullnameOverride: argo-image-updater
-registries:
-  - name: Docker Registry MW Local
-    prefix: docker-registry.mw.local
-    api_url: https://docker-registry.mw.local
-    default: true
-    insecure: true
-initContainers: 
-  - name: add-trusted-ca-certificates
-    image: alpine:3.8
-    command: [sh, -c]
-    args: |
-      cd /homelab-root-ca-bundle.pem /etc/ssl/certs/ && \
-      update-ca-certificates
-    volumeMounts:
-      - mountPath: /homelab-root-ca-bundle.pem
-        name: trusted-ca-certificates
-
-volumes:
-  - name: trusted-ca-certificates
-    configMap:
-      name: homelab-root-ca-bundle
-      items:
-        - key: root-certs.pem
+  volumes:
+    - name: trusted-ca-certificates
+      configMap:
+        name: homelab-root-ca-bundle
+        items:
+          - key: root-certs.pem
