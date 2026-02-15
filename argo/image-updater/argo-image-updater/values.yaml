@@ -13,9 +13,9 @@ deployment:
     - name: add-trusted-ca-certificates
       image: alpine:3.8
       command: [sh, -c]
-      args: |
-        cd /homelab-root-ca-bundle.pem /etc/ssl/certs/ && \
-        update-ca-certificates
+      args: 
+        - "cd /homelab-root-ca-bundle.pem /etc/ssl/certs/"
+        - "update-ca-certificates"
       volumeMounts:
         - mountPath: /homelab-root-ca-bundle.pem
           name: trusted-ca-certificates
