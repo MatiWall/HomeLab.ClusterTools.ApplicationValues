@@ -38,6 +38,6 @@ deployment:
         name: homelab-root-ca-bundle
         items:
           - key: root-certs.pem
-            path: root-certs.pem
+            path: homelab-root-ca.crt
     - name: tmp
       emptyDir: {}
