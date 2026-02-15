@@ -13,6 +13,9 @@ deployment:
     - name: add-trusted-ca-certificates
       image: alpine:3.8
       command: [sh, -c]
+      securityContext:
+        runAsUser: 0
+        runAsNonRoot: false
       args: 
         - | 
           cp /certs/root-certs.pem /usr/local/share/ca-certificates/homelab-root-ca.pem && update-ca-certificates
