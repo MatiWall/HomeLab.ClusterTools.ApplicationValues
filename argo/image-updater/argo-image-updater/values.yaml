@@ -26,10 +26,10 @@ deployment:
           name: trusted-ca-certificates
           readOnly: true
         - mountPath: /artifact
-          name: tmp
+          name: tmp-storage
           readOnly: false
   volumeMounts:
-      - name: tmp
+      - name: tmp-storage
         mountPath: /etc/ssl/certs
         readOnly: false
   volumes:
@@ -39,7 +39,7 @@ deployment:
         items:
           - key: root-certs.pem
             path: homelab-root-ca.crt
-    - name: tmp
+    - name: tmp-storage
       emptyDir: {}
   extraObjects:
     - apiVersion: bitnami.com/v1alpha1
