@@ -34,7 +34,6 @@ deployment:
         readOnly: false
       - mountPath: /app/.ssh/id_rsa
         name: ssh-key
-        subPath: id_rsa
         readOnly: true
   volumes:
     - name: trusted-ca-certificates
