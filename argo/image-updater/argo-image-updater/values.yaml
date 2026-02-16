@@ -45,9 +45,6 @@ deployment:
     - name: ssh-key
       secret:
         secretName: github-ssh-key
-        items:
-          - key: ssh-privatekey
-            path: id_rsa
     - name: tmp
       emptyDir: {}
   extraObjects:
@@ -58,7 +55,7 @@ deployment:
         namespace: argocd
       spec:
         encryptedData:
-          ssh-privatekey: AgBQ/y0SePVdhp9eF6KF0bwuAOedKqRKri3Dupu+qJPWcvKKz2TfFuM1syAo2mtmLXiAAAu426RXQtTJXliRWiiGGQ9WE3Euwd7dh4mHEmgI7eZR9okBj2675L59DY6E2YdoR/MgpOokh5P/mJgy7FGIbZf2MtsLBzP4adp/jDUB07tGEnw4V0q3/EmcoAZH7TA5nztR23yVC965+wYJzw4v7YSrcV7/Lcxz6OkvLuj5YdSYrL2/tNJW/oAaOVpsOp3p95qorag5NhPVcnL/YCxShI9tUjflGRg6GXGQbL7Bh0j3iMTc/w5fupar22wLdpLZvTI0f2jAoP6OkGe5iDJu5+QhVzFLWv8z0/GQeoskSqLy35H+cA8FSQy74rW3DjV5FtIe5txTwmSpEod44i1q4J9n2O+Ua5I79P7eVQqVoxktn6WcM2EoUTxVU6QVazpw1cORIed0qvBf7LVtbHhaPorxZMGJS58a9fClYwCRx8B7uOq4g4dV3wxD67y08GTzyRhn0tg7Sonyiud0blqCxm3voDhkZlX/HAcetmUpy6kpjTdXULNUxc31InJ3Fjx6pGwqHD6pXz02rQWjg85zb9s2mx5w4oi2lSKwyIf+jswXOput7b/rC5vM4M1cYsGZVJ406RAGHGlTuKvapHRfC2kGOp5Lv00a6wlAmsT1bgQr5M5RtL+KHt1y3vmgAn//tv6UpgFqmDXf4uGVswF/CSMbfwREAJ32oBRGk5IEXYL3p8ZAejle9dLKP9V02pCLkPiEOga8rC7nAx0uesO+0agLZMfEk6CyfqQroyHg18Wuo5hKE7/4dOG0jVO7gPnSPxisJGsBQ5+82vrnty8xnCdi5zx/b+bbmDqI0vOlUJ/Md/yMIqwvzxzE40AR+cDPIz9BlwMYLehbVNglhgl1vSGR14lilDj7Qod1q59uIPVnscdpIfGYTkJ+6V/7f2fRPJpelIB7Zroom59QItPwzn5aLJRhL0i/sBel8mSc4lgOi53qrMl+XYR+xd8Mn7YsKaXicBfia/Fza6Sjsz5ebak6DNbmod0jQc+lvzOdeKFEaSxWMiuozmRlkVwzOeb9jZHnCoZW7clGYLgmvu+ufnesHC6F+ByC5fOLEfZnQIuZ2nAxlTVTufwu8F4cjO9BeE18kBfe4nKFbuuwn0D2kD0j8Y6TW3g6vbaJDq8bDUXI3Vl4Otwk40wGj3t0yKmiAlg=
+          id_rsa: AgAF/PrrtkJoH0jPjPHoN03l6meueg3abPEqM/pgbm4ppfZ5tyobT/oiCL5S7o/VHOgtNnED/FgBMPQoB1/5QyitaPU9JXFVpUD48k6mHq3Ww8pvHO5mj2Oir8XIiKoNDunrvvZqkgkRBxZKMqzQ/Pj6i/rvZKE00LYvq7xE7D5GjJTjJSyQfwewfajcVF+Urbpjht6spFkbVibmDk2ggEOpRw7uT2wiX/qk7bgWlrlkbpe3UeHYcTjsc368L7713mgr2tSkvUyElqiMUFdnqndl1G48OYPlIqxYjDW4hS0ZonNrDZ7Ohfgfz/NubgBiSG+6eJvzQ9S7Evzcl/PjwKnc3Cz/2IMeHc7EOpLIoZSJ6P8VoSnOguO2OyLHxpqG4v7+LFXf89EHKV8CvguZeAtkcKHQQh//M5gW9UFS+ajcPuqcTsEqJp1Bl1vdlxytSOohKYalIlsTxvFNGteZK4vi4VGkiV+e0NxFDnUd1a2LZc+TmMAjMT8EvwZlDW15ltiBypzDq/O38Gd0aG9feDKqTyWz0uM2PVoOYWPn2e7UeZBQZoOIkjLw4KUSRfjgpJdxGF3tq/NaZ1DDlPNQK1Y8wO2IQCR9aoxUTaFizzDoXXNSsNk8Rs2VBQElfWm4S8GAGBMpaWzR0T7sKISzJtbQ7bUwqFuSQpipzF4QsP3KJV/RjAxeN+406qK6KMr1ea83vw5ki8L4LvBPksl8Hv9flK1FdaTwZ00mhzeP2zTsfh42lnYS54q+hUurZp8b+Ja8OGCVTWknhGOQOfYBK1aF7vYNcau7CWon6CiQUnS1+sSBxyu9DG3ZpEdNXUlNY7NJje2ExarAIGOR3aTOEl+NeBrPNbGYQb36bFv6OUwHO5rupha6U/rL6dFXbb8ibbVQbFhtI8xo/aneDzH0WAibhJSA2nyVYDzRX3ZdkpALHQ3HxmGlEMwKfOvgCR55ilczho86y7ndVFg9gqIyiBBdfEwTLaQUEi/ihWNxxepxIvssgO3VAv9AZUHjYSPbRc72xnl4oPVHcYD3O1a0qgEtv4hZDLL7VsxbMeJ3sCFGMv1OiKIwgIAtIAWD91tBGH++YXII+7/4nGzgky0B/kYueFQR7b7EsFeFXK0PdUhUwaqpDKsxNWZIYkQzVLeiRplKb2ipnTJ4uq5hXBUlDN0IWj4SS84ejWwUtE8mgPlG8rnM0vRUZlvV3VR+Ky8EyvEj6wg=
         template:
           metadata:
             name: github-ssh-key
