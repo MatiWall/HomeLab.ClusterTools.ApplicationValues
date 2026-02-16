@@ -46,8 +46,6 @@ deployment:
     - name: ssh-key
       secret:
         secretName: github-ssh-key
-        items:
-          - key: ssh-privatekey
     - name: tmp
       emptyDir: {}
   extraObjects:
