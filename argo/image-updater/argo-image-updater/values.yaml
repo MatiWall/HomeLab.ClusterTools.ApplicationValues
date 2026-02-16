@@ -54,13 +54,14 @@ deployment:
     - apiVersion: bitnami.com/v1alpha1
       kind: SealedSecret
       metadata:
-        name: github-ssh-key
+        name: ssh-git-creds
         namespace: argocd
       spec:
         encryptedData:
-          id_rsa: AgAF/PrrtkJoH0jPjPHoN03l6meueg3abPEqM/pgbm4ppfZ5tyobT/oiCL5S7o/VHOgtNnED/FgBMPQoB1/5QyitaPU9JXFVpUD48k6mHq3Ww8pvHO5mj2Oir8XIiKoNDunrvvZqkgkRBxZKMqzQ/Pj6i/rvZKE00LYvq7xE7D5GjJTjJSyQfwewfajcVF+Urbpjht6spFkbVibmDk2ggEOpRw7uT2wiX/qk7bgWlrlkbpe3UeHYcTjsc368L7713mgr2tSkvUyElqiMUFdnqndl1G48OYPlIqxYjDW4hS0ZonNrDZ7Ohfgfz/NubgBiSG+6eJvzQ9S7Evzcl/PjwKnc3Cz/2IMeHc7EOpLIoZSJ6P8VoSnOguO2OyLHxpqG4v7+LFXf89EHKV8CvguZeAtkcKHQQh//M5gW9UFS+ajcPuqcTsEqJp1Bl1vdlxytSOohKYalIlsTxvFNGteZK4vi4VGkiV+e0NxFDnUd1a2LZc+TmMAjMT8EvwZlDW15ltiBypzDq/O38Gd0aG9feDKqTyWz0uM2PVoOYWPn2e7UeZBQZoOIkjLw4KUSRfjgpJdxGF3tq/NaZ1DDlPNQK1Y8wO2IQCR9aoxUTaFizzDoXXNSsNk8Rs2VBQElfWm4S8GAGBMpaWzR0T7sKISzJtbQ7bUwqFuSQpipzF4QsP3KJV/RjAxeN+406qK6KMr1ea83vw5ki8L4LvBPksl8Hv9flK1FdaTwZ00mhzeP2zTsfh42lnYS54q+hUurZp8b+Ja8OGCVTWknhGOQOfYBK1aF7vYNcau7CWon6CiQUnS1+sSBxyu9DG3ZpEdNXUlNY7NJje2ExarAIGOR3aTOEl+NeBrPNbGYQb36bFv6OUwHO5rupha6U/rL6dFXbb8ibbVQbFhtI8xo/aneDzH0WAibhJSA2nyVYDzRX3ZdkpALHQ3HxmGlEMwKfOvgCR55ilczho86y7ndVFg9gqIyiBBdfEwTLaQUEi/ihWNxxepxIvssgO3VAv9AZUHjYSPbRc72xnl4oPVHcYD3O1a0qgEtv4hZDLL7VsxbMeJ3sCFGMv1OiKIwgIAtIAWD91tBGH++YXII+7/4nGzgky0B/kYueFQR7b7EsFeFXK0PdUhUwaqpDKsxNWZIYkQzVLeiRplKb2ipnTJ4uq5hXBUlDN0IWj4SS84ejWwUtE8mgPlG8rnM0vRUZlvV3VR+Ky8EyvEj6wg=
+          id_rsa: AgDoHlI/C5p6/xofF64xyyXnfAg4fkCS3SURbdcH/0thmk8EjqIjbbrhbSFwOwuCHuIEL3OEbsZLYEFTXHAHHas8PYDeafb9ufT0z4DOPc10r4LA4AJml7EOTi7grANUIourSguRUU/M2SRir6JLE6P7IE+98Q02dwDnm2pok+IwLpJAn1eqaCKSPHZu9qwGSi+Ei4eahLwon0BNuouxIgT3mFoo8RP0ok50quCwAyblJIjvFr1j5EsxzFXTZDV7DQt81jh0rtxQXVh2i4HqTdjtMDBHmkizOzJ8PZF2ro9Ubemrx7IuhleVy7AzDMrmBGCv9FuNXFWGnsxrhPnnJmOWSDx5JLg0t1Jej3JgSbu+uUQCg3oi471yXJOIStRYy8hChM1Gwq9O7F0TfkWk3s1fIwynATeixo6GP2jqfJ3Y6O0YpYn2W9VnpQWv+ByhArMvaPnzLOiPnMS484uP0OHpT0bYSsXVv26JLzHLTEloQ7VnMAtY7n6D91bXOfVD5a60jrxjqJcEiRauPGqH6ITll0IKlF7hY+KOzNVsbcN2GUjiWv/fPl5iMjM6aHqsWI4vmFEAWid4hqoSWg697A169ZrKXayovDLwwprnAFhWQOobYYCrVzgsU5GREgK7nvJfXbAxfpWK4egGs16r1Bp7V5I/pArp/Q/wd7hsmfHby0U1pqlcwn8DBK62eXqb3lVGfh3wi2QbGxv1va5IMD2UuQvNIWt2EhPfEV+tTVYLh3UbOgh0Sx+BdysL1070H2yRrTtK7+l7diqVSkPi0Qp/+5ZSWU/vPNK4qKVu3J1Y/csK3pS1pFAF0K8c3cSKWIq4V8i8pU0b2tyAiVMEv7aECDt/GAbU9RY6gDLNRWJfofBYW0xloYbOo7GcRmOS96Iyfe0Bm+3jSVfFvO7N7k8LaTZBckCZbbWflS7yg5c/KjBH5ZBzbZ2lUnnazawdmDJwlvYhGiF9N+op9m4aZFlNrJBHcoufR8gebR+NY6RDRdBuPEX9Z4BfjAVTa2PmyYLyUbIQtZmVBHMfSyWfgUmejohkRS0LMD0tkIEE2VhFqYZbJyLV/rkieFFLA/PbWNUL1YWUY+WrOQSMYRKXIYVB6KLF2PitzVvnXgwfKb/XOVyGNTL12GLJUI2tIxWW7PqZX4cdZvBn3SuOmeVJX191mXaPMWKZy3u7dhkLSd6Vsp27eDwaPVMgLishi65mxG/Jj/I=
         template:
           metadata:
-            name: github-ssh-key
+            name: ssh-git-creds
             namespace: argocd
           type: Opaque
+
