@@ -32,8 +32,9 @@ deployment:
       - name: tmp
         mountPath: /etc/ssl/certs
         readOnly: false
-      - mountPath: ~/.ssh
+      - mountPath: /root/.ssh
         name: ssh-key
+        subPath: id_rsa
         readOnly: true
   volumes:
     - name: trusted-ca-certificates
@@ -45,6 +46,9 @@ deployment:
     - name: ssh-key
       secret:
         secretName: github-ssh-key
+        items: 
+          - key: id_rsa
+            path: id_rsa
     - name: tmp
       emptyDir: {}
   extraObjects:
