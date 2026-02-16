@@ -3,6 +3,15 @@
 deployment:
   nameOverride: argo-image-updater
   fullnameOverride: argo-image-updater
+  config:
+    name: argocd-image-updater-config
+    kube.events: false
+    git.user: "matiwall"
+    git.email: "matiwall@live.dk"
+    git.commit-message-template: ""
+    git.commit-signing-key: "/app/ssh-keys/id_rsa"
+    git.commit-sign-off: false
+
   #registries:
   #  - name: Docker Registry MW Local
   #    prefix: docker-registry.mw.local
