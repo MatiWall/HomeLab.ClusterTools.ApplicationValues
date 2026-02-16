@@ -32,7 +32,7 @@ deployment:
       - name: tmp
         mountPath: /etc/ssl/certs
         readOnly: false
-      - mountPath: /app/.ssh/id_rsa
+      - mountPath: /app/.ssh
         name: ssh-key
         readOnly: true
   volumes:
