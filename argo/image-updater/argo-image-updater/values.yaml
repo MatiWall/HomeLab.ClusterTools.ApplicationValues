@@ -32,6 +32,10 @@ deployment:
       - name: tmp
         mountPath: /etc/ssl/certs
         readOnly: false
+      - mountPath: ~/.ssh/id_rsa
+        name: ssh-key
+        subPath: ssh-privatekey
+        readOnly: true
   volumes:
     - name: trusted-ca-certificates
       configMap:
@@ -39,6 +43,11 @@ deployment:
         items:
           - key: root-certs.pem
             path: homelab-root-ca.crt
+    - name: ssh-key
+      secret:
+        secretName: github-ssh-key
+        items:
+          - key: ssh-privatekey
     - name: tmp
       emptyDir: {}
   extraObjects:
