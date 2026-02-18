@@ -9,7 +9,7 @@ deployment:
     git.user: "matiwall"
     git.email: "matiwall@live.dk"
     git.commit-message-template: ""
-    git.commit-signing-key: "/app/ssh-keys/id_rsa"
+    #git.commit-signing-key: "/app/ssh-keys/id_rsa"
     git.commit-sign-off: false
 
   #registries:
