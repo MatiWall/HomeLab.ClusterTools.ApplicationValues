@@ -11,9 +11,12 @@ spec:
       images:
         - alias: "webhook-forwarder"
           imageName: docker-registry.mw.local/mwstack-webhookforwarder
-
+          manifestTargets:
+            helm:
+              name: "image.repository"
+              tag: "image.tag"
       writeBackConfig:
         method: git
         gitConfig:
           branch: master
-          writeBackTarget: helmvalues
+          writeBackTarget: helmvalues:/mwstack/mwstack-webhookforwarder/values.yaml
