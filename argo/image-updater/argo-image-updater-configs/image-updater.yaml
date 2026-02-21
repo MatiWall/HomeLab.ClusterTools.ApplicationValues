@@ -14,3 +14,7 @@ spec:
     gitConfig:
       branch: "main"
       writeBackTarget: "helmvalues:./values.yaml"
+      manifestTargets:
+        helm:
+          name: "image.repository"
+          tag: "image.tag"
