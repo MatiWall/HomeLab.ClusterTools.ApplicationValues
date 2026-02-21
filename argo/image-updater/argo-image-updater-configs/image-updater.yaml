@@ -4,6 +4,8 @@ metadata:
   name: argo-image-updater
 spec:
   namespace: argocd
+  commonUpdateSettings:
+    updateStrategy: "digest"
   applicationRefs:
     - namePattern: "webhook-forwarder"
       images:
