@@ -5,7 +5,7 @@ metadata:
 spec:
   namespace: argocd
   commonUpdateSettings:
-    updateStrategy: "digest"
+    updateStrategy: "latest"
   applicationRefs:
     - namePattern: "webhook-forwarder"
       images:
