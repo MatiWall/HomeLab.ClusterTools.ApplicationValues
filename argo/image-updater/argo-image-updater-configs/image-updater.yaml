@@ -13,8 +13,8 @@ spec:
           imageName: docker-registry.mw.local/mwstack-webhookforwarder
           manifestTargets:
             helm:
-              name: "image.repository"
-              tag: "image.tag"
+              name: "deployment.image.repository"
+              tag: "deployment.image.tag"
       writeBackConfig:
         method: git
         gitConfig:
