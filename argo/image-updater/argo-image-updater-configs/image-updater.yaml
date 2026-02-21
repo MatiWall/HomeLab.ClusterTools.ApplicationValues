@@ -15,8 +15,8 @@ spec:
             helm:
               name: "deployment.image.repository"
               tag: "deployment.image.tag"
-  writeBackConfig:
-    method: "git"
-    gitConfig:
-      branch: "main"
-      writeBackTarget: "helmvalues:./values.yaml"
+          writeBackConfig:
+            method: "git"
+            gitConfig:
+              branch: "main"
+              writeBackTarget: "helmvalues:./values.yaml"
