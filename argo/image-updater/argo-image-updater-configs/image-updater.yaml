@@ -5,11 +5,11 @@ metadata:
 spec:
   namespace: argocd
   commonUpdateSettings:
-    updateStrategy: "newest-build"
+    updateStrategy: newest-build
   applicationRefs:
     - namePattern: "webhook-forwarder"
       images:
-        - alias: "webhook-forwarder"
+        - alias: webhook-forwarder
           imageName: docker-registry.mw.local/mwstack-webhookforwarder
           manifestTargets:
             helm:
@@ -19,4 +19,4 @@ spec:
         method: git
         gitConfig:
           branch: master
-          writeBackTarget: helmvalues:/mwstack/mwstack-webhookforwarder/values.yaml
+          writeBackTarget: helmvalues:values.yaml
