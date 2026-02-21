@@ -16,4 +16,4 @@ spec:
         method: git
         gitConfig:
           branch: master
-          writeBackTarget: helmvalues:values.yaml
+          writeBackTarget: helmvalues:/values.yaml
