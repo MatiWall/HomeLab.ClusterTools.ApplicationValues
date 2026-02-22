@@ -1,16 +1,9 @@
-# Steps
-# 1. Git clone
-# 2. Build docker image
-# 3. Push to registry
-# 4. Update image version in helm
-# 5. Push update to git
 
-# Use generic-image-builder
 
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: deploy-pipline
+  name: mwstack-pipeline
 spec:
   podGC:
     strategy: OnWorkflowSuccess
@@ -29,25 +22,15 @@ spec:
   arguments:
     parameters:
       - name: giturl
-        value: git@github.com:MatiWall/  # Provide the correct GitHub URL here
-      - name: revision
-        value: HEAD
-      - name: branch
-        value: master
+        value: git@github.com:MatiWall/ 
       - name: repo
-        value: catcode-backend
+        value: FitTracker
       - name: subpath
-        value: services/core-api
+        value: ''
       - name: registry
-        value: docker-registry.mw.local/
-      - name: base-image
-        value: python:3.12-3
-      - name: git-application-values
-        value: git@github.com:MatiWall/homelab.application-values.git
-      - name: username
-        value: matiwall
-      - name: email
-        value: matiwall@live.dk
+        value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
+      - name: application-name
+        value: fittracker-backend
   templates:
     - name: build-and-deploy
       dag:
@@ -60,18 +43,19 @@ spec:
               parameters:
                 - name: url
                   value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+          - name: generate-tag
+            dependencies: [git-clone]
+            template: generate-tag
+            arguments:
+              parameters:
+                - name: git-hash
+                  value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
+
           - name: build
+            templateRef:
+              name: docker-templates
+              template: build-tag-push
             dependencies: [git-clone]
-            template: build
-            arguments:
-              parameters:
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
-          - name: update-version
-            dependencies: [git-clone]
-            template: update-version
             arguments:
               parameters:
                 - name: subpath
@@ -80,56 +64,30 @@ spec:
                   value: "{{workflow.parameters.repo}}"
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
-                - name: base-image
-                  value: "{{workflow.parameters.base-image}}"
-          - name: extract-name-and-version
-            dependencies: [update-version]
-            template: extract-name-and-version
-            arguments:
-              parameters:
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
-          - name: tag-and-push
-            dependencies: [extract-name-and-version, build]
-            template: tag-and-push
-            arguments:
-              parameters:
-                - name: registry
-                  value: "{{workflow.parameters.registry}}"
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
                 - name: application-name
-                  value: "{{tasks.extract-name-and-version.outputs.parameters.application-name}}"
+                  value: "{{workflow.parameters.application-name}}"
                 - name: version
-                  value: "{{tasks.extract-name-and-version.outputs.parameters.version}}"
-          - name: git-push
-            dependencies: [tag-and-push]
-            templateRef:
-              name: git-template
-              template: git-push
-            arguments:
-              parameters:
-                - name: username
-                  value: "{{workflow.parameters.username}}"
-                - name: email
-                  value: "{{workflow.parameters.email}}"
-                - name: path
-                  value: "{{workflow.parameters.repo}}"
-                - name: commit-message
-                  value: "Updated {{tasks.extract-name-and-version.outputs.parameters.application-name}} to {{tasks.extract-name-and-version.outputs.parameters.version}}"
-                  
-          - name: update-values
-            dependencies: [tag-and-push]
-            templateRef:
-              name: application-values-tag-updater
-              template: update-values-tag
-            arguments:
-              parameters:
-                - name: version
-                  value: "{{tasks.extract-name-and-version.outputs.parameters.version}}"
-                - name: application-name
-                  value: "{{tasks.extract-name-and-version.outputs.parameters.application-name}}"
+                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
+                
+    - name: generate-tag
+      inputs:
+        parameters:
+          - name: git-hash
+      outputs:
+        parameters:
+          - name: version
+            valueFrom: 
+              path: /tmp/version.txt
+        workingDir: /src
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+      container:
+        image: alpine/git:latest
+        command: [sh, -c]
+        args: 
+          - |
+            date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
+            echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
+              
+              
