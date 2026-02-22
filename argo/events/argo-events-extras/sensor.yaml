@@ -21,13 +21,18 @@ spec:
               metadata:
                 generateName: build-pipeline-workflow-
               spec:
-                entrypoint: whalesay
-                templates:
-                  - name: whalesay
-                    container:
-                      image: docker/whalesay:latest
-                      command: [cowsay]
-                      args: ["hello world"]
+                workflowTemplateRef:
+                  name: mwstack-pipeline
+                arguments:
+                  parameters:
+                    - name: repo
+                      value: ""
+          parameters:
+            - src:
+                dependencyName: webhook-dep
+                dataKey: body.repository.name
+              dest: spec.arguments.parameters.0.value
+                  
 ---
 apiVersion: v1
 kind: ServiceAccount
