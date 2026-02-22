@@ -91,11 +91,15 @@ spec:
     - name: parse-pipeline
       script:
         image: python:3.10
-        command: [python]
-        args: ["-c", "pip install pyyaml && python"]
+        command: [sh]
         source: |
-          import yaml
+          import subprocess
           import sys
+
+          # install dependency
+          subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml"])
+
+          import yaml
 
           with open("/src/mwstack-pipeline.yaml", "r") as f:
               pipeline = yaml.safe_load(f)
