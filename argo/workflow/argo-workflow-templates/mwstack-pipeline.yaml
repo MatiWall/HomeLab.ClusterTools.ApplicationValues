@@ -58,9 +58,9 @@ spec:
             arguments:
               parameters:
                 - name: application-name
-                  value: "{{item.builds.name}}"
+                  value: "{{item.name}}"
                 - name: subpath
-                  value: "{{item.builds.path}}"
+                  value: "{{item.path}}"
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
                 - name: version
