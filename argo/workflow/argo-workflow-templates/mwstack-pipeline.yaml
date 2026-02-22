@@ -58,9 +58,9 @@ spec:
             arguments:
               parameters:
                 - name: application-name
-                  value: "{{item.name}}"
+                  value: "{{item.builds.name}}"
                 - name: subpath
-                  value: "{{item.path}}"
+                  value: "{{item.builds.path}}"
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
                 - name: version
@@ -104,7 +104,7 @@ spec:
           with open("/src/mwstack-pipeline.yaml", "r") as f:
               pipeline = yaml.safe_load(f)
 
-          print(pipeline['builds'])
+          print(pipeline)
 
         volumeMounts:
           - name: workdir
