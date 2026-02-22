@@ -92,6 +92,7 @@ spec:
       script:
         image: python:3.10
         command: [python]
+        args: ["-c", "pip install pyyaml && python"]
         source: |
           import yaml
           import sys
