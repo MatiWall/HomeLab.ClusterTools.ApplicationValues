@@ -105,5 +105,10 @@ spec:
               pipeline = yaml.safe_load(f)
 
           print(pipeline['builds'])
+
+        volumeMounts:
+          - name: workdir
+            mountPath: src/
+  
               
               
