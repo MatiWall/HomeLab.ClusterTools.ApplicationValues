@@ -95,6 +95,7 @@ spec:
         source: |
           import subprocess
           import sys
+          import json
 
           # install dependency
           subprocess.check_call([sys.executable, "-m", "pip", "-q", "install", "pyyaml"])
@@ -104,7 +105,7 @@ spec:
           with open("/src/mwstack-pipeline.yaml", "r") as f:
               pipeline = yaml.safe_load(f)
 
-          print(pipeline)
+          json.dump(pipeline, sys.stdout)
 
         volumeMounts:
           - name: workdir
