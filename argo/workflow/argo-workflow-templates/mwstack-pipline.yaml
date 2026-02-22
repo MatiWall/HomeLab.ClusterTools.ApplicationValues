@@ -55,7 +55,7 @@ spec:
             templateRef:
               name: docker-templates
               template: build-tag-push
-            dependencies: [git-clone]
+            dependencies: [git-clone, generate-tag]
             arguments:
               parameters:
                 - name: subpath
