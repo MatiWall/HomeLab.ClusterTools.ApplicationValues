@@ -25,12 +25,8 @@ spec:
         value: git@github.com:MatiWall/ 
       - name: repo
         value: FitTracker
-      - name: subpath
-        value: ''
       - name: registry
         value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
-      - name: application-name
-        value: fittracker-backend
   templates:
     - name: build-and-deploy
       dag:
@@ -43,6 +39,9 @@ spec:
               parameters:
                 - name: url
                   value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+          - name: parse-pipeline
+            template: parse-pipeline
+            dependencies: [git-clone]
           - name: generate-tag
             dependencies: [git-clone]
             template: generate-tag
@@ -51,23 +50,22 @@ spec:
                 - name: git-hash
                   value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
 
-          - name: build
+          - name: build-push
             templateRef:
               name: docker-templates
               template: build-tag-push
             dependencies: [git-clone, generate-tag]
             arguments:
               parameters:
+                - name: application-name
+                  value: "{{item.name}}"
                 - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
+                  value: "{{item.path}}"
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
-                - name: application-name
-                  value: "{{workflow.parameters.application-name}}"
                 - name: version
                   value: "{{tasks.generate-tag.outputs.parameters.version}}"
+            withParam: "{{tasks.parse-pipeline.outputs.result}}" # Loop over builds defined in the pipeline YAML
                 
     - name: generate-tag
       inputs:
@@ -89,5 +87,18 @@ spec:
           - |
             date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
             echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
+
+    - name: parse-pipeline
+      script:
+        image: python:3.10
+        command: [python]
+        source: |
+          import yaml
+          import sys
+
+          with open("/src/mwstack-pipeline.yaml", "r") as f:
+              pipeline = yaml.safe_load(f)
+
+          print(pipeline['builds'])
               
               
