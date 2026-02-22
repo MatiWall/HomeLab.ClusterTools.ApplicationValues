@@ -105,7 +105,7 @@ spec:
           with open("/src/mwstack-pipeline.yaml", "r") as f:
               pipeline = yaml.safe_load(f)
 
-          json.dump(pipeline, sys.stdout)
+          json.dump(pipeline['builds'], sys.stdout)
 
         volumeMounts:
           - name: workdir
