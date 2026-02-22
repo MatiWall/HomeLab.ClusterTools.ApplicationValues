@@ -91,7 +91,7 @@ spec:
     - name: parse-pipeline
       script:
         image: python:3.10
-        command: [sh]
+        command: [python]
         source: |
           import subprocess
           import sys
