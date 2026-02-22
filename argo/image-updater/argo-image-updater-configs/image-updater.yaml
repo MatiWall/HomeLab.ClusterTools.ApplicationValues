@@ -11,8 +11,8 @@ spec:
       images:
         - alias: webhook-forwarder
           imageName: docker-registry.mw.local/mwstack-webhookforwarder
-          writeBackConfig:
-            method: git
-            gitConfig:
-              branch: master
-              writeBackTarget: helmvalues:values.yaml
+      writeBackConfig:
+        method: git
+        gitConfig:
+          branch: master
+          writeBackTarget: helmvalues:values.yaml
