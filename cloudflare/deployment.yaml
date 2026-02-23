@@ -1,46 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflare-tunnel
-  namespace: cloudflare
-  labels:
-    app: cloudflare
+  name: cloudflared-deployment
+  namespace: default
 spec:
-  replicas: 1
-  selector: 
+  replicas: 2
+  selector:
     matchLabels:
-      app: cloudflare
+      pod: cloudflared
   template:
     metadata:
       labels:
-        app: cloudflare
-      name: cloudflare-tunnel
+        pod: cloudflared
     spec:
+      securityContext:
+        sysctls:
+        # Allows ICMP traffic (ping, traceroute) to resources behind cloudflared.
+          - name: net.ipv4.ping_group_range
+            value: "65532 65532"
       containers:
-        - name: cloudflare-tunnel
-          image: cloudflare/cloudflared:latest
-          imagePullPolicy: IfNotPresent
-          args: 
+        - image: cloudflare/cloudflared:latest
+          name: cloudflared
+          env:
+            # Defines an environment variable for the tunnel token.
+            - name: TUNNEL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tunnel-token
+                  key: token
+          command:
+            # Configures tunnel run parameters
+            - cloudflared
             - tunnel
+            - --no-autoupdate
+            - --loglevel
+            - info
+            - --metrics
+            - 0.0.0.0:2000
             - run
-            #- --config
-            #- /etc/cloudflared/config.yaml
-          volumeMounts:
-            - name: tunnel-creds
-              mountPath: /etc/cloudflared/credentials.json
-              subPath: credentials.json
-              readOnly: true
-            - name: tunnel-config
-              mountPath: /etc/cloudflared/config.yaml
-              subPath: config.yaml
-              readOnly: True
-      volumes:
-        - name: tunnel-creds
-          secret:
-            secretName: cloudflare-tunnel-credentials
-        - name: tunnel-config
-          configMap:
-           name: cloudflare-tunnel-config
-
-       
-  
+          livenessProbe:
+            httpGet:
+              # Cloudflared has a /ready endpoint which returns 200 if and only if
+              # it has an active connection to Cloudflare's network.
+              path: /ready
+              port: 2000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
