@@ -10,7 +10,7 @@ spec:
     metadata:
       labels:
         app: event-source-webhook
-  webhook:
+  github:
     # event-source can run multiple HTTP servers. Simply define a unique port to start a new HTTP server
     build-pipeline:
       # port to run HTTP server on
@@ -19,3 +19,8 @@ spec:
       endpoint: /build
       # HTTP request method to allow. In this case, only POST requests are accepted
       method: POST
+
+      webhookSecret:
+        name: github-webhook-secret
+        key: token
+        
