@@ -10,6 +10,6 @@ data:
     credentials-file: /etc/cloudflared/credentials.json
 
     ingress:
-      - service: http://pejzen-frontend.pejzen.svc.cluster.local:80
-        hostname: "*"
+      - service: http://build-pipeline-webhook-eventsource-svc.cloudflare.svc.cluster.local:12000
+        hostname: "homelab-build.mwstack.org"
       - service: http_status:404
