@@ -30,7 +30,7 @@ spec:
           parameters:
             - src:
                 dependencyName: webhook-dep
-                dataKey: body.repository.name
+                dataKey: body.payload.repository.name
               dest: spec.arguments.parameters.0.value
                   
 ---

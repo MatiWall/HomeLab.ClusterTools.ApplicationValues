@@ -19,7 +19,8 @@ spec:
       endpoint: /build
       # HTTP request method to allow. In this case, only POST requests are accepted
       method: POST
-
+      events:
+        - push
       webhookSecret:
         name: github-webhook-secret
         key: token
