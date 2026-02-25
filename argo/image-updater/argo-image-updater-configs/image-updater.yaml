@@ -15,6 +15,12 @@ spec:
             helm:
               name: "deployment.image.repository"
               tag: "deployment.image.tag"
+        - alias: mwstack-authenticator
+          imageName: docker-registry.mw.local/mwstack-authenticator
+          manifestTargets:
+            helm:
+              name: "deployment.image.repository"
+              tag: "deployment.image.tag"
       writeBackConfig:
         method: git
         gitConfig:
