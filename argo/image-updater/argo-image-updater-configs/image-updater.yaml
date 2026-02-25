@@ -20,7 +20,7 @@ spec:
         gitConfig:
           branch: master
           writeBackTarget: helmvalues:values.yaml
-    - namePattern: "webhook-forwarder"
+    - namePattern: fittracker-backend
       images:
         - alias: fittracker-backend
           imageName: docker-registry.mw.local/fittracker-backend
