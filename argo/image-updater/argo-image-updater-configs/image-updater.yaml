@@ -15,12 +15,6 @@ spec:
             helm:
               name: "deployment.image.repository"
               tag: "deployment.image.tag"
-        - alias: mwstack-authenticator
-          imageName: docker-registry.mw.local/mwstack-authenticator
-          manifestTargets:
-            helm:
-              name: "deployment.image.repository"
-              tag: "deployment.image.tag"
       writeBackConfig:
         method: git
         gitConfig:
@@ -30,6 +24,19 @@ spec:
       images:
         - alias: fittracker-backend
           imageName: docker-registry.mw.local/fittracker-backend
+          manifestTargets:
+            helm:
+              name: "deployment.image.repository"
+              tag: "deployment.image.tag"
+      writeBackConfig:
+        method: git
+        gitConfig:
+          branch: master
+          writeBackTarget: helmvalues:values.yaml
+    - namePattern: "authenticator"
+      images:
+        - alias: mwstack-authenticator
+          imageName: docker-registry.mw.local/mwstack-authenticator
           manifestTargets:
             helm:
               name: "deployment.image.repository"
