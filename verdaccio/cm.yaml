@@ -10,7 +10,7 @@ data:
         enabled: false
 
     storage: /verdaccio/storage
-    auth: {}
+    auth: 
 
     # a list of other known repositories we can talk to
     uplinks:
