@@ -5,6 +5,10 @@ metadata:
   namespace: verdaccio
 data:
   config.yaml: |
+    middlewares:
+      audit:
+        enabled: false
+
     storage: /verdaccio/storage
     auth:
 
