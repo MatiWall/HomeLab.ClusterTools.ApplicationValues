@@ -13,8 +13,3 @@ deployment:
         - argo-workflow.mw.local  # Specify your desired hostname
       tls:
         - secretName: argocd-workflow-tls-secret
-
-  workflowDefaults:
-    spec:
-      ttlStrategy:
-        secondsAfterCompletion: 3600
