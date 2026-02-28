@@ -40,10 +40,10 @@ data:
             - from: connection
     exporters:
       loki:
-        endpoint: "https://loki.mw.local/loki/api/v1/push"
+        endpoint: "http://loki-service.monitoring.svc.cluster.local:80/loki/api/v1/push"
 
       otlphttp: 
-        endpoint: "http://loki.mw.local/otlp"
+        endpoint: "http://loki-service.monitoring.svc.cluster.local:80/otlp"
 
       otlp:
         endpoint: "tempo-service.monitoring.svc.cluster.local:4317"
