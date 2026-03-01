@@ -6,12 +6,12 @@ metadata:
 data:
   config.yaml: |
     storage: /verdaccio/storage
+    web:
+      title: Verdaccio
+    
     auth:
       htpasswd:
         file: ./htpasswd
-    middlewares:
-      audit:
-        enabled: true
 
 
     uplinks:
@@ -32,6 +32,11 @@ data:
         publish: $authenticated
         unpublish: $authenticated
         proxy: npmjs
+    server:
+      keepAliveTimeout: 60
 
+    middlewares:
+      audit:
+        enabled: true
     logs:
       - { type: stdout, format: pretty, level: http }
