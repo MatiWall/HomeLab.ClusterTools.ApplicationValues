@@ -28,6 +28,14 @@ spec:
             helm:
               name: "deployment.image.repository"
               tag: "deployment.image.tag"
+    - namePattern: fittracker-backend
+      images:
+        - alias: fittracker-frontend
+          imageName: docker-registry.mw.local/fittracker-frontend
+          manifestTargets:
+            helm:
+              name: "deployment.image.repository"
+              tag: "deployment.image.tag"
       writeBackConfig:
         method: git
         gitConfig:
