@@ -13,6 +13,13 @@ spec:
       labels:
         app: verdaccio
     spec:
+      initContainers:
+        - name: fix-storage-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 10001:65533 /verdaccio/storage"]
+          volumeMounts:
+            - name: verdaccio-storage
+              mountPath: /verdaccio/storage
       containers:
         - name: verdaccio
           image: verdaccio/verdaccio:6.2
