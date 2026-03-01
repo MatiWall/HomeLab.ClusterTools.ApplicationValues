@@ -6,7 +6,13 @@ metadata:
 data:
   config.yaml: |
     storage: /verdaccio/storage
-    auth: 
+    auth:
+      htpasswd:
+        file: ./htpasswd
+    middlewares:
+      audit:
+        enabled: true
+
 
     uplinks:
       npmjs:
