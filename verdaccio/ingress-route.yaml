@@ -6,13 +6,13 @@ metadata:
   namespace: verdaccio
 spec:
   entryPoints:
-   # - websecure
-     - web
+   - websecure
+  #   - web
   routes:
     - match: Host(`verdaccio.mw.local`) && PathPrefix(`/`)
       kind: Rule
       services:
         - name: verdaccio-service
           port: 80
-#  tls:
-#    secretName: verdaccio-tls-secret
+  tls:
+    secretName: verdaccio-tls-secret
