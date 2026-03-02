@@ -5,6 +5,6 @@ type: application
 version: 0.1.0
 
 dependencies:
-  - name: penpot/penpot
+  - name: penpot
     version: 0.35.0 
     repository: https://helm.penpot.app/
