@@ -1,0 +1,10 @@
+apiVersion: v2
+name: penpot
+description: Umbrella chart to install penpot
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: penpot/penpot
+    version: 0.35.0 
+    repository: https://helm.penpot.app/
