@@ -3,7 +3,8 @@ global:
   postgresqlEnabled: true
   valkeyEnabled: true
   persistence.assets.enabled: true
-  
+  redisEnabled: true
+
 penpot:
 
   ingress:
