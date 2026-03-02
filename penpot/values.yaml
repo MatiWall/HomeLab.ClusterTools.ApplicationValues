@@ -12,8 +12,8 @@ penpot:
     enabled: true
     hosts:
       - penpot.mw.local
-  tls:
-    - secretName: penpot-cert
-      hosts:
-        - penpot.mw.local
+    tls:
+      - secretName: penpot-cert
+        hosts:
+          - penpot.mw.local
     
