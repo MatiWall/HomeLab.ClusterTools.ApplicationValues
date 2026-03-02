@@ -1,7 +1,7 @@
 
 
-
-ingress:
-  enabled: true
-  hosts:
-    - penpot.mw.local
+penpot:
+  ingress:
+    enabled: true
+    hosts:
+      - penpot.mw.local
