@@ -2,11 +2,12 @@
 global:
   postgresqlEnabled: true
   valkeyEnabled: true
-  persistence.assets.enabled: true
   redisEnabled: false
 
 penpot:
-
+  persistence:
+    assets: 
+      enabled: true
   ingress:
     enabled: true
     hosts:
