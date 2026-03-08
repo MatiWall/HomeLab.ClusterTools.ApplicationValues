@@ -16,4 +16,6 @@ penpot:
       - secretName: penpot-cert
         hosts:
           - penpot.mw.local
+  config:
+    publicUri: "https://penpot.mw.local"
     
