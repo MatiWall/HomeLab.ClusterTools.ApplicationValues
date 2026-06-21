@@ -12,3 +12,13 @@ data:
       ttlStrategy:
         secondsAfterSuccess: 5
       parallelism: 3
+  telemetry: |
+    # Configure OpenTelemetry gRPC endpoint
+    collector:
+      address: "http://otelcollector-service.monitoring.svc.cluster.local:4317"
+      insecure: true
+  tracing: |
+    # Enable distributed tracing (beta)
+    enabled: true
+    # Specify base URL of your tracing frontend to link from the Argo UI
+    frontendUrl: "https://argo-workflow.mw.local/{{ .TraceID }}"
