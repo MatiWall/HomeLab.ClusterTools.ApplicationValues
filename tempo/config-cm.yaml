@@ -9,9 +9,6 @@ data:
     server:
       http_listen_port: 3200
       log_level: info
-    compactor:
-      compaction:
-        block_retention: 100h
     
     metrics_generator:
       storage:
