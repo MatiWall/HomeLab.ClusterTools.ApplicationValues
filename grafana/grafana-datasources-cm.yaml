@@ -24,7 +24,7 @@ data:
           sslmode: 'disable'
       - name: Tempo
         type: tempo
-        url: tempo-service.monitoring.svc.cluster.local:80
+        url: http://tempo-service.monitoring.svc.cluster.local:80
       - name: Loki
         type: loki
         access: proxy
