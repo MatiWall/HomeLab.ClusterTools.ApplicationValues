@@ -39,6 +39,9 @@ data:
           - sources:
             - from: connection
     exporters:
+
+      debug:
+        verbosity: detailed
       loki:
         endpoint: "http://loki-service.monitoring.svc.cluster.local:80/loki/api/v1/push"
 
