@@ -47,10 +47,17 @@ spec:
             requests:
               cpu: 250m
               memory: 750Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
           env:
             - name: GF_SECURITY_ADMIN_PASSWORD
               value: admin
             - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: Admin
+            - name: GF_AUTH_DISABLE_LOGIN_FORM
               value: "true"
           volumeMounts:
             - name: grafana-datasources
@@ -71,6 +78,13 @@ spec:
           volumeMounts:
             - name: shared-volume
               mountPath: /etc/grafana/provisioning/dashboards
+          resources:
+            requests:
+              cpu: 20m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
           env:
           - name: LABEL
             value: "grafana_dashboard"
@@ -78,14 +92,6 @@ spec:
             value: /etc/grafana/provisioning/dashboards
           - name: RESOURCE
             value: both
-          - name: GF_SECURITY_ADMIN_PASSWORD
-            value: admin
-          - name: GF_AUTH_ANONYMOUS_ENABLED
-            value: "true"
-          - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-            value: Admin
-          - name: GF_AUTH_DISABLE_LOGIN_FORM
-            value: "true"
       volumes:
         - name: grafana-volume
           persistentVolumeClaim:
