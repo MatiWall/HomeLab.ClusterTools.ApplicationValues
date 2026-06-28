@@ -38,10 +38,12 @@ spec:
             arguments:
               parameters:
                 - name: url
-                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+                  value: "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+
           - name: parse-pipeline
-            template: parse-pipeline
             dependencies: [git-clone]
+            template: parse-pipeline
+
           - name: generate-tag
             dependencies: [git-clone]
             template: generate-tag
@@ -51,10 +53,12 @@ spec:
                   value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
 
           - name: build-push
+            dependencies:
+              - generate-tag
+              - parse-pipeline
             templateRef:
               name: docker-templates
               template: build-tag-push
-            dependencies: [generate-tag, parse-pipeline]
             arguments:
               parameters:
                 - name: application-name
@@ -65,51 +69,69 @@ spec:
                   value: "{{workflow.parameters.registry}}"
                 - name: version
                   value: "{{tasks.generate-tag.outputs.parameters.version}}"
-            withParam: "{{tasks.parse-pipeline.outputs.result}}" # Loop over builds defined in the pipeline YAML
-                
+            withParam: "{{tasks.parse-pipeline.outputs.result}}"
+
     - name: generate-tag
       inputs:
         parameters:
           - name: git-hash
+
       outputs:
         parameters:
           - name: version
-            valueFrom: 
+            valueFrom:
               path: /tmp/version.txt
+
+      container:
+        image: alpine:3.21
+        command: [sh, -c]
         workingDir: /src
         volumeMounts:
           - name: workdir
             mountPath: /src
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args: 
+        args:
           - |
-            date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
-            echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
+            set -e
+
+            VERSION="$(date -u +'%Y%m%d-%H%M%S')-{{inputs.parameters.git-hash}}"
+            echo "${VERSION}" > /tmp/version.txt
 
     - name: parse-pipeline
       script:
-        image: python:3.10
+        image: python:3.12
         command: [python]
-        source: |
-          import subprocess
-          import sys
-          import json
-
-          # install dependency
-          subprocess.check_call([sys.executable, "-m", "pip", "-q", "install", "pyyaml"])
-
-          import yaml
-
-          with open("/src/mwstack-pipeline.yaml", "r") as f:
-              pipeline = yaml.safe_load(f)
-
-          json.dump(pipeline['builds'], sys.stdout)
 
         volumeMounts:
           - name: workdir
-            mountPath: src/
-  
-              
-              
+            mountPath: /src
+
+        source: |
+          import json
+          import pathlib
+          import subprocess
+          import sys
+
+          subprocess.check_call([
+              sys.executable,
+              "-m",
+              "pip",
+              "-q",
+              "install",
+              "pyyaml",
+          ])
+
+          import yaml
+
+          pipeline_file = pathlib.Path("/src/mwstack-pipeline.yaml")
+
+          if not pipeline_file.exists():
+              raise FileNotFoundError(
+                  f"{pipeline_file} does not exist."
+              )
+
+          with pipeline_file.open() as f:
+              pipeline = yaml.safe_load(f)
+
+          builds = pipeline.get("builds", [])
+
+          json.dump(builds, sys.stdout)

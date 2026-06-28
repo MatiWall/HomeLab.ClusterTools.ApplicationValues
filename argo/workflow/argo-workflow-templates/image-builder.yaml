@@ -1,92 +1,92 @@
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
-metadata:
-  name: generic-image-builder
-spec:
-  podGC:
-    strategy: OnWorkflowSuccess
-    deleteDelayDuration: 1m
-  entrypoint: build-and-deploy
-  serviceAccountName: argo-workflow-svc
-  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
-    - metadata:
-        name: workdir                     # name of volume claim
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
-
-  arguments:
-    parameters:
-      - name: giturl
-        value: git@github.com:MatiWall/ 
-      - name: repo
-        value: FitTracker
-      - name: subpath
-        value: ''
-      - name: registry
-        value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
-      - name: application-name
-        value: fittracker-backend
-  templates:
-    - name: build-and-deploy
-      dag:
-        tasks:
-          - name: git-clone
-            templateRef:
-              name: git-template
-              template: git-clone
-            arguments:
-              parameters:
-                - name: url
-                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
-          - name: generate-tag
-            dependencies: [git-clone,]
-            template: generate-tag
-            arguments:
-              parameters:
-                - name: git-hash
-                  value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
-
-          - name: build-tag-push
-            templateRef:
-              name: docker-templates
-              template: build-tag-push
-            dependencies: [git-clone, generate-tag]
-            arguments:
-              parameters:
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: repo
-                  value: "{{workflow.parameters.repo}}"
-                - name: registry
-                  value: "{{workflow.parameters.registry}}"
-                - name: subpath
-                  value: "{{workflow.parameters.subpath}}"
-                - name: application-name
-                  value: "{{workflow.parameters.application-name}}"
-                - name: version
-                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
-    - name: generate-tag
-      inputs:
-        parameters:
-          - name: git-hash
-      outputs:
-        parameters:
-          - name: version
-            valueFrom: 
-              path: /tmp/version.txt
-        workingDir: /src
-        volumeMounts:
-          - name: workdir
-            mountPath: /src
-      container:
-        image: alpine/git:latest
-        command: [sh, -c]
-        args: 
-          - |
-            date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
-            echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
-              
-              
+#apiVersion: argoproj.io/v1alpha1
+#kind: WorkflowTemplate
+#metadata:
+#  name: generic-image-builder
+#spec:
+#  podGC:
+#    strategy: OnWorkflowSuccess
+#    deleteDelayDuration: 1m
+#  entrypoint: build-and-deploy
+#  serviceAccountName: argo-workflow-svc
+#  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+#    - metadata:
+#        name: workdir                     # name of volume claim
+#      spec:
+#        accessModes: [ "ReadWriteOnce" ]
+#        resources:
+#          requests:
+#            storage: 1Gi
+#
+#  arguments:
+#    parameters:
+#      - name: giturl
+#        value: git@github.com:MatiWall/ 
+#      - name: repo
+#        value: FitTracker
+#      - name: subpath
+#        value: ''
+#      - name: registry
+#        value: docker-registry.mw.local/ #docker-registry-service.docker-registry.svc.cluster.local:5000
+#      - name: application-name
+#        value: fittracker-backend
+#  templates:
+#    - name: build-and-deploy
+#      dag:
+#        tasks:
+#          - name: git-clone
+#            templateRef:
+#              name: git-template
+#              template: git-clone
+#            arguments:
+#              parameters:
+#                - name: url
+#                  value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
+#          - name: generate-tag
+#            dependencies: [git-clone,]
+#            template: generate-tag
+#            arguments:
+#              parameters:
+#                - name: git-hash
+#                  value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
+#
+#          - name: build-tag-push
+#            templateRef:
+#              name: docker-templates
+#              template: build-tag-push
+#            dependencies: [git-clone, generate-tag]
+#            arguments:
+#              parameters:
+#                - name: subpath
+#                  value: "{{workflow.parameters.subpath}}"
+#                - name: repo
+#                  value: "{{workflow.parameters.repo}}"
+#                - name: registry
+#                  value: "{{workflow.parameters.registry}}"
+#                - name: subpath
+#                  value: "{{workflow.parameters.subpath}}"
+#                - name: application-name
+#                  value: "{{workflow.parameters.application-name}}"
+#                - name: version
+#                  value: "{{tasks.generate-tag.outputs.parameters.version}}"
+#    - name: generate-tag
+#      inputs:
+#        parameters:
+#          - name: git-hash
+#      outputs:
+#        parameters:
+#          - name: version
+#            valueFrom: 
+#              path: /tmp/version.txt
+#        workingDir: /src
+#        volumeMounts:
+#          - name: workdir
+#            mountPath: /src
+#      container:
+#        image: alpine/git:latest
+#        command: [sh, -c]
+#        args: 
+#          - |
+#            date -u +"%Y%m%d-%H%M%S" > /tmp/date.txt
+#            echo "$(cat /tmp/date.txt)-{{inputs.parameters.git-hash}}" > /tmp/version.txt
+#              
+#              
