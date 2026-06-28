@@ -25,6 +25,7 @@ spec:
     - secret:
         name: local-root-ca-secret
         key: tls.crt
+    - useDefaultCAs: true
   
   target:
     # Sync the bundle to a ConfigMap called `my-org.com` in every namespace which
