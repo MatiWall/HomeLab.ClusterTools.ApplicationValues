@@ -47,7 +47,8 @@ spec:
       env:
         - name: SSL_CERT_FILE
           value: /certs/ca.crt
-
+        - name: REQUESTS_CA_BUNDLE
+          value: /certs/ca.crt
       volumeMounts:
         - name: workdir
           mountPath: /src
