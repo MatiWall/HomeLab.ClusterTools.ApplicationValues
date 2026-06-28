@@ -29,17 +29,13 @@ spec:
           name: homelab-root-ca-bundle
 
     container:
-      image: moby/buildkit:latest
+      image: moby/buildkit:master-rootless
       command: [sh, -c]
       args:
         - |
           set -e
 
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
-
-          mkdir -p /etc/ssl/certs
-          cp /etc/ssl/certs/homelab-root-ca-bundle.pem /usr/local/share/ca-certificates/root-ca.crt || true
-          update-ca-certificates || true
 
           buildctl-daemonless.sh build \
             --frontend dockerfile.v0 \
@@ -48,12 +44,15 @@ spec:
             --output type=image,name=${IMAGE},push=true
 
       workingDir: /src/{{inputs.parameters.subpath}}
+      env:
+        - name: SSL_CERT_FILE
+          value: /certs/ca.crt
 
       volumeMounts:
         - name: workdir
           mountPath: /src
 
         - name: ca-bundle
-          mountPath: /etc/ssl/certs/homelab-root-ca-bundle.pem
+          mountPath: /certs/ca.crt
           subPath: root-certs.pem
           readOnly: true
