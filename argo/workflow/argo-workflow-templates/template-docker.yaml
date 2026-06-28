@@ -34,8 +34,10 @@ spec:
       args:
         - |
           set -e
-          cp /certs/ca.crt /usr/local/share/ca-certificates/homelab-root-ca.crt
-          update-ca-certificates
+          export SSL_CERT_FILE=/certs/ca.crt
+          export REQUESTS_CA_BUNDLE=/certs/ca.crt
+          export NODE_EXTRA_CA_CERTS=/certs/ca.crt
+
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
 
           buildctl-daemonless.sh build \
