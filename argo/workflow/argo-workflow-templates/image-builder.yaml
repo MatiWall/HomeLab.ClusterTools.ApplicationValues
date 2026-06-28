@@ -42,31 +42,24 @@ spec:
                 - name: url
                   value:  "{{workflow.parameters.giturl}}{{workflow.parameters.repo}}"
           - name: generate-tag
-            dependencies: [git-clone]
+            dependencies: [git-clone,]
             template: generate-tag
             arguments:
               parameters:
                 - name: git-hash
                   value: "{{tasks.git-clone.outputs.parameters.git-hash}}"
 
-          - name: build
+          - name: build-tag-push
             templateRef:
               name: docker-templates
-              template: build
-            dependencies: [git-clone]
+              template: build-tag-push
+            dependencies: [git-clone, generate-tag]
             arguments:
               parameters:
                 - name: subpath
                   value: "{{workflow.parameters.subpath}}"
                 - name: repo
                   value: "{{workflow.parameters.repo}}"
-          - name: push
-            templateRef:
-              name: docker-templates
-              template: tag-and-push
-            dependencies: [build, generate-tag]
-            arguments:
-              parameters:
                 - name: registry
                   value: "{{workflow.parameters.registry}}"
                 - name: subpath
@@ -75,7 +68,6 @@ spec:
                   value: "{{workflow.parameters.application-name}}"
                 - name: version
                   value: "{{tasks.generate-tag.outputs.parameters.version}}"
-                
     - name: generate-tag
       inputs:
         parameters:
