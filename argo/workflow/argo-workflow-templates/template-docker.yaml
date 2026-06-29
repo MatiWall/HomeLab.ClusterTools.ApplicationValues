@@ -27,6 +27,9 @@ spec:
       - name: ca-bundle
         configMap:
           name: homelab-root-ca-bundle
+      - name: buildkit-config
+        configMap:
+          name: buildkitd-toml-config
 
     container:
       image: moby/buildkit:master
@@ -54,3 +57,6 @@ spec:
           mountPath: /home/user/certs/homelab-root-ca-bundle.pem
           subPath: root-certs.pem
           readOnly: true
+        - name: buildkit-config
+          mountPath: /home/user/.config/buildkit/buildkitd.toml
+          subPath: buildkitd.toml
