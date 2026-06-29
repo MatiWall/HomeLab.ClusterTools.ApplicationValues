@@ -41,7 +41,7 @@ spec:
             --frontend dockerfile.v0 \
             --local context=. \
             --local dockerfile=. \
-            --output type=image,name=${IMAGE},push=true
+            --output type=image,name=${IMAGE},push=true \
             --secret id=homelab_ca,src=/home/user/certs/homelab-root-ca-bundle.pem
 
       workingDir: /src/{{inputs.parameters.subpath}}
