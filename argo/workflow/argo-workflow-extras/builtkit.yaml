@@ -4,7 +4,5 @@ metadata:
   name: buildkitd-toml-config
 data:
   buildkitd.toml: |
-    debug = true
-
-    [registry."your-registry.homelab"]
-      ca = ["/home/user/certs/homelab-root-ca-bundle.pem"]
+    [registry."docker-registry.mw.local"]
+      ca = ["/etc/buildkit/certs/homelab-root-ca-bundle.pem"]

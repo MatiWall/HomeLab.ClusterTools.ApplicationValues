@@ -31,7 +31,7 @@ spec:
         configMap:
           name: buildkitd-toml-config
 
-    # MAIN CONTAINER: Runs only the buildctl client
+    # CLIENT CONTAINER
     container:
       image: moby/buildkit:master-rootless
       command: [sh, -c]
@@ -41,13 +41,12 @@ spec:
 
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
 
-          # Wait for the buildkitd sidecar socket to become available
           until buildctl --addr unix:///run/buildkit/buildkitd.sock debug workers > /dev/null 2>&1; do
             echo "Waiting for buildkitd sidecar..."
             sleep 1
           done
 
-          # Execute buildctl client pointing to the sidecar socket
+          # Note: The client uses its own mount path to load the secret context data
           buildctl --addr unix:///run/buildkit/buildkitd.sock build \
             --frontend dockerfile.v0 \
             --local context=. \
@@ -63,16 +62,14 @@ spec:
           mountPath: /home/user/certs/homelab-root-ca-bundle.pem
           subPath: root-certs.pem
           readOnly: true
-        # Share the socket file system space with the sidecar
         - name: workdir
           mountPath: /run/buildkit
           subPath: buildkit-socket
 
-    # SIDECAR CONTAINER: Runs the daemon independently 
+    # DAEMON SIDECAR
     sidecars:
       - name: buildkitd
         image: moby/buildkit:master-rootless
-        # Now we can cleanly pass standard daemon configuration flags!
         args: ["--config", "/etc/buildkit/buildkitd.toml", "--addr", "unix:///run/buildkit/buildkitd.sock"]
         securityContext:
           privileged: true
@@ -81,10 +78,10 @@ spec:
             mountPath: /etc/buildkit/buildkitd.toml
             subPath: buildkitd.toml
           - name: ca-bundle
-            mountPath: /home/user/certs/homelab-root-ca-bundle.pem
+            # CHANGE: Mount to /etc/ system scope inside the sidecar for the root process to parse
+            mountPath: /etc/buildkit/certs/homelab-root-ca-bundle.pem
             subPath: root-certs.pem
             readOnly: true
-          # Expose the matching socket directory
           - name: workdir
             mountPath: /run/buildkit
             subPath: buildkit-socket
