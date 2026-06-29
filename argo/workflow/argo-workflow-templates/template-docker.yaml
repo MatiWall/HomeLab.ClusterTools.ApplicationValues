@@ -39,10 +39,8 @@ spec:
           set -e
 
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
-
-          buildctl-daemonless.sh \
-           --config /home/user/.config/buildkit/buildkitd.toml \
-           build \
+          export BUILDKITD_FLAGS="--config /home/user/.config/buildkit/buildkitd.toml"
+          buildctl-daemonless.sh build \
             --frontend dockerfile.v0 \
             --local context=. \
             --local dockerfile=. \
