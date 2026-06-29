@@ -53,6 +53,8 @@ spec:
           value: /etc/ssl/certs/homelab-root-ca-bundle.pem
         - name: NODE_EXTRA_CA_CERTS
           value: /etc/ssl/certs/homelab-root-ca-bundle.pem
+        - name: CA_BUNDLE
+          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
       volumeMounts:
         - name: workdir
           mountPath: /src
