@@ -42,23 +42,15 @@ spec:
             --local context=. \
             --local dockerfile=. \
             --output type=image,name=${IMAGE},push=true
+            --secret id=homelab_ca,src=/home/user/certs/homelab-root-ca-bundle.pem
 
       workingDir: /src/{{inputs.parameters.subpath}}
       securityContext:
         privileged: true
-      env:
-        - name: SSL_CERT_FILE
-          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
-        - name: REQUESTS_CA_BUNDLE
-          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
-        - name: NODE_EXTRA_CA_CERTS
-          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
-        - name: CA_BUNDLE
-          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
       volumeMounts:
         - name: workdir
           mountPath: /src
         - name: ca-bundle
-          mountPath: /etc/ssl/certs/homelab-root-ca-bundle.pem
+          mountPath: /home/user/certs/homelab-root-ca-bundle.pem
           subPath: root-certs.pem
           readOnly: true
