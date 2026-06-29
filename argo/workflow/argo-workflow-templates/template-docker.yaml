@@ -5,9 +5,9 @@ metadata:
 spec:
   serviceAccountName: argo-workflow-svc
 
-  volumeClaimTemplates:                 # define volume, same syntax as k8s Pod spec
+  volumeClaimTemplates:
     - metadata:
-        name: workdir                     # name of volume claim
+        name: workdir
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
@@ -31,16 +31,24 @@ spec:
         configMap:
           name: buildkitd-toml-config
 
+    # MAIN CONTAINER: Runs only the buildctl client
     container:
-      image: moby/buildkit:master
+      image: moby/buildkit:master-rootless
       command: [sh, -c]
       args:
         - |
           set -e
 
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
-          export BUILDKITD_FLAGS="--config /home/user/.config/buildkit/buildkitd.toml"
-          buildctl-daemonless.sh build \
+
+          # Wait for the buildkitd sidecar socket to become available
+          until buildctl --addr unix:///run/buildkit/buildkitd.sock debug workers > /dev/null 2>&1; do
+            echo "Waiting for buildkitd sidecar..."
+            sleep 1
+          done
+
+          # Execute buildctl client pointing to the sidecar socket
+          buildctl --addr unix:///run/buildkit/buildkitd.sock build \
             --frontend dockerfile.v0 \
             --local context=. \
             --local dockerfile=. \
@@ -48,8 +56,6 @@ spec:
             --secret id=homelab_ca,src=/home/user/certs/homelab-root-ca-bundle.pem
 
       workingDir: /src/{{inputs.parameters.subpath}}
-      securityContext:
-        privileged: true
       volumeMounts:
         - name: workdir
           mountPath: /src
@@ -57,6 +63,28 @@ spec:
           mountPath: /home/user/certs/homelab-root-ca-bundle.pem
           subPath: root-certs.pem
           readOnly: true
-        - name: buildkit-config
-          mountPath: /home/user/.config/buildkit/buildkitd.toml
-          subPath: buildkitd.toml
+        # Share the socket file system space with the sidecar
+        - name: workdir
+          mountPath: /run/buildkit
+          subPath: buildkit-socket
+
+    # SIDECAR CONTAINER: Runs the daemon independently 
+    sidecars:
+      - name: buildkitd
+        image: moby/buildkit:master-rootless
+        # Now we can cleanly pass standard daemon configuration flags!
+        args: ["--config", "/etc/buildkit/buildkitd.toml", "--addr", "unix:///run/buildkit/buildkitd.sock"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - name: buildkit-config
+            mountPath: /etc/buildkit/buildkitd.toml
+            subPath: buildkitd.toml
+          - name: ca-bundle
+            mountPath: /home/user/certs/homelab-root-ca-bundle.pem
+            subPath: root-certs.pem
+            readOnly: true
+          # Expose the matching socket directory
+          - name: workdir
+            mountPath: /run/buildkit
+            subPath: buildkit-socket
