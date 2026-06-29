@@ -34,9 +34,6 @@ spec:
       args:
         - |
           set -e
-          export SSL_CERT_FILE=/certs/ca.crt
-          export REQUESTS_CA_BUNDLE=/certs/ca.crt
-          export NODE_EXTRA_CA_CERTS=/certs/ca.crt
 
           IMAGE="{{inputs.parameters.registry}}{{inputs.parameters.application-name}}:{{inputs.parameters.version}}"
 
@@ -51,14 +48,15 @@ spec:
         privileged: true
       env:
         - name: SSL_CERT_FILE
-          value: /certs/ca.crt
+          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
         - name: REQUESTS_CA_BUNDLE
-          value: /certs/ca.crt
+          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
+        - name: NODE_EXTRA_CA_CERTS
+          value: /etc/ssl/certs/homelab-root-ca-bundle.pem
       volumeMounts:
         - name: workdir
           mountPath: /src
-
         - name: ca-bundle
-          mountPath: /certs/ca.crt
+          mountPath: /etc/ssl/certs/homelab-root-ca-bundle.pem
           subPath: root-certs.pem
           readOnly: true
